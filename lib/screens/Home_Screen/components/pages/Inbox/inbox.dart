@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:shop_app/constants.dart';
 import 'package:shop_app/screens/Home_Screen/components/pages/Inbox/chat_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -73,14 +74,26 @@ class _InboxState extends State<Inbox> {
             .collection('Contacts')
             .snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          if (snapshot.data == null)
+            return SpinKitDoubleBounce(color: kPrimaryColor);
+          if (snapshot.data.docs.length == 0)
+            return Center(
+                child: Container(
+              margin: EdgeInsets.symmetric(vertical: 300),
+              color: kPrimaryColor.withOpacity(0.9),
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 8.0, horizontal: 20),
+                child: Text(
+                  'No Messages',
+                  style: TextStyle(color: kWhiteColor),
+                ),
+              ),
+            ));
           return ListView.builder(
             itemCount: snapshot.data.docs.length,
             itemBuilder: (BuildContext context, int index) {
-              if (snapshot.hasData) 
               return userList(snapshot.data.docs[index]);
-              return Center(
-                child: Container(child: Text('No Messages'),)
-                );
             },
           );
         },
@@ -173,12 +186,15 @@ class _InboxState extends State<Inbox> {
                     height: 5,
                   ),
                   Row(
+                    mainAxisSize: MainAxisSize.max,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Container(
+                        width: 150,
+                        // margin: EdgeInsets.only(bottom:15),
                         alignment: Alignment.topLeft,
                         child: Text(
-                          snapshot['Message'],
+                          snapshot['Last Message'],
                           style: TextStyle(
                             fontSize: 13,
                             color: Colors.black54,

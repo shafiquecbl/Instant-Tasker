@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:shop_app/constants.dart';
 import 'package:shop_app/models/getData.dart';
 import 'package:shop_app/models/messages.dart';
@@ -12,7 +13,11 @@ class ChatScreen extends StatefulWidget {
   final String receiverPhotoURL;
   final bool isOnline;
 
-  ChatScreen({this.receiverName, this.isOnline, this.receiverEmail,this.receiverPhotoURL});
+  ChatScreen(
+      {this.receiverName,
+      this.isOnline,
+      this.receiverEmail,
+      this.receiverPhotoURL});
 
   @override
   _ChatScreenState createState() => _ChatScreenState();
@@ -90,22 +95,24 @@ class _ChatScreenState extends State<ChatScreen> {
           .collection('Messages')
           .doc(email)
           .collection(widget.receiverEmail)
-          .orderBy("Time", descending: true)
+          .orderBy("timestamp", descending: true)
           .snapshots(),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-        if(snapshot.hasData || snapshot.data.docs.length != 0)
-        return ListView.builder(
+        if (snapshot.data == null)
+          return SpinKitDoubleBounce(color: kPrimaryColor);
+        if (snapshot.hasData)
+          return ListView.builder(
             reverse: true,
-            padding: EdgeInsets.all(20),
-            itemCount: snapshot.data.docs.length,
-            itemBuilder: (BuildContext context, int index) {
-              if (!snapshot.hasData)
-                return Container(
-                  child: Text('Inbox is Empty'),
-                );
-              return chatMessageItem(snapshot.data.docs[index]);
-            });
-            return Center(child: Container());
+              padding: EdgeInsets.all(20),
+              itemCount: snapshot.data.docs.length,
+              itemBuilder: (BuildContext context, int index) {
+                if (!snapshot.hasData)
+                  return Container(
+                    child: Text('Inbox is Empty'),
+                  );
+                return chatMessageItem(snapshot.data.docs[index]);
+              });
+        return Center(child: Container());
       },
     );
   }
@@ -248,8 +255,8 @@ class _ChatScreenState extends State<ChatScreen> {
           .addMessage(
               widget.receiverEmail, user.displayName, user.photoURL, text)
           .then((value) {
-        Messages().addContact(
-            widget.receiverEmail, widget.receiverName, widget.receiverPhotoURL, text);
+        Messages().addContact(widget.receiverEmail, widget.receiverName,
+            widget.receiverPhotoURL, text);
       });
       setState(() {
         isWriting = false;

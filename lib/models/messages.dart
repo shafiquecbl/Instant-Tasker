@@ -22,6 +22,7 @@ class Messages {
       'Time': dateTime,
       'Message': message,
       'Type': "text",
+      'timestamp': FieldValue.serverTimestamp(),
     });
 
     return await FirebaseFirestore.instance
@@ -35,6 +36,7 @@ class Messages {
       'Time': dateTime,
       'Message': message,
       'Type': "text",
+      'timestamp': FieldValue.serverTimestamp(),
     });
     
   }
@@ -48,7 +50,7 @@ class Messages {
       'Name': receiverName,
       'Email': receiverEmail,
       'PhotoURL': receiverPhotoURl,
-      'Message': message,
+      'Last Message': message,
       'Time': dateTime,
     });
 
@@ -65,6 +67,5 @@ class Messages {
     });
     
   }
-  
 
 }
