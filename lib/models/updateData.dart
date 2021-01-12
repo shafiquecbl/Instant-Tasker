@@ -4,10 +4,9 @@ import 'package:flutter/widgets.dart';
 import 'package:shop_app/screens/Home_Screen/home_screen.dart';
 import 'package:shop_app/widgets/snack_bar.dart';
 
-
-final auth = FirebaseAuth.instance;
-User user = auth.currentUser;
-final email = user.email;
+class UpdateData{
+User user = FirebaseAuth.instance.currentUser;
+final email = FirebaseAuth.instance.currentUser.email;
 
   Future<User> saveUserProfile(context,name,gender,phNo,address) async{
 
@@ -92,4 +91,5 @@ Future<User> updateUserProfile(context, name, gender, phNo, address,
         print(e.message);
       });
   return null;
+}
 }

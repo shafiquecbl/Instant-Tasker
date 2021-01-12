@@ -15,6 +15,7 @@ class ManageRequests extends StatefulWidget {
 
 class _ManageRequestsState extends State<ManageRequests> {
   int indexLength;
+  GetData getData = GetData();
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -38,7 +39,7 @@ class _ManageRequestsState extends State<ManageRequests> {
         body: Container(
           child: FutureBuilder(
             initialData: [],
-            future: getUserRequests(),
+            future: getData.getUserRequests(),
             // ignore: missing_return
             builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting)
@@ -71,7 +72,7 @@ class _ManageRequestsState extends State<ManageRequests> {
                 return RefreshIndicator(
                   onRefresh: () async {
                     setState(() {
-                      getUserRequests();
+                     getData.getUserRequests();
                     });
                   },
                   child: ListView.builder(
@@ -165,7 +166,7 @@ class _ManageRequestsState extends State<ManageRequests> {
                                   ),
                                   FutureBuilder(
                                     initialData: [],
-                                    future: getOffers(snapshot.data[index].id),
+                                    future: getData.getOffers(snapshot.data[index].id),
                                     builder: (BuildContext context,
                                         AsyncSnapshot snap) {
                                       return RaisedButton(
@@ -202,7 +203,7 @@ class _ManageRequestsState extends State<ManageRequests> {
 
   updateScreen(){
     setState(() {
-      getUserRequests();
+      getData.getUserRequests();
     });
   }
 }

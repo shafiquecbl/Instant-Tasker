@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:shop_app/constants.dart';
-import 'package:shop_app/screens/Home_Screen/components/models/message_model.dart';
 import 'package:shop_app/screens/Home_Screen/components/pages/Inbox/chat_screen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:shop_app/widgets/time_ago.dart';
 
 class Inbox extends StatefulWidget {
   @override
@@ -9,6 +11,9 @@ class Inbox extends StatefulWidget {
 }
 
 class _InboxState extends State<Inbox> {
+
+  User user = FirebaseAuth.instance.currentUser;
+  final email = FirebaseAuth.instance.currentUser.email;
   Icon customIcon = Icon(Icons.search);
   Widget customSearchBar = Text(
     "Inbox",
@@ -66,16 +71,34 @@ class _InboxState extends State<Inbox> {
           ),
         ],
       ),
-      body: ListView.builder(
-        itemCount: chats.length,
+      body: StreamBuilder(
+        stream: FirebaseFirestore.instance
+          .collection('Users')
+          .doc(email).collection('Contacts').snapshots(),
+        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot){
+          return ListView.builder(
+        itemCount: snapshot.data.docs.length,
         itemBuilder: (BuildContext context, int index) {
-          final Message chat = chats[index];
-          return GestureDetector(
+          if(snapshot.data == null)
+          return Container();
+          return userList(snapshot.data.docs[index]);
+        },
+      );
+        },
+      ),
+    );
+  }
+
+  Widget userList(DocumentSnapshot snapshot){
+    return GestureDetector(
             onTap: () => Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (_) => ChatScreen(
-                  user: chat.sender,
+                  receiverEmail: snapshot['Email'],
+                  receiverName: snapshot['Name'],
+                  receiverPhotoURL: snapshot['PhotoURL'],
+                  isOnline: true,
                 ),
               ),
             ),
@@ -88,24 +111,12 @@ class _InboxState extends State<Inbox> {
                 children: <Widget>[
                   Container(
                     padding: EdgeInsets.all(2),
-                    decoration: chat.unread
-                        ? BoxDecoration(
+                    decoration: BoxDecoration(
                             borderRadius: BorderRadius.all(Radius.circular(40)),
                             border: Border.all(
                               width: 2,
                               color: Theme.of(context).primaryColor,
                             ),
-                            // shape: BoxShape.circle,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey.withOpacity(0.5),
-                                spreadRadius: 2,
-                                blurRadius: 5,
-                              ),
-                            ],
-                          )
-                        : BoxDecoration(
-                            shape: BoxShape.circle,
                             boxShadow: [
                               BoxShadow(
                                 color: Colors.grey.withOpacity(0.5),
@@ -115,12 +126,34 @@ class _InboxState extends State<Inbox> {
                             ],
                           ),
                     child: CircleAvatar(
-                      radius: 35,
-                      backgroundImage: AssetImage(chat.sender.imageUrl),
-                    ),
+                            radius: snapshot['PhotoURL'] == null ? 30 : 30,
+                            backgroundColor: kPrimaryColor.withOpacity(0.8),
+                            child: user.photoURL != null
+                                ? ClipRRect(
+                                    borderRadius: BorderRadius.circular(70),
+                                    child: Image.network(
+                                      snapshot['PhotoURL'],
+                                      width: 60,
+                                      height: 60,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  )
+                                : Container(
+                                    decoration: BoxDecoration(
+                                        color: Colors.grey[200],
+                                        borderRadius:
+                                            BorderRadius.circular(50)),
+                                    width: 100,
+                                    height: 100,
+                                    child: Icon(
+                                      Icons.camera_alt,
+                                      color: Colors.grey[800],
+                                    ),
+                                  ),
+                          ),
                   ),
                   Container(
-                    width: MediaQuery.of(context).size.width * 0.65,
+                    width: MediaQuery.of(context).size.width * 0.7,
                     padding: EdgeInsets.only(
                       left: 20,
                     ),
@@ -129,54 +162,44 @@ class _InboxState extends State<Inbox> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
-                            Row(
-                              children: <Widget>[
-                                Text(
-                                  chat.sender.name,
+                            Text(
+                                  snapshot['Name'],
                                   style: TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
-                                chat.sender.isOnline
-                                    ? Container(
-                                        margin: const EdgeInsets.only(left: 5),
-                                        width: 7,
-                                        height: 7,
-                                        decoration: BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          color: Theme.of(context).primaryColor,
-                                        ),
-                                      )
-                                    : Container(
-                                        child: null,
-                                      ),
-                              ],
-                            ),
-                            Text(
-                              chat.time,
-                              style: TextStyle(
-                                fontSize: 11,
-                                fontWeight: FontWeight.w300,
-                                color: Colors.black54,
-                              ),
-                            ),
+                            
                           ],
                         ),
                         SizedBox(
-                          height: 10,
+                          height: 5,
                         ),
-                        Container(
-                          alignment: Alignment.topLeft,
-                          child: Text(
-                            chat.text,
-                            style: TextStyle(
-                              fontSize: 13,
-                              color: Colors.black54,
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Container(
+                              alignment: Alignment.topLeft,
+                              child: Text(
+                                snapshot['Message'],
+                                style: TextStyle(
+                                  fontSize: 13,
+                                  color: Colors.black54,
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 2,
+                              ),
                             ),
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 2,
-                          ),
+                            Text(
+                              TimeAgo.timeAgoSinceDate(
+                              snapshot['Time']),
+                              style: TextStyle(
+                                fontSize: 11,
+                                fontWeight: FontWeight.w300,
+                                color: kPrimaryColor,
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
@@ -185,8 +208,5 @@ class _InboxState extends State<Inbox> {
               ),
             ),
           );
-        },
-      ),
-    );
   }
 }

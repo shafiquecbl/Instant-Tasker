@@ -33,7 +33,7 @@ class _VerificationsState extends State<Verifications> {
         backgroundColor: hexColor,
       ),
       body: FutureBuilder(
-        future: getUserProfile(),
+        future: GetData().getUserProfile(),
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting)
             return SpinKitDoubleBounce(

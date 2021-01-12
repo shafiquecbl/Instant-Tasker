@@ -76,8 +76,8 @@ class _TasksState extends State<Tasks> {
       body: FutureBuilder(
         initialData: [list,cnicCheck],
         future: Future.wait([
-          getRequests(),
-          getCNIC(),
+          GetData().getRequests(),
+          GetData().getCNIC(),
           ]),
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
           if(snapshot.connectionState == ConnectionState.waiting)

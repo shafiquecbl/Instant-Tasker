@@ -60,7 +60,7 @@ class _UserProfileState extends State<UserProfile> {
             ),
           ]),
       body: FutureBuilder(
-        future: getUserProfile(),
+        future: GetData().getUserProfile(),
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting)
             return SpinKitDoubleBounce(
@@ -72,7 +72,7 @@ class _UserProfileState extends State<UserProfile> {
             child: RefreshIndicator(
               onRefresh: () async {
                 setState(() {
-                  getUserProfile();
+                  GetData().getUserProfile();
                 });
               },
               child: ListView(children: [
@@ -570,11 +570,11 @@ class _UserProfileState extends State<UserProfile> {
     sref.putFile(_image);
     // ignore: unnecessary_cast
     dowurl = await sref.getDownloadURL() as String;
-    updateProfilePicture(context, dowurl);
+    UpdateData().updateProfilePicture(context, dowurl);
     auth.currentUser
         .updateProfile(photoURL: dowurl)
         .then((value) => setState(() {
-              getUserProfile();
+              GetData().getUserProfile();
             }));
   }
 }

@@ -93,7 +93,7 @@ class _SendOfferFormState extends State<SendOfferForm> {
   Widget build(BuildContext context) {
     return FutureBuilder(
       initialData: [],
-      future: getUserProfile(),
+      future: GetData().getUserProfile(),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         return Form(
           key: _formKey,
@@ -113,7 +113,7 @@ class _SendOfferFormState extends State<SendOfferForm> {
                   text: "Send Offer",
                   press: () async {
                     if (_formKey.currentState.validate()) {
-                      sendOffer(
+                      SetData().sendOffer(
                         context, 
                         widget.docID, 
                         description, 

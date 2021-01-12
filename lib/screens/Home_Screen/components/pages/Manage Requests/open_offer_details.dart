@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:shop_app/constants.dart';
 import 'package:shop_app/models/getData.dart';
-import 'package:shop_app/screens/Home_Screen/components/pages/Inbox/chat_Screen1.dart';
+import 'package:shop_app/screens/Home_Screen/components/pages/Inbox/chat_Screen.dart';
 import 'package:shop_app/screens/Home_Screen/components/pages/Manage Requests/Review_Offers.dart';
 import 'package:shop_app/screens/Home_Screen/components/pages/Tasks/widgets/common_widgets.dart';
 import 'package:shop_app/size_config.dart';
@@ -62,8 +62,8 @@ class _OpenOfferDetailsState extends State<OpenOfferDetails> {
         child: FutureBuilder(
           initialData: [],
           future: Future.wait([
-            getUserRequests(),
-            getOffers(widget.docID),
+            GetData().getUserRequests(),
+            GetData().getOffers(widget.docID),
           ]),
           builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting)
@@ -496,9 +496,10 @@ class _OpenOfferDetailsState extends State<OpenOfferDetails> {
                                             Navigator.push(
                                                 context,
                                                 MaterialPageRoute(
-                                                  builder: (_) => ChatScreen1(
+                                                  builder: (_) => ChatScreen(
                                                     receiverName: snapshot.data[1][i] ['Name'],
                                                     receiverEmail: snapshot.data[1][i] ['Email'],
+                                                    receiverPhotoURL: snapshot.data[1][i] ['PhotoURL'],
                                                     isOnline: true,
                                                   ),
                                                 ));

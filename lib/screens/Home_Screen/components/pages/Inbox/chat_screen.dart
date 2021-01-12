@@ -1,197 +1,227 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:shop_app/constants.dart';
-import 'package:shop_app/screens/Home_Screen/components/models/user_model.dart';
-import 'package:shop_app/screens/Home_Screen/components/models/message_model.dart';
+import 'package:shop_app/models/getData.dart';
+import 'package:shop_app/models/messages.dart';
 import 'package:shop_app/screens/Home_Screen/components/pages/Inbox/modal_tile.dart';
-class ChatScreen extends StatefulWidget {
-  final User user;
 
-  ChatScreen({this.user});
+class ChatScreen extends StatefulWidget {
+  final String receiverName;
+  final String receiverEmail;
+  final String receiverPhotoURL;
+  final bool isOnline;
+
+  ChatScreen({this.receiverName, this.isOnline, this.receiverEmail,this.receiverPhotoURL});
 
   @override
   _ChatScreenState createState() => _ChatScreenState();
 }
 
 class _ChatScreenState extends State<ChatScreen> {
-  _chatBubble(Message message, bool isMe, bool isSameUser) {
-    if (isMe) {
-      return Column(
-        children: <Widget>[
-          Container(
-            alignment: Alignment.topRight,
-            child: Container(
-              constraints: BoxConstraints(
-                maxWidth: MediaQuery.of(context).size.width * 0.80,
-              ),
-              padding: EdgeInsets.all(10),
-              margin: EdgeInsets.symmetric(vertical: 10),
-              decoration: BoxDecoration(
-                color: Theme.of(context).primaryColor,
-                borderRadius: BorderRadius.circular(15),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.5),
-                    spreadRadius: 2,
-                    blurRadius: 5,
-                  ),
-                ],
-              ),
-              child: Text(
-                message.text,
-                style: TextStyle(
-                  color: Colors.white,
-                ),
-              ),
-            ),
-          ),
-          !isSameUser
-              ? Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: <Widget>[
-                    Text(
-                      message.time,
+  User user = FirebaseAuth.instance.currentUser;
+  final email = FirebaseAuth.instance.currentUser.email;
+  TextEditingController textFieldController = TextEditingController();
+  bool isWriting = false;
+  GetData getData = GetData();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Color(0xFFF6F6F6),
+      appBar: AppBar(
+        elevation: 2,
+        shadowColor: kPrimaryColor,
+        backgroundColor: hexColor,
+        centerTitle: true,
+        title: RichText(
+          textAlign: TextAlign.center,
+          text: TextSpan(
+            children: [
+              TextSpan(
+                  text: widget.receiverName,
+                  style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w400,
+                      color: kPrimaryColor)),
+              TextSpan(text: '\n'),
+              widget.isOnline
+                  ? TextSpan(
+                      text: 'Online',
                       style: TextStyle(
-                        fontSize: 12,
-                        color: Colors.black45,
-                      ),
-                    ),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    Container(
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.5),
-                            spreadRadius: 2,
-                            blurRadius: 5,
-                          ),
-                        ],
-                      ),
-                      child: CircleAvatar(
-                        radius: 15,
-                        backgroundImage: AssetImage(message.sender.imageUrl),
-                      ),
-                    ),
-                  ],
-                )
-              : Container(
-                  child: null,
-                ),
-        ],
-      );
-    } else {
-      return Column(
-        children: <Widget>[
-          Container(
-            alignment: Alignment.topLeft,
-            child: Container(
-              constraints: BoxConstraints(
-                maxWidth: MediaQuery.of(context).size.width * 0.80,
-              ),
-              padding: EdgeInsets.all(10),
-              margin: EdgeInsets.symmetric(vertical: 10),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(15),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.5),
-                    spreadRadius: 2,
-                    blurRadius: 5,
-                  ),
-                ],
-              ),
-              child: Text(
-                message.text,
-                style: TextStyle(
-                  color: Colors.black54,
-                ),
-              ),
-            ),
-          ),
-          !isSameUser
-              ? Row(
-                  children: <Widget>[
-                    Container(
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.5),
-                            spreadRadius: 2,
-                            blurRadius: 5,
-                          ),
-                        ],
-                      ),
-                      child: CircleAvatar(
-                        radius: 15,
-                        backgroundImage: AssetImage(message.sender.imageUrl),
-                      ),
-                    ),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    Text(
-                      message.time,
+                          fontSize: 11,
+                          fontWeight: FontWeight.w400,
+                          color: kPrimaryColor),
+                    )
+                  : TextSpan(
+                      text: 'Offline',
                       style: TextStyle(
-                        fontSize: 12,
-                        color: Colors.black45,
-                      ),
-                    ),
-                  ],
-                )
-              : Container(
-                  child: null,
-                ),
+                          fontSize: 11,
+                          fontWeight: FontWeight.w400,
+                          color: kPrimaryColor),
+                    )
+            ],
+          ),
+        ),
+        leading: IconButton(
+            icon: Icon(
+              Icons.arrow_back_ios,
+              color: kPrimaryColor,
+            ),
+            color: Colors.white,
+            onPressed: () {
+              Navigator.pop(context);
+            }),
+      ),
+      body: Column(
+        children: <Widget>[
+          Flexible(
+            child: messageList(),
+          ),
+          _sendMessageArea(),
         ],
-      );
-    }
+      ),
+    );
+  }
+
+  Widget messageList() {
+    return StreamBuilder(
+      stream: FirebaseFirestore.instance
+          .collection('Messages')
+          .doc(email)
+          .collection(widget.receiverEmail)
+          .orderBy("Time", descending: true)
+          .snapshots(),
+      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+        if (snapshot.data.docs.length == 0) return Container();
+        if (snapshot.data == null)
+          return SpinKitDoubleBounce(color: kPrimaryColor);
+        return ListView.builder(
+            reverse: true,
+            padding: EdgeInsets.all(20),
+            itemCount: snapshot.data.docs.length,
+            itemBuilder: (BuildContext context, int index) {
+              if (!snapshot.hasData)
+                return Container(
+                  child: Text('Inbox is Empty'),
+                );
+              return chatMessageItem(snapshot.data.docs[index]);
+            });
+      },
+    );
+  }
+
+  Widget chatMessageItem(DocumentSnapshot snapshot) {
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: 15),
+      child: Container(
+        alignment: snapshot['Email'] == user.email
+            ? Alignment.centerRight
+            : Alignment.centerLeft,
+        child: snapshot['Email'] == user.email
+            ? senderLayout(snapshot)
+            : receiverLayout(snapshot),
+      ),
+    );
+  }
+
+  Widget senderLayout(DocumentSnapshot snapshot) {
+    return Container(
+      constraints: BoxConstraints(
+        maxWidth: MediaQuery.of(context).size.width * 0.80,
+      ),
+      padding: EdgeInsets.all(10),
+      margin: EdgeInsets.symmetric(vertical: 0),
+      decoration: BoxDecoration(
+        color: Theme.of(context).primaryColor,
+        borderRadius: BorderRadius.circular(15),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.5),
+            spreadRadius: 2,
+            blurRadius: 5,
+          ),
+        ],
+      ),
+      child: getMessage(snapshot),
+    );
+  }
+
+  getMessage(DocumentSnapshot snapshot) {
+    return Text(
+      snapshot['Message'],
+      style: TextStyle(
+        color: snapshot['Email'] == user.email ? Colors.white : Colors.black54,
+        fontSize: 16.0,
+      ),
+    );
+  }
+
+  Widget receiverLayout(DocumentSnapshot snapshot) {
+    return Container(
+      constraints: BoxConstraints(
+        maxWidth: MediaQuery.of(context).size.width * 0.80,
+      ),
+      padding: EdgeInsets.all(10),
+      margin: EdgeInsets.symmetric(vertical: 0),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(15),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.5),
+            spreadRadius: 2,
+            blurRadius: 5,
+          ),
+        ],
+      ),
+      child: getMessage(snapshot),
+    );
   }
 
   addMediaModal(context) {
-      showModalBottomSheet(
-          context: context,
-          elevation: 0,
-          backgroundColor: UniversalVariables.blackColor,
-          builder: (context) {
-            return Column(
-              children: <Widget>[
-                Container(
-                  padding: EdgeInsets.symmetric(vertical: 15),
-                  child: Row(
-                    children: <Widget>[
-                      FlatButton(
-                        child: Icon(
-                          Icons.close,
-                        ),
-                        onPressed: () => Navigator.maybePop(context),
+    showModalBottomSheet(
+        context: context,
+        elevation: 0,
+        backgroundColor: UniversalVariables.blackColor,
+        builder: (context) {
+          return Column(
+            children: <Widget>[
+              Container(
+                padding: EdgeInsets.symmetric(vertical: 15),
+                child: Row(
+                  children: <Widget>[
+                    FlatButton(
+                      child: Icon(
+                        Icons.close,
                       ),
-                      Expanded(
-                        child: Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            "Content and tools",
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold),
-                          ),
+                      onPressed: () => Navigator.maybePop(context),
+                    ),
+                    Expanded(
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          "Content and tools",
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold),
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-                Flexible(
-                  child: ListView(
-                    children: <Widget>[
-                      ModalTile(
-                        title: "Media",
-                        subtitle: "Share Photos and Video",
-                        icon: Icons.image,
-                      ),
-                      ModalTile(
+              ),
+              Flexible(
+                child: ListView(
+                  children: <Widget>[
+                    ModalTile(
+                      title: "Media",
+                      subtitle: "Share Photos and Video",
+                      icon: Icons.image,
+                    ),
+                    ModalTile(
                         title: "File",
                         subtitle: "Share files",
                         icon: Icons.tab),
@@ -199,34 +229,69 @@ class _ChatScreenState extends State<ChatScreen> {
                         title: "Location",
                         subtitle: "Share a location",
                         icon: Icons.add_location),
-                    ],
-                  ),
+                  ],
                 ),
-              ],
-            );
-          });
-    }
+              ),
+            ],
+          );
+        });
+  }
 
   _sendMessageArea() {
+    setWritingTo(bool val) {
+      setState(() {
+        isWriting = val;
+      });
+    }
+
+    sendMessage() {
+      var text = textFieldController.text;
+      Messages()
+          .addMessage(
+              widget.receiverEmail, user.displayName, user.photoURL, text)
+          .then((value) {
+        Messages().addContact(
+            widget.receiverEmail, widget.receiverName, widget.receiverPhotoURL, text);
+      });
+      setState(() {
+        isWriting = false;
+      });
+      textFieldController.text = "";
+    }
+
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 8),
       height: 70,
-      color: Colors.white,
+      padding: EdgeInsets.all(8),
       child: Row(
         children: <Widget>[
-          IconButton(
-            icon: Icon(Icons.attachment),
-            iconSize: 25,
-            color: Theme.of(context).primaryColor,
-            onPressed: () {
-              addMediaModal(context);
-            },
+          Container(
+            margin: EdgeInsets.symmetric(horizontal: 5),
+            child: GestureDetector(
+              onTap: () => addMediaModal(context),
+              child: Container(
+                padding: EdgeInsets.all(7),
+                decoration: BoxDecoration(
+                  gradient: UniversalVariables.fabGradient,
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(Icons.add),
+              ),
+            ),
+          ),
+          SizedBox(
+            width: 10,
           ),
           Expanded(
             child: TextField(
+              controller: textFieldController,
               style: TextStyle(
                 color: UniversalVariables.greyColor,
               ),
+              onChanged: (val) {
+                (val.length > 0 && val.trim() != "")
+                    ? setWritingTo(true)
+                    : setWritingTo(false);
+              },
               decoration: InputDecoration(
                 hintText: "Type a message",
                 hintStyle: TextStyle(
@@ -244,91 +309,29 @@ class _ChatScreenState extends State<ChatScreen> {
               ),
             ),
           ),
-          IconButton(
-            icon: Icon(Icons.send),
-            iconSize: 25,
-            color: Theme.of(context).primaryColor,
-            onPressed: () {},
-          ),
+          isWriting
+              ? Container(
+                  child: IconButton(
+                    icon: Icon(Icons.send),
+                    iconSize: 25,
+                    color: Theme.of(context).primaryColor,
+                    onPressed: () {
+                      sendMessage();
+                    },
+                  ),
+                )
+              : Container(
+                  width: 10,
+                )
         ],
       ),
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    int prevUserId;
-    return Scaffold(
-      backgroundColor: Color(0xFFF6F6F6),
-      appBar: AppBar(
-        elevation: 2,
-        shadowColor: kPrimaryColor,
-        backgroundColor: hexColor,
-        centerTitle: true,
-        title: RichText(
-          textAlign: TextAlign.center,
-          text: TextSpan(
-            children: [
-              TextSpan(
-                  text: widget.user.name,
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w400,
-                    color: kPrimaryColor
-                  )),
-              TextSpan(text: '\n'),
-              widget.user.isOnline ?
-              TextSpan(
-                text: 'Online',
-                style: TextStyle(
-                  fontSize: 11,
-                  fontWeight: FontWeight.w400,
-                  color: kPrimaryColor
-                ),
-              )
-              :
-              TextSpan(
-                text: 'Offline',
-                style: TextStyle(
-                  fontSize: 11,
-                  fontWeight: FontWeight.w400,
-                  color: kPrimaryColor
-                ),
-              )
-            ],
-          ),
-        ),
-        leading: IconButton(
-            icon: Icon(Icons.arrow_back_ios,color: kPrimaryColor,),
-            color: Colors.white,
-            onPressed: () {
-              Navigator.pop(context);
-            }),
-      ),
-      body: Column(
-        children: <Widget>[
-          Expanded(
-            child: ListView.builder(
-              reverse: true,
-              padding: EdgeInsets.all(20),
-              itemCount: messages.length,
-              itemBuilder: (BuildContext context, int index) {
-                final Message message = messages[index];
-                final bool isMe = message.sender.id == currentUser.id;
-                final bool isSameUser = prevUserId == message.sender.id;
-                prevUserId = message.sender.id;
-                return _chatBubble(message, isMe, isSameUser);
-              },
-            ),
-          ),
-          _sendMessageArea(),
-        ],
-      ),
-    );
-  }
+  /////////////////////////////////////////////////////////////////////
+
+  /////////////////////////////////////////////////////////////////////
 }
-
-
 
 class ModalTile extends StatelessWidget {
   final String title;
@@ -341,7 +344,7 @@ class ModalTile extends StatelessWidget {
     @required this.icon,
   });
 
-@override
+  @override
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 15),

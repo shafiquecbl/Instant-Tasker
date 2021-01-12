@@ -193,7 +193,7 @@ class _PostTaskFormState extends State<PostTaskForm> {
                 try{
                   if(location == null)
                   location = "Online";
-                postTask(context, description, category, duration, budget, location);
+                SetData().postTask(context, description, category, duration, budget, location);
                 }
                 catch(e){
                   Snack_Bar.show(context, e.message);

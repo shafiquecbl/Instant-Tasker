@@ -34,7 +34,7 @@ class _VerifyCNICState extends State<VerifyCNIC> {
         backgroundColor: hexColor,
       ),
       body: FutureBuilder(
-        future: getUserProfile(),
+        future: GetData().getUserProfile(),
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting)
             return SpinKitDoubleBounce(

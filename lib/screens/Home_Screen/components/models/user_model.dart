@@ -15,7 +15,7 @@ class User {
 }
 
 // YOU - current user
-final User currentUser = User(
+final User user = User(
   id: 0,
   name: 'Nick Fury',
   imageUrl: 'assets/images/shafiqueimg.jpeg',

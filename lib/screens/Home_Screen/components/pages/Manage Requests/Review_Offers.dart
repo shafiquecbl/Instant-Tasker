@@ -39,7 +39,7 @@ class _ReviewOffersState extends State<ReviewOffers> {
       ),
       body: FutureBuilder(
         initialData: [],
-        future: getOffers(widget.docID),
+        future: GetData().getOffers(widget.docID),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting)
             return SpinKitDoubleBounce(color: kPrimaryColor);

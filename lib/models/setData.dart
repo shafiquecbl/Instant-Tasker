@@ -5,12 +5,12 @@ import 'package:shop_app/screens/complete_profile/complete_profile_screen.dart';
 import 'package:shop_app/widgets/snack_bar.dart';
 import 'package:intl/intl.dart';
 
-final auth = FirebaseAuth.instance;
-User user = auth.currentUser;
-final email = user.email;
-String uid = user.uid.toString();
-String name = user.displayName;
-DateTime now = DateTime.now();
+class SetData{
+final User user = FirebaseAuth.instance.currentUser;
+final email = FirebaseAuth.instance.currentUser.email;
+String uid = FirebaseAuth.instance.currentUser.uid.toString();
+String name = FirebaseAuth.instance.currentUser.displayName;
+static DateTime now = DateTime.now();
 String dateTime = DateFormat("dd-MM-yyyy h:mma").format(now);
 
 Future saveNewUser(email, context) async {
@@ -111,4 +111,5 @@ Future sendOffer(
         'PhotoURL': receiverPhotoURL,
         'Online Status': isOnline,
       });
+}
 }

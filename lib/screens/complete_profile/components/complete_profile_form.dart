@@ -74,7 +74,7 @@ class _CompleteProfileFormState extends State<CompleteProfileForm> {
             text: "continue",
             press: () {
               if (_formKey.currentState.validate()) {
-                saveUserProfile(context, name, gender, phoneNo, address);
+                UpdateData().saveUserProfile(context, name, gender, phoneNo, address);
                 auth.currentUser.updateProfile(displayName: name);
               }
             },

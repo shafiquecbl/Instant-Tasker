@@ -31,7 +31,9 @@ class Body extends StatelessWidget {
                   children: [
                     SocialCard(
                       icon: "assets/icons/google-icon.svg",
-                      press: () {},
+                      press: () {
+                        
+                      },
                     ),
                   ],
                 ),

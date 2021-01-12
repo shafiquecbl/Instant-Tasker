@@ -68,7 +68,7 @@ class _EditProfileFormState extends State<EditProfileForm> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: getUserProfile(),
+        future: GetData().getUserProfile(),
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting)
           return SpinKitDoubleBounce(color: kPrimaryColor,);
@@ -108,7 +108,7 @@ class _EditProfileFormState extends State<EditProfileForm> {
                   text: "Update Profile",
                   press: () async {
                     if (_formKey.currentState.validate()) {
-                      updateUserProfile(context, name, gender, phoneNo, address,
+                      UpdateData().updateUserProfile(context, name, gender, phoneNo, address,
                           about, education, specialities, languages, work);
                     }
                   },

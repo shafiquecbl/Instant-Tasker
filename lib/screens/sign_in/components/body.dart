@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shop_app/components/no_account_text.dart';
 import 'package:shop_app/components/socal_card.dart';
-import 'package:shop_app/screens/complete_profile/complete_profile_screen.dart';
-
-// import '../../../constants.dart';
 import '../../../size_config.dart';
 import 'sign_form.dart';
 
@@ -41,7 +38,7 @@ class Body extends StatelessWidget {
                     SocialCard(
                       icon: "assets/icons/google-icon.svg",
                       press: () {
-                        Navigator.pushReplacementNamed(context, CompleteProfileScreen.routeName);
+                        
                       },
                     ),
                   ],
