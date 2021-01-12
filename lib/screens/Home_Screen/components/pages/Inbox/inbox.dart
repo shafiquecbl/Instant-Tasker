@@ -11,7 +11,6 @@ class Inbox extends StatefulWidget {
 }
 
 class _InboxState extends State<Inbox> {
-
   User user = FirebaseAuth.instance.currentUser;
   final email = FirebaseAuth.instance.currentUser.email;
   Icon customIcon = Icon(Icons.search);
@@ -30,9 +29,7 @@ class _InboxState extends State<Inbox> {
         automaticallyImplyLeading: false,
         centerTitle: false,
         title: Padding(
-            padding: const EdgeInsets.only(left: 0), 
-            child: customSearchBar
-            ),
+            padding: const EdgeInsets.only(left: 0), child: customSearchBar),
         backgroundColor: hexColor,
         actions: <Widget>[
           IconButton(
@@ -61,9 +58,7 @@ class _InboxState extends State<Inbox> {
                   this.customIcon = Icon(Icons.search);
                   this.customSearchBar = Text(
                     "Inbox",
-                    style: TextStyle(
-                      color: kPrimaryColor
-                    ),
+                    style: TextStyle(color: kPrimaryColor),
                   );
                 }
               });
@@ -73,140 +68,141 @@ class _InboxState extends State<Inbox> {
       ),
       body: StreamBuilder(
         stream: FirebaseFirestore.instance
-          .collection('Users')
-          .doc(email).collection('Contacts').snapshots(),
-        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot){
+            .collection('Users')
+            .doc(email)
+            .collection('Contacts')
+            .snapshots(),
+        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           return ListView.builder(
-        itemCount: snapshot.data.docs.length,
-        itemBuilder: (BuildContext context, int index) {
-          if(snapshot.data == null)
-          return Container();
-          return userList(snapshot.data.docs[index]);
-        },
-      );
+            itemCount: snapshot.data.docs.length,
+            itemBuilder: (BuildContext context, int index) {
+              if (snapshot.hasData) 
+              return userList(snapshot.data.docs[index]);
+              return Center(
+                child: Container(child: Text('No Messages'),)
+                );
+            },
+          );
         },
       ),
     );
   }
 
-  Widget userList(DocumentSnapshot snapshot){
+  Widget userList(DocumentSnapshot snapshot) {
     return GestureDetector(
-            onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => ChatScreen(
-                  receiverEmail: snapshot['Email'],
-                  receiverName: snapshot['Name'],
-                  receiverPhotoURL: snapshot['PhotoURL'],
-                  isOnline: true,
+      onTap: () => Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => ChatScreen(
+            receiverEmail: snapshot['Email'],
+            receiverName: snapshot['Name'],
+            receiverPhotoURL: snapshot['PhotoURL'],
+            isOnline: true,
+          ),
+        ),
+      ),
+      child: Container(
+        padding: EdgeInsets.symmetric(
+          horizontal: 20,
+          vertical: 15,
+        ),
+        child: Row(
+          children: <Widget>[
+            Container(
+              padding: EdgeInsets.all(2),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(40)),
+                border: Border.all(
+                  width: 2,
+                  color: Theme.of(context).primaryColor,
                 ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.5),
+                    spreadRadius: 2,
+                    blurRadius: 5,
+                  ),
+                ],
+              ),
+              child: CircleAvatar(
+                radius: snapshot['PhotoURL'] == null ? 30 : 30,
+                backgroundColor: kPrimaryColor.withOpacity(0.8),
+                child: user.photoURL != null
+                    ? ClipRRect(
+                        borderRadius: BorderRadius.circular(70),
+                        child: Image.network(
+                          snapshot['PhotoURL'],
+                          width: 60,
+                          height: 60,
+                          fit: BoxFit.cover,
+                        ),
+                      )
+                    : Container(
+                        decoration: BoxDecoration(
+                            color: Colors.grey[200],
+                            borderRadius: BorderRadius.circular(50)),
+                        width: 100,
+                        height: 100,
+                        child: Icon(
+                          Icons.camera_alt,
+                          color: Colors.grey[800],
+                        ),
+                      ),
               ),
             ),
-            child: Container(
-              padding: EdgeInsets.symmetric(
-                horizontal: 20,
-                vertical: 15,
+            Container(
+              width: MediaQuery.of(context).size.width * 0.7,
+              padding: EdgeInsets.only(
+                left: 20,
               ),
-              child: Row(
+              child: Column(
                 children: <Widget>[
-                  Container(
-                    padding: EdgeInsets.all(2),
-                    decoration: BoxDecoration(
-                            borderRadius: BorderRadius.all(Radius.circular(40)),
-                            border: Border.all(
-                              width: 2,
-                              color: Theme.of(context).primaryColor,
-                            ),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey.withOpacity(0.5),
-                                spreadRadius: 2,
-                                blurRadius: 5,
-                              ),
-                            ],
-                          ),
-                    child: CircleAvatar(
-                            radius: snapshot['PhotoURL'] == null ? 30 : 30,
-                            backgroundColor: kPrimaryColor.withOpacity(0.8),
-                            child: user.photoURL != null
-                                ? ClipRRect(
-                                    borderRadius: BorderRadius.circular(70),
-                                    child: Image.network(
-                                      snapshot['PhotoURL'],
-                                      width: 60,
-                                      height: 60,
-                                      fit: BoxFit.cover,
-                                    ),
-                                  )
-                                : Container(
-                                    decoration: BoxDecoration(
-                                        color: Colors.grey[200],
-                                        borderRadius:
-                                            BorderRadius.circular(50)),
-                                    width: 100,
-                                    height: 100,
-                                    child: Icon(
-                                      Icons.camera_alt,
-                                      color: Colors.grey[800],
-                                    ),
-                                  ),
-                          ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Text(
+                        snapshot['Name'],
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
                   ),
-                  Container(
-                    width: MediaQuery.of(context).size.width * 0.7,
-                    padding: EdgeInsets.only(
-                      left: 20,
-                    ),
-                    child: Column(
-                      children: <Widget>[
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Text(
-                                  snapshot['Name'],
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                            
-                          ],
+                  SizedBox(
+                    height: 5,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(
+                        alignment: Alignment.topLeft,
+                        child: Text(
+                          snapshot['Message'],
+                          style: TextStyle(
+                            fontSize: 13,
+                            color: Colors.black54,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 2,
                         ),
-                        SizedBox(
-                          height: 5,
+                      ),
+                      Text(
+                        TimeAgo.timeAgoSinceDate(snapshot['Time']),
+                        style: TextStyle(
+                          fontSize: 11,
+                          fontWeight: FontWeight.w300,
+                          color: kPrimaryColor,
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Container(
-                              alignment: Alignment.topLeft,
-                              child: Text(
-                                snapshot['Message'],
-                                style: TextStyle(
-                                  fontSize: 13,
-                                  color: Colors.black54,
-                                ),
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 2,
-                              ),
-                            ),
-                            Text(
-                              TimeAgo.timeAgoSinceDate(
-                              snapshot['Time']),
-                              style: TextStyle(
-                                fontSize: 11,
-                                fontWeight: FontWeight.w300,
-                                color: kPrimaryColor,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ],
               ),
             ),
-          );
+          ],
+        ),
+      ),
+    );
   }
 }

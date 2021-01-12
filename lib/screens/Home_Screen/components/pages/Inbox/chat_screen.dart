@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:shop_app/constants.dart';
 import 'package:shop_app/models/getData.dart';
 import 'package:shop_app/models/messages.dart';
@@ -94,9 +93,7 @@ class _ChatScreenState extends State<ChatScreen> {
           .orderBy("Time", descending: true)
           .snapshots(),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-        if (snapshot.data.docs.length == 0) return Container();
-        if (snapshot.data == null)
-          return SpinKitDoubleBounce(color: kPrimaryColor);
+        if(snapshot.hasData || snapshot.data.docs.length != 0)
         return ListView.builder(
             reverse: true,
             padding: EdgeInsets.all(20),
@@ -108,6 +105,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 );
               return chatMessageItem(snapshot.data.docs[index]);
             });
+            return Center(child: Container());
       },
     );
   }
