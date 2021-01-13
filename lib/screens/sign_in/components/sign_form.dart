@@ -21,8 +21,7 @@ class SignForm extends StatefulWidget {
 
 class _SignFormState extends State<SignForm> {
   final _formKey = GlobalKey<FormState>();
-
-  final auth = FirebaseAuth.instance;
+  final FirebaseAuth auth = FirebaseAuth.instance;
   User user;
   String email;
   String password;
@@ -169,23 +168,11 @@ class _SignFormState extends State<SignForm> {
     );
   }
 
-  Future<User> signinUser(email, password, context) async {
-    try {
-      auth
-          .signInWithEmailAndPassword(email: email, password: password)
-          .then((value) => navigationPage())
-          .catchError((e) {
-        Snack_Bar.show(context, e.message);
-      });
-    } catch (e) {
-      Snack_Bar.show(context, e.message);
-    }
-    return user;
-  }
-
-  void navigationPage() {
-    FirebaseAuth.instance.authStateChanges().listen((user) {
-      if (user.emailVerified) {
+  Future signinUser(email, password, context) async {
+    auth
+        .signInWithEmailAndPassword(email: email, password: password)
+        .then((value) {
+      if (value.user.emailVerified) {
         Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(builder: (context) => MainScreen()),
             (Route<dynamic> route) => false);
@@ -194,6 +181,22 @@ class _SignFormState extends State<SignForm> {
         String content = "Please verify the Email first to Sigin.";
         verifyEmailDialog(context, title, content);
       }
-     });
+    }).catchError((e) {
+      Snack_Bar.show(context, e.message);
+    });
+
+    // void navigationPage() {
+    //   FirebaseAuth.instance.authStateChanges().listen((user) {
+    //     if (user.emailVerified) {
+    //       Navigator.of(context).pushAndRemoveUntil(
+    //           MaterialPageRoute(builder: (context) => MainScreen()),
+    //           (Route<dynamic> route) => false);
+    //     } else {
+    //       String title = "Email not verified";
+    //       String content = "Please verify the Email first to Sigin.";
+    //       verifyEmailDialog(context, title, content);
+    //     }
+    //    });
+    // }
   }
 }
