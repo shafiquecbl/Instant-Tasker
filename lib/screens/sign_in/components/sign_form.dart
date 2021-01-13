@@ -183,15 +183,8 @@ class _SignFormState extends State<SignForm> {
     return user;
   }
 
-  // startTime() async {
-  //   var _duration = new Duration(seconds: 3);
-  //   return new Timer(_duration, navigationPage);
-  // }
-
   void navigationPage() {
-    var auth = FirebaseAuth.instance;
-    // ignore: deprecated_member_use
-    auth.onAuthStateChanged.listen((user) {
+    FirebaseAuth.instance.authStateChanges().listen((user) {
       if (user.emailVerified) {
         Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(builder: (context) => MainScreen()),
@@ -201,6 +194,6 @@ class _SignFormState extends State<SignForm> {
         String content = "Please verify the Email first to Sigin.";
         verifyEmailDialog(context, title, content);
       }
-    });
+     });
   }
 }

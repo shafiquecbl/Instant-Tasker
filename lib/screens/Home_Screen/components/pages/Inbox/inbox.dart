@@ -90,11 +90,22 @@ class _InboxState extends State<Inbox> {
                 ),
               ),
             ));
-          return ListView.builder(
-            itemCount: snapshot.data.docs.length,
-            itemBuilder: (BuildContext context, int index) {
-              return userList(snapshot.data.docs[index]);
+          return RefreshIndicator(
+            onRefresh: () async{
+              setState(() {
+                FirebaseFirestore.instance
+                    .collection('Users')
+                    .doc(email)
+                    .collection('Contacts')
+                    .snapshots();
+              });
             },
+            child: ListView.builder(
+              itemCount: snapshot.data.docs.length,
+              itemBuilder: (BuildContext context, int index) {
+                return userList(snapshot.data.docs[index]);
+              },
+            ),
           );
         },
       ),

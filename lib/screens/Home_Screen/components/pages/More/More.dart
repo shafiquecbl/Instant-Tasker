@@ -15,7 +15,7 @@ class More extends StatefulWidget {
 }
 
 class _MoreState extends State<More> {
-User user = FirebaseAuth.instance.currentUser;
+  User user = FirebaseAuth.instance.currentUser;
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -146,9 +146,16 @@ User user = FirebaseAuth.instance.currentUser;
                 ProfileMenu(
                   text: "Sign Out",
                   icon: "assets/icons/Log out.svg",
-                  press: () {
+                  press: () async {
                     try {
-                      signOut();
+                      await FirebaseAuth.instance.signOut().whenComplete(() {
+                        Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(
+                              builder: (context) => SignInScreen()),
+                        );
+                      }).catchError((e) {
+                        Snack_Bar.show(context, e.message);
+                      });
                     } catch (e) {
                       Snack_Bar.show(context, e.message);
                     }
@@ -160,19 +167,5 @@ User user = FirebaseAuth.instance.currentUser;
         ],
       ),
     );
-  }
-
-  Future<void> signOut() async {
-    await FirebaseAuth.instance
-        .signOut()
-        .then((currentUser) => {
-          Navigator.of(context).pushAndRemoveUntil(
-                MaterialPageRoute(builder: (context) => SignInScreen()),
-                (Route<dynamic> route) => false)
-                }
-                )
-        .catchError((e) {
-      Snack_Bar.show(context, e.message);
-    });
   }
 }
