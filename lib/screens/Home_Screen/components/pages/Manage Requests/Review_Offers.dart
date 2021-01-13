@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shop_app/constants.dart';
+import 'package:shop_app/screens/Home_Screen/components/pages/Inbox/chat_Screen.dart';
 import 'package:shop_app/size_config.dart';
 import 'package:shop_app/models/getData.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -342,7 +343,18 @@ class _ReviewOffersState extends State<ReviewOffers> {
                                         ]),
                                         textColor: Colors.white,
                                         color: Colors.black.withOpacity(0.7),
-                                        onPressed: () {},
+                                        onPressed: () {
+                                          Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (_) => ChatScreen(
+                                                    receiverName: snapshot.data[i] ['Name'],
+                                                    receiverEmail: snapshot.data[i] ['Email'],
+                                                    receiverPhotoURL: snapshot.data[i] ['PhotoURL'],
+                                                    isOnline: true,
+                                                  ),
+                                                ));
+                                        },
                                       ),
                                     ),
                                     SizedBox(
