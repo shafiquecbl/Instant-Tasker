@@ -9,9 +9,7 @@ import 'screens/Home_Screen/home_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp().then((value) { 
-    FirebaseFirestore.instance.terminate();
-    FirebaseFirestore.instance.clearPersistence();
+  await Firebase.initializeApp().then((value) {
     runApp(MyApp());
     }
   );

@@ -184,19 +184,5 @@ class _SignFormState extends State<SignForm> {
     }).catchError((e) {
       Snack_Bar.show(context, e.message);
     });
-
-    // void navigationPage() {
-    //   FirebaseAuth.instance.authStateChanges().listen((user) {
-    //     if (user.emailVerified) {
-    //       Navigator.of(context).pushAndRemoveUntil(
-    //           MaterialPageRoute(builder: (context) => MainScreen()),
-    //           (Route<dynamic> route) => false);
-    //     } else {
-    //       String title = "Email not verified";
-    //       String content = "Please verify the Email first to Sigin.";
-    //       verifyEmailDialog(context, title, content);
-    //     }
-    //    });
-    // }
   }
 }
