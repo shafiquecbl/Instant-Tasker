@@ -19,8 +19,6 @@ class _ManageRequestsState extends State<ManageRequests> {
   int postedTaskLength;
   int activeTaskLength;
   GetData getData = GetData();
-  Timer timer;
-  int start = 10;
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
