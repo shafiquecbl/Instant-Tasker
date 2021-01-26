@@ -14,8 +14,7 @@ class Tasks extends StatefulWidget {
 
 class _TasksState extends State<Tasks> {
   User user = FirebaseAuth.instance.currentUser;
-  // ignore: unused_field
-  int _index = 0;
+  GetData getData = new GetData();
   int indexLength;
   String cnicCheck;
   List<dynamic> list = [];
@@ -76,8 +75,8 @@ class _TasksState extends State<Tasks> {
       body: FutureBuilder(
         initialData: [list,cnicCheck],
         future: Future.wait([
-          GetData().getRequests(),
-          GetData().getCNIC(),
+          getData.getRequests(),
+          getData.getCNIC(),
           ]),
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
           if(snapshot.connectionState == ConnectionState.waiting)

@@ -5,6 +5,7 @@ import 'package:shop_app/models/getData.dart';
 import 'package:shop_app/screens/Home_Screen/components/pages/Manage%20Requests/open_offer_details.dart';
 import 'package:shop_app/screens/Home_Screen/components/pages/More/Post%20a%20Task/post_task.dart';
 import 'package:shop_app/size_config.dart';
+import 'package:shop_app/widgets/customAppBar.dart';
 import 'package:shop_app/widgets/time_ago.dart';
 import 'package:shop_app/models/deleteData.dart';
 
@@ -20,22 +21,7 @@ class _ManageRequestsState extends State<ManageRequests> {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return Scaffold(
-        appBar: AppBar(
-          elevation: 2,
-          shadowColor: kPrimaryColor,
-          automaticallyImplyLeading: false,
-          centerTitle: false,
-          title: Padding(
-            padding: const EdgeInsets.only(left: 0),
-            child: Text(
-              'My Tasks',
-              style: TextStyle(
-                color: kPrimaryColor,
-              ),
-            ),
-          ),
-          backgroundColor: hexColor,
-        ),
+        appBar: customAppBar("My Tasks"),
         body: Container(
           child: FutureBuilder(
             initialData: [],

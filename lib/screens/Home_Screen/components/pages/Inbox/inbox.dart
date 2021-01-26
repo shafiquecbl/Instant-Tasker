@@ -72,6 +72,7 @@ class _InboxState extends State<Inbox> {
             .collection('Users')
             .doc(email)
             .collection('Contacts')
+            .orderBy("Time", descending: true)
             .snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.data == null)

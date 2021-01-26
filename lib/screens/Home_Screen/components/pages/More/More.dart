@@ -4,6 +4,7 @@ import 'package:shop_app/screens/Home_Screen/components/pages/More/Verification/
 import 'package:shop_app/screens/Home_Screen/components/pages/More/user_profile/user_profile.dart';
 import 'package:shop_app/screens/sign_in/sign_in_screen.dart';
 import 'package:shop_app/size_config.dart';
+import 'package:shop_app/widgets/customAppBar.dart';
 import 'package:shop_app/widgets/snack_bar.dart';
 import '../../../../../constants.dart';
 import 'Post a Task/post_task.dart';
@@ -20,18 +21,7 @@ class _MoreState extends State<More> {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return Scaffold(
-      // backgroundColor: Colors.white,
-      appBar: AppBar(
-        elevation: 2,
-        shadowColor: kPrimaryColor,
-        automaticallyImplyLeading: false,
-        centerTitle: false,
-        title: Text(
-          'More',
-          style: TextStyle(color: kPrimaryColor),
-        ),
-        backgroundColor: hexColor,
-      ),
+      appBar: customAppBar("More"),
       body: Column(
         children: [
           Container(

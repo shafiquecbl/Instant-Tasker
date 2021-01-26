@@ -18,7 +18,7 @@ Future getUserProfile() async {
 
 Future getRequests() async {
     QuerySnapshot snapshot =
-        await firestore.collection("Buyer Requests").get();
+        await firestore.collection("Buyer Requests").orderBy("Time",descending: false).get();
     return snapshot.docs;
   }
 

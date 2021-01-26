@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:shop_app/constants.dart';
+import 'package:shop_app/widgets/customAppBar.dart';
+
 
 class Dashboard extends StatefulWidget {
   @override
@@ -10,22 +11,7 @@ class _DashboardState extends State<Dashboard> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        elevation: 2,
-        shadowColor: kPrimaryColor,
-        automaticallyImplyLeading: false,
-        centerTitle: false,
-        title: Padding(
-          padding: const EdgeInsets.only(left: 0),
-          child: Text(
-            'Dashboard',
-            style: TextStyle(
-              color: kPrimaryColor
-            ),
-          ),
-        ),
-        backgroundColor: hexColor
-      ),
+      appBar: customAppBar("Dashboard"),
       body: Container()
     );
   }

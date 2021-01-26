@@ -6,6 +6,7 @@ import 'package:shop_app/models/getData.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shop_app/screens/Home_Screen/components/pages/Tasks/widgets/common_widgets.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:shop_app/widgets/customAppBar.dart';
 import 'package:shop_app/widgets/time_ago.dart';
 
 class ReviewOffers extends StatefulWidget {
@@ -22,22 +23,7 @@ class _ReviewOffersState extends State<ReviewOffers> {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return Scaffold(
-      appBar: AppBar(
-        elevation: 2,
-        shadowColor: kPrimaryColor,
-        automaticallyImplyLeading: false,
-        centerTitle: false,
-        title: Padding(
-          padding: const EdgeInsets.only(left: 0),
-          child: Text(
-            'Review Offers',
-            style: TextStyle(
-              color: kPrimaryColor,
-            ),
-          ),
-        ),
-        backgroundColor: hexColor,
-      ),
+      appBar: customAppBar("Review Offers"),
       body: FutureBuilder(
         initialData: [],
         future: GetData().getOffers(widget.docID),
