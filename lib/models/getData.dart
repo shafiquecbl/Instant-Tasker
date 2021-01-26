@@ -22,10 +22,21 @@ Future getRequests() async {
     return snapshot.docs;
   }
 
-  Future getUserRequests() async {
+  Future getPostedTask() async {
     QuerySnapshot snapshot =
         await firestore.collection("Buyer Requests").where("Email",isEqualTo: email).get();
     return snapshot.docs;
+  }
+  Future getActiveTask() async {
+    QuerySnapshot snapshot =
+        await firestore.collection("Users").doc(email).collection("Assigned Tasks").get();
+    return snapshot.docs;
+  }
+
+  Future getTask(docID) async {
+    DocumentSnapshot snapshot =
+        await firestore.collection("Buyer Requests").doc(docID).get();
+    return snapshot;
   }
 
   Future<String> getCNIC() async {

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shop_app/constants.dart';
+import 'package:shop_app/models/deleteData.dart';
+import 'package:shop_app/models/setData.dart';
 import 'package:shop_app/screens/Home_Screen/components/pages/Inbox/chat_Screen.dart';
 import 'package:shop_app/size_config.dart';
 import 'package:shop_app/models/getData.dart';
@@ -7,6 +9,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shop_app/screens/Home_Screen/components/pages/Tasks/widgets/common_widgets.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:shop_app/widgets/customAppBar.dart';
+import 'package:shop_app/widgets/snack_bar.dart';
 import 'package:shop_app/widgets/time_ago.dart';
 
 class ReviewOffers extends StatefulWidget {
@@ -18,6 +21,7 @@ class ReviewOffers extends StatefulWidget {
 
 class _ReviewOffersState extends State<ReviewOffers> {
   User user = FirebaseAuth.instance.currentUser;
+  GetData getData = GetData();
   int indexLength;
   @override
   Widget build(BuildContext context) {
@@ -26,11 +30,14 @@ class _ReviewOffersState extends State<ReviewOffers> {
       appBar: customAppBar("Review Offers"),
       body: FutureBuilder(
         initialData: [],
-        future: GetData().getOffers(widget.docID),
+        future: Future.wait([
+          getData.getOffers(widget.docID),
+          getData.getTask(widget.docID),
+        ]),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting)
             return SpinKitDoubleBounce(color: kPrimaryColor);
-          indexLength = snapshot.data.length;
+          indexLength = snapshot.data[0].length;
           return indexLength == 0
               ? Container(
                   padding: EdgeInsets.symmetric(vertical: 50, horizontal: 100),
@@ -61,11 +68,11 @@ class _ReviewOffersState extends State<ReviewOffers> {
                           ListTile(
                             leading: CircleAvatar(
                                 backgroundColor: kPrimaryColor.withOpacity(0.8),
-                                child: snapshot.data[i]['PhotoURL'] != null
+                                child: snapshot.data[0][i]['PhotoURL'] != null
                                     ? ClipRRect(
                                         borderRadius: BorderRadius.circular(50),
                                         child: Image.network(
-                                          snapshot.data[i]['PhotoURL'],
+                                          snapshot.data[0][i]['PhotoURL'],
                                           width: 50,
                                           height: 50,
                                           fit: BoxFit.cover,
@@ -81,7 +88,7 @@ class _ReviewOffersState extends State<ReviewOffers> {
                                         ),
                                       )),
                             title: Text(
-                              snapshot.data[i]['Email'],
+                              snapshot.data[0][i]['Email'],
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w700,
@@ -90,7 +97,7 @@ class _ReviewOffersState extends State<ReviewOffers> {
                             ),
                             subtitle: Text(
                               TimeAgo.timeAgoSinceDate(
-                                  snapshot.data[i]['Time']),
+                                  snapshot.data[0][i]['Time']),
                               style: TextStyle(
                                   color: Colors.black.withOpacity(0.6)),
                             ),
@@ -103,34 +110,34 @@ class _ReviewOffersState extends State<ReviewOffers> {
                                   child: Center(
                                       child: Column(
                                     children: [
-                                      snapshot.data[i]['Seller Reviews'] == 0
+                                      snapshot.data[0][i]['Seller Reviews'] == 0
                                           ? EmptyRatingBar(
                                               rating: 5,
                                             )
                                           : RatingBar(
-                                              rating: snapshot.data[i]
+                                              rating: snapshot.data[0][i]
                                                   ['Seller Rating'],
                                             ),
                                       SizedBox(
                                           height:
                                               getProportionateScreenHeight(10)),
                                       Text(
-                                          '(${snapshot.data[i]['Seller Reviews']} Reviews)'),
+                                          '(${snapshot.data[0][i]['Seller Reviews']} Reviews)'),
                                       SizedBox(
                                           height:
                                               getProportionateScreenHeight(10)),
                                       Text(
-                                          "Completetion Rate: ${snapshot.data[i]['Completetion Rate']}%"),
-                                          SizedBox(
+                                          "Completetion Rate: ${snapshot.data[0][i]['Completetion Rate']}%"),
+                                      SizedBox(
                                           height:
                                               getProportionateScreenHeight(10)),
-                                          Text(
-                                          'Duration : ${snapshot.data[i]['Duration']}',
-                                          style: TextStyle(
-                                            fontSize: 14,
-                                            color: kPrimaryColor,
-                                          ),
+                                      Text(
+                                        'Duration : ${snapshot.data[0][i]['Duration']}',
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          color: kPrimaryColor,
                                         ),
+                                      ),
                                     ],
                                   )),
                                 ),
@@ -149,7 +156,7 @@ class _ReviewOffersState extends State<ReviewOffers> {
                                       ),
                                       padding: EdgeInsets.all(10),
                                       child: Text(
-                                        snapshot.data[i]['Description'],
+                                        snapshot.data[0][i]['Description'],
                                         style: TextStyle(
                                             color:
                                                 Colors.black.withOpacity(0.6)),
@@ -171,7 +178,7 @@ class _ReviewOffersState extends State<ReviewOffers> {
                                                   fontWeight: FontWeight.bold),
                                             ),
                                             Text(
-                                              'Rs ${snapshot.data[i]['Budget']}',
+                                              'Rs ${snapshot.data[0][i]['Budget']}',
                                               style: TextStyle(
                                                   fontSize: 16,
                                                   fontWeight: FontWeight.bold),
@@ -196,7 +203,7 @@ class _ReviewOffersState extends State<ReviewOffers> {
                                                   fontWeight: FontWeight.bold),
                                             ),
                                             Text(
-                                              'Rs ${snapshot.data[i]['Budget']}',
+                                              'Rs ${snapshot.data[0][i]['Budget']}',
                                               style: TextStyle(
                                                   color: Colors.green,
                                                   fontSize: 16,
@@ -227,7 +234,7 @@ class _ReviewOffersState extends State<ReviewOffers> {
                                               Column(children: [
                                                 Icon(
                                                   Icons.email,
-                                                  color: snapshot.data[i][
+                                                  color: snapshot.data[0][i][
                                                               'Email Status'] ==
                                                           'Verified'
                                                       ? kPrimaryColor
@@ -237,7 +244,7 @@ class _ReviewOffersState extends State<ReviewOffers> {
                                                 Text(
                                                   "Email",
                                                   style: TextStyle(
-                                                    color: snapshot.data[i][
+                                                    color: snapshot.data[0][i][
                                                                 'Email Status'] ==
                                                             'Verified'
                                                         ? kPrimaryColor
@@ -249,7 +256,7 @@ class _ReviewOffersState extends State<ReviewOffers> {
                                               Column(children: [
                                                 Icon(
                                                   Icons.phone,
-                                                  color: snapshot.data[i][
+                                                  color: snapshot.data[0][i][
                                                               'Phone No Status'] ==
                                                           'Verified'
                                                       ? kPrimaryColor
@@ -259,7 +266,7 @@ class _ReviewOffersState extends State<ReviewOffers> {
                                                 Text(
                                                   "Phone",
                                                   style: TextStyle(
-                                                    color: snapshot.data[i][
+                                                    color: snapshot.data[0][i][
                                                                 'Phone No Status'] ==
                                                             'Verified'
                                                         ? kPrimaryColor
@@ -271,7 +278,7 @@ class _ReviewOffersState extends State<ReviewOffers> {
                                               Column(children: [
                                                 Icon(
                                                   Icons.payment,
-                                                  color: snapshot.data[i][
+                                                  color: snapshot.data[0][i][
                                                               'Payment Status'] ==
                                                           'Verified'
                                                       ? kPrimaryColor
@@ -281,7 +288,7 @@ class _ReviewOffersState extends State<ReviewOffers> {
                                                 Text(
                                                   "Payment",
                                                   style: TextStyle(
-                                                    color: snapshot.data[i][
+                                                    color: snapshot.data[0][i][
                                                                 'Payment Status'] ==
                                                             'Verified'
                                                         ? kPrimaryColor
@@ -293,7 +300,7 @@ class _ReviewOffersState extends State<ReviewOffers> {
                                               Column(children: [
                                                 Icon(
                                                   Icons.verified_user,
-                                                  color: snapshot.data[i]
+                                                  color: snapshot.data[0][i]
                                                               ['CNIC Status'] ==
                                                           'verified'
                                                       ? kPrimaryColor
@@ -303,7 +310,7 @@ class _ReviewOffersState extends State<ReviewOffers> {
                                                 Text(
                                                   "CNIC",
                                                   style: TextStyle(
-                                                    color: snapshot.data[i][
+                                                    color: snapshot.data[0][i][
                                                                 'CNIC Status'] ==
                                                             'verified'
                                                         ? kPrimaryColor
@@ -331,15 +338,18 @@ class _ReviewOffersState extends State<ReviewOffers> {
                                         color: Colors.black.withOpacity(0.7),
                                         onPressed: () {
                                           Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                  builder: (_) => ChatScreen(
-                                                    receiverName: snapshot.data[i] ['Name'],
-                                                    receiverEmail: snapshot.data[i] ['Email'],
-                                                    receiverPhotoURL: snapshot.data[i] ['PhotoURL'],
-                                                    isOnline: true,
-                                                  ),
-                                                ));
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (_) => ChatScreen(
+                                                  receiverName: snapshot.data[0]
+                                                      [i]['Name'],
+                                                  receiverEmail: snapshot
+                                                      .data[0][i]['Email'],
+                                                  receiverPhotoURL: snapshot
+                                                      .data[0][i]['PhotoURL'],
+                                                  isOnline: true,
+                                                ),
+                                              ));
                                         },
                                       ),
                                     ),
@@ -353,7 +363,9 @@ class _ReviewOffersState extends State<ReviewOffers> {
                                         child: Text('Accept Offer'),
                                         textColor: Colors.white,
                                         color: Colors.green,
-                                        onPressed: () {},
+                                        onPressed: () {
+                                          acceptOffer(context, snapshot, i);
+                                        },
                                       ),
                                     ),
                                   ],
@@ -367,6 +379,63 @@ class _ReviewOffersState extends State<ReviewOffers> {
                   });
         },
       ),
+    );
+  }
+
+  acceptOffer(BuildContext context, AsyncSnapshot<dynamic> snapshot, int i) {
+    // set up the button
+    Widget acceptButton = FlatButton(
+      child: Text("Yes"),
+      onPressed: () {
+        SetData()
+            .assignTask(
+                context,
+                snapshot.data[1]['Description'],
+                snapshot.data[1]['Category'],
+                snapshot.data[1]['Duration'],
+                snapshot.data[1]['Budget'],
+                snapshot.data[1]['Location'],
+                snapshot.data[0][i]['Email'],
+                snapshot.data[0][i]['PhotoURL'],
+                snapshot.data[0][i]['Name'])
+            .then((value) => deleteUserRequest(widget.docID))
+            .then((value) {
+          Navigator.pop(context);
+          // Navigator.pop(context);
+        }).then((value) =>
+                Snack_Bar.show(context, "Task Assigned Successfully"));
+      },
+    );
+    Widget cancelButton = FlatButton(
+      child: Text("No"),
+      onPressed: () {
+        Navigator.pop(context);
+      },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      elevation: 5.0,
+      backgroundColor: hexColor,
+      title: Text(
+        "Confirmation!",
+        style: TextStyle(
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+      content: Text("Do you want to accept offer?"),
+      actions: [
+        cancelButton,
+        acceptButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
     );
   }
 }

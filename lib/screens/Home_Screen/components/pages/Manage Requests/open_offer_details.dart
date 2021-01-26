@@ -19,6 +19,7 @@ class OpenOfferDetails extends StatefulWidget {
 
 class _OpenOfferDetailsState extends State<OpenOfferDetails> {
   User user = FirebaseAuth.instance.currentUser;
+  GetData getData =  GetData();
   int indexLength;
   @override
   Widget build(BuildContext context) {
@@ -62,8 +63,8 @@ class _OpenOfferDetailsState extends State<OpenOfferDetails> {
         child: FutureBuilder(
           initialData: [],
           future: Future.wait([
-            GetData().getUserRequests(),
-            GetData().getOffers(widget.docID),
+            getData.getPostedTask(),
+            getData.getOffers(widget.docID),
           ]),
           builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting)
