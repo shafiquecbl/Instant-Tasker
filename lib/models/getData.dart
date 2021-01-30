@@ -18,7 +18,7 @@ Future getUserProfile() async {
 
 Future getRequests() async {
     QuerySnapshot snapshot =
-        await firestore.collection("Buyer Requests").orderBy("Time",descending: false).get();
+        await firestore.collection("Buyer Requests").where("Email", isNotEqualTo:email).get();
     return snapshot.docs;
   }
 
@@ -38,13 +38,18 @@ Future getRequests() async {
         await firestore.collection("Buyer Requests").doc(docID).get();
     return snapshot;
   }
+  Future getActiveOrders() async {
+    QuerySnapshot snapshot =
+        await firestore.collection("Users").doc(email).collection("Orders").get();
+    return snapshot.docs;
+  }
 
   Future<String> getCNIC() async {
   DocumentSnapshot document = await firestore
       .collection('Users')
       .doc(email)
       .get();
-       String getCNIC = document['CNIC'];
+       String getCNIC = document['CNIC Status'];
       return getCNIC;
 
 }
@@ -54,6 +59,14 @@ Future getOffers(docID) async {
       .collection("Buyer Requests")
       .doc(docID)
       .collection('Offers')
+      .get();
+  return snapshot.docs;
+}
+Future getOrders(docID) async {
+  QuerySnapshot snapshot = await firestore
+      .collection("Users")
+      .doc(email)
+      .collection('Orders')
       .get();
   return snapshot.docs;
 }

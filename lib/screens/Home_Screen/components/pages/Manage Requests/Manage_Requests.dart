@@ -39,15 +39,28 @@ class _ManageRequestsState extends State<ManageRequests> {
           ),
           backgroundColor: hexColor,
           bottom: TabBar(
-            labelColor: kPrimaryColor,
-            unselectedLabelColor: Colors.grey,
-            indicatorColor: kPrimaryColor,
-            tabs: [
-              Tab(text: "Posted"),
-              Tab(text: "Active"),
-              Tab(text: "Completed")
-            ],
-          ),
+              labelColor: kPrimaryColor,
+              unselectedLabelColor: Colors.grey,
+              indicatorColor: kPrimaryColor,
+              tabs: [
+                FutureBuilder(
+                  initialData: [],
+                  future: getData.getPostedTask(),
+                  builder: (BuildContext context, AsyncSnapshot snapshot) {
+                    postedTaskLength = snapshot.data.length;
+                    return Tab(text: "Posted ($postedTaskLength)");
+                  },
+                ),
+                FutureBuilder(
+                  initialData: [],
+                  future: getData.getActiveTask(),
+                  builder: (BuildContext context, AsyncSnapshot snapshot) {
+                    activeTaskLength = snapshot.data.length;
+                    return Tab(text: "Active ($activeTaskLength)");
+                  },
+                ),
+                Tab(text: "Completed")
+              ]),
         ),
         body: FutureBuilder(
           initialData: [],
@@ -231,23 +244,23 @@ class _ManageRequestsState extends State<ManageRequests> {
   }
 
   activeTask(AsyncSnapshot<dynamic> snapshot) {
-    if (postedTaskLength == 0)
+    if (activeTaskLength == 0)
       return Center(
         child: Text(
-          "No Active Tasks yet",
+          "No Active Tasks Yet",
           style: TextStyle(
-              fontWeight: FontWeight.bold, fontSize: 17, color: kWhiteColor),
+              fontWeight: FontWeight.bold, fontSize: 17, color: kPrimaryColor),
         ),
       );
     if (snapshot.hasData)
       return RefreshIndicator(
         onRefresh: () async {
           setState(() {
-            getData.getPostedTask();
+            getData.getActiveTask();
           });
         },
         child: ListView.builder(
-          itemCount: postedTaskLength,
+          itemCount: activeTaskLength,
           itemBuilder: (context, index) {
             return Container(
               margin: EdgeInsets.all(10),

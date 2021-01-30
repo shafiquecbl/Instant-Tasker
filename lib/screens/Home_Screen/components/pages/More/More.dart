@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:shop_app/screens/Home_Screen/components/pages/More/Manage%20Orders/manage_orders.dart';
 import 'package:shop_app/screens/Home_Screen/components/pages/More/Verification/verification.dart';
 import 'package:shop_app/screens/Home_Screen/components/pages/More/user_profile/user_profile.dart';
 import 'package:shop_app/screens/sign_in/sign_in_screen.dart';
@@ -117,6 +118,18 @@ class _MoreState extends State<More> {
                       context,
                       MaterialPageRoute(
                         builder: (_) => PostTask(),
+                      ),
+                    ),
+                  },
+                ),
+                ProfileMenu(
+                  text: "Manage Orders",
+                  icon: "assets/icons/orders.svg",
+                  press: () => {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => ManageOrders(),
                       ),
                     ),
                   },

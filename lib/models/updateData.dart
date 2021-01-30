@@ -31,8 +31,10 @@ final email = FirebaseAuth.instance.currentUser.email;
       'Specialities': "",
       'Languages': "",
       'Work': "",
-      'CNIC': "Not Verified",
+      'CNIC Status': "Not Verified",
       'Payment Status': "Not Verified",
+      'CNIC': "Not Available",
+      "Payment Method": "Not Available",
     },).then((value) => 
     Navigator.pushReplacementNamed(context, MainScreen.routeName)).catchError((e){
       Snack_Bar.show(context, e.message);

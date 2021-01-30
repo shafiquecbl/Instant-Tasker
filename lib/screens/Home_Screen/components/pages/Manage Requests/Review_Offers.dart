@@ -9,7 +9,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shop_app/screens/Home_Screen/components/pages/Tasks/widgets/common_widgets.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:shop_app/widgets/customAppBar.dart';
-import 'package:shop_app/widgets/snack_bar.dart';
 import 'package:shop_app/widgets/time_ago.dart';
 
 class ReviewOffers extends StatefulWidget {
@@ -302,7 +301,7 @@ class _ReviewOffersState extends State<ReviewOffers> {
                                                   Icons.verified_user,
                                                   color: snapshot.data[0][i]
                                                               ['CNIC Status'] ==
-                                                          'verified'
+                                                          'Verified'
                                                       ? kPrimaryColor
                                                           .withOpacity(0.9)
                                                       : Colors.grey[400],
@@ -312,7 +311,7 @@ class _ReviewOffersState extends State<ReviewOffers> {
                                                   style: TextStyle(
                                                     color: snapshot.data[0][i][
                                                                 'CNIC Status'] ==
-                                                            'verified'
+                                                            'Verified'
                                                         ? kPrimaryColor
                                                             .withOpacity(0.9)
                                                         : Colors.grey[400],
@@ -401,9 +400,12 @@ class _ReviewOffersState extends State<ReviewOffers> {
             .then((value) => deleteUserRequest(widget.docID))
             .then((value) {
           Navigator.pop(context);
-          // Navigator.pop(context);
-        }).then((value) =>
-                Snack_Bar.show(context, "Task Assigned Successfully"));
+          Navigator.pop(context);
+          Navigator.pop(context);
+        }).then((value) => setState(() {
+                  getData.getPostedTask();
+                  getData.getActiveTask();
+                }));
       },
     );
     Widget cancelButton = FlatButton(
