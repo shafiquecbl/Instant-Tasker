@@ -301,7 +301,7 @@ class _ReviewOffersState extends State<ReviewOffers> {
                                                   Icons.verified_user,
                                                   color: snapshot.data[0][i]
                                                               ['CNIC Status'] ==
-                                                          'Verified'
+                                                          'verified'
                                                       ? kPrimaryColor
                                                           .withOpacity(0.9)
                                                       : Colors.grey[400],
@@ -311,7 +311,7 @@ class _ReviewOffersState extends State<ReviewOffers> {
                                                   style: TextStyle(
                                                     color: snapshot.data[0][i][
                                                                 'CNIC Status'] ==
-                                                            'Verified'
+                                                            'verified'
                                                         ? kPrimaryColor
                                                             .withOpacity(0.9)
                                                         : Colors.grey[400],

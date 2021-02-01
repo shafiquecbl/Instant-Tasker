@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:shop_app/constants.dart';
@@ -61,7 +62,7 @@ class _ManageOrdersState extends State<ManageOrders> {
             activeOrdersLength = snapshot.data[0].length;
             return TabBarView(
               children: [
-                activeOrders(snapshot),
+                activeOrders(snapshot.data[0]),
                 Center(child: Text("Completed")),
               ],
             );
@@ -77,17 +78,20 @@ class _ManageOrdersState extends State<ManageOrders> {
     });
   }
 
-  activeOrders(AsyncSnapshot<dynamic> snapshot) {
+  activeOrders(List<QueryDocumentSnapshot> snapshot) {
     if (activeOrdersLength == 0)
       return SizedBox(
         child: Center(
-            child: Text(
+          child: Text(
             "No Orders Yet",
             style: TextStyle(
-                fontWeight: FontWeight.bold, fontSize: 17, color: kPrimaryColor),
-          ),),
+                fontWeight: FontWeight.bold,
+                fontSize: 17,
+                color: kPrimaryColor),
+          ),
+        ),
       );
-    if (snapshot.hasData)
+    if (snapshot.isNotEmpty)
       return RefreshIndicator(
         onRefresh: () async {
           setState(() {
@@ -99,40 +103,28 @@ class _ManageOrdersState extends State<ManageOrders> {
           itemBuilder: (context, index) {
             return Container(
               margin: EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(5)),
-                border: Border.all(color: Colors.grey[300]),
-              ),
+              decoration: boxDecoration,
               child: Wrap(
                 children: <Widget>[
                   Container(
-                    margin: EdgeInsets.only(left: 17, top: 5),
+                    margin: EdgeInsets.only(left: 17, top: 5, right: 17),
                     child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Align(
                             alignment: Alignment.centerLeft,
                             child: Text(
-                              TimeAgo.timeAgoSinceDate(
-                                  snapshot.data[0][index]['Time']),
+                              TimeAgo.timeAgoSinceDate(snapshot[index]['Time']),
                               style: TextStyle(color: Colors.grey),
                             ),
                           ),
-                          // Align(
-                          //     alignment: Alignment.centerRight,
-                          //     child: SizedBox(
-                          //       height: 25,
-                          //       child: IconButton(
-                          //         color: Colors.grey,
-                          //         padding: EdgeInsets.all(0),
-                          //         icon: Icon(Icons.close),
-                          //         onPressed: () {
-                          //           deleteUserRequest(
-                          //                   snapshot.data[0][index].id)
-                          //               .then((value) => updateScreen());
-                          //         },
-                          //       ),
-                          //     ))
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              snapshot[index]['Status'],
+                              style: TextStyle(color: kPrimaryColor),
+                            ),
+                          ),
                         ]),
                   ),
                   Padding(
@@ -148,7 +140,7 @@ class _ManageOrdersState extends State<ManageOrders> {
                           ),
                           padding: EdgeInsets.all(10),
                           child: Text(
-                            snapshot.data[0][index]['Description'],
+                            snapshot[index]['Description'],
                             style:
                                 TextStyle(color: Colors.black.withOpacity(0.6)),
                           ),
@@ -159,7 +151,7 @@ class _ManageOrdersState extends State<ManageOrders> {
                             color: Colors.green,
                           ),
                           title: Text(
-                            "Budget: ${snapshot.data[0][index]['Budget']}",
+                            "Budget: ${snapshot[index]['Budget']}",
                             style: TextStyle(
                               fontSize: 14,
                               color: Colors.green,
@@ -176,7 +168,7 @@ class _ManageOrdersState extends State<ManageOrders> {
                         ListTile(
                           leading: Icon(Icons.timer),
                           title: Text(
-                            "Duration: ${snapshot.data[0][index]['Duration']}",
+                            "Duration: ${snapshot[index]['Duration']}",
                             style: TextStyle(
                               fontSize: 14,
                               color: Colors.grey,
@@ -185,7 +177,7 @@ class _ManageOrdersState extends State<ManageOrders> {
                         ),
                         FutureBuilder(
                           initialData: [],
-                          future: getData.getOrders(snapshot.data[0][index].id),
+                          future: getData.getOrders(snapshot[index].id),
                           builder: (BuildContext context, AsyncSnapshot snap) {
                             return RaisedButton(
                               child: Text('View Details'),
@@ -197,7 +189,7 @@ class _ManageOrdersState extends State<ManageOrders> {
                                   MaterialPageRoute(
                                     builder: (_) => OpenOrderDetails(
                                       index,
-                                      snapshot.data[0][index].id,
+                                      snapshot[index].id,
                                     ),
                                   ),
                                 );

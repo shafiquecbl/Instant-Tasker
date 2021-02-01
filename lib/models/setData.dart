@@ -130,6 +130,7 @@ class SetData {
       'Category': category,
       'Client PhotoURL': user.photoURL,
       'timestamp': FieldValue.serverTimestamp(),
+      'Status': "Pending"
     });
 
     return await FirebaseFirestore.instance

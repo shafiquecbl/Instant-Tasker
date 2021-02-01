@@ -102,7 +102,7 @@ class _ChatScreenState extends State<ChatScreen> {
           return SpinKitDoubleBounce(color: kPrimaryColor);
         if (snapshot.hasData)
           return ListView.builder(
-            reverse: true,
+              reverse: true,
               padding: EdgeInsets.all(20),
               itemCount: snapshot.data.docs.length,
               itemBuilder: (BuildContext context, int index) {

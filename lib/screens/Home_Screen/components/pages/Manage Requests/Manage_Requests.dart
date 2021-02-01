@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:shop_app/constants.dart';
@@ -75,8 +76,8 @@ class _ManageRequestsState extends State<ManageRequests> {
             activeTaskLength = snapshot.data[1].length;
             return TabBarView(
               children: [
-                postedTask(snapshot),
-                activeTask(snapshot),
+                postedTask(snapshot.data[0]),
+                activeTask(snapshot.data[1]),
                 Center(child: Text("Completed")),
               ],
             );
@@ -92,10 +93,11 @@ class _ManageRequestsState extends State<ManageRequests> {
     });
   }
 
-  postedTask(AsyncSnapshot<dynamic> snapshot) {
+  postedTask(List<QueryDocumentSnapshot> snapshot) {
     if (postedTaskLength == 0)
       return SizedBox(
         child: Center(
+            // ignore: deprecated_member_use
             child: RaisedButton(
           color: kPrimaryColor,
           padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
@@ -114,7 +116,7 @@ class _ManageRequestsState extends State<ManageRequests> {
           },
         )),
       );
-    if (snapshot.hasData)
+    if (snapshot.isNotEmpty)
       return RefreshIndicator(
         onRefresh: () async {
           setState(() {
@@ -126,10 +128,7 @@ class _ManageRequestsState extends State<ManageRequests> {
           itemBuilder: (context, index) {
             return Container(
               margin: EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(5)),
-                border: Border.all(color: Colors.grey[300]),
-              ),
+              decoration: boxDecoration,
               child: Wrap(
                 children: <Widget>[
                   Container(
@@ -140,8 +139,7 @@ class _ManageRequestsState extends State<ManageRequests> {
                           Align(
                             alignment: Alignment.centerLeft,
                             child: Text(
-                              TimeAgo.timeAgoSinceDate(
-                                  snapshot.data[0][index]['Time']),
+                              TimeAgo.timeAgoSinceDate(snapshot[index]['Time']),
                               style: TextStyle(color: Colors.grey),
                             ),
                           ),
@@ -154,8 +152,7 @@ class _ManageRequestsState extends State<ManageRequests> {
                                   padding: EdgeInsets.all(0),
                                   icon: Icon(Icons.close),
                                   onPressed: () {
-                                    deleteUserRequest(
-                                            snapshot.data[0][index].id)
+                                    deleteUserRequest(snapshot[index].id)
                                         .then((value) => updateScreen());
                                   },
                                 ),
@@ -175,7 +172,7 @@ class _ManageRequestsState extends State<ManageRequests> {
                           ),
                           padding: EdgeInsets.all(10),
                           child: Text(
-                            snapshot.data[0][index]['Description'],
+                            snapshot[index]['Description'],
                             style:
                                 TextStyle(color: Colors.black.withOpacity(0.6)),
                           ),
@@ -186,24 +183,18 @@ class _ManageRequestsState extends State<ManageRequests> {
                             color: Colors.green,
                           ),
                           title: Text(
-                            "Budget: ${snapshot.data[0][index]['Budget']}",
+                            "Budget: ${snapshot[index]['Budget']}",
                             style: TextStyle(
                               fontSize: 14,
                               color: Colors.green,
                             ),
                           ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 70),
-                          child: Divider(
-                            height: 1,
-                            color: Colors.grey,
-                          ),
-                        ),
+                        dividerPad,
                         ListTile(
                           leading: Icon(Icons.timer),
                           title: Text(
-                            "Duration: ${snapshot.data[0][index]['Duration']}",
+                            "Duration: ${snapshot[index]['Duration']}",
                             style: TextStyle(
                               fontSize: 14,
                               color: Colors.grey,
@@ -212,8 +203,9 @@ class _ManageRequestsState extends State<ManageRequests> {
                         ),
                         FutureBuilder(
                           initialData: [],
-                          future: getData.getOffers(snapshot.data[0][index].id),
+                          future: getData.getOffers(snapshot[index].id),
                           builder: (BuildContext context, AsyncSnapshot snap) {
+                            // ignore: deprecated_member_use
                             return RaisedButton(
                               child: Text('View Offers  (${snap.data.length})'),
                               textColor: Colors.white,
@@ -224,7 +216,7 @@ class _ManageRequestsState extends State<ManageRequests> {
                                   MaterialPageRoute(
                                     builder: (_) => OpenOfferDetails(
                                       index,
-                                      snapshot.data[0][index].id,
+                                      snapshot[index].id,
                                     ),
                                   ),
                                 );
@@ -243,7 +235,7 @@ class _ManageRequestsState extends State<ManageRequests> {
       );
   }
 
-  activeTask(AsyncSnapshot<dynamic> snapshot) {
+  activeTask(List<QueryDocumentSnapshot> snapshot) {
     if (activeTaskLength == 0)
       return Center(
         child: Text(
@@ -252,7 +244,7 @@ class _ManageRequestsState extends State<ManageRequests> {
               fontWeight: FontWeight.bold, fontSize: 17, color: kPrimaryColor),
         ),
       );
-    if (snapshot.hasData)
+    if (snapshot.isNotEmpty)
       return RefreshIndicator(
         onRefresh: () async {
           setState(() {
@@ -264,10 +256,7 @@ class _ManageRequestsState extends State<ManageRequests> {
           itemBuilder: (context, index) {
             return Container(
               margin: EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(5)),
-                border: Border.all(color: Colors.grey[300]),
-              ),
+              decoration: boxDecoration,
               child: Wrap(
                 children: <Widget>[
                   Container(
@@ -278,18 +267,17 @@ class _ManageRequestsState extends State<ManageRequests> {
                           Align(
                             alignment: Alignment.centerLeft,
                             child: Text(
-                              TimeAgo.timeAgoSinceDate(
-                                  snapshot.data[1][index]['Time']),
+                              TimeAgo.timeAgoSinceDate(snapshot[index]['Time']),
                               style: TextStyle(color: Colors.grey),
                             ),
                           ),
-                          // Align(
-                          //   alignment: Alignment.centerLeft,
-                          //   child: Text(
-                          //     "Pending",
-                          //     style: TextStyle(color: Colors.green),
-                          //   ),
-                          // ),
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              snapshot[index]['Status'],
+                              style: TextStyle(color: kPrimaryColor),
+                            ),
+                          ),
                         ]),
                   ),
                   Padding(
@@ -305,7 +293,7 @@ class _ManageRequestsState extends State<ManageRequests> {
                           ),
                           padding: EdgeInsets.all(10),
                           child: Text(
-                            snapshot.data[1][index]['Description'],
+                            snapshot[index]['Description'],
                             style:
                                 TextStyle(color: Colors.black.withOpacity(0.6)),
                           ),
@@ -316,24 +304,18 @@ class _ManageRequestsState extends State<ManageRequests> {
                             color: Colors.green,
                           ),
                           title: Text(
-                            "Budget: ${snapshot.data[1][index]['Budget']}",
+                            "Budget: ${snapshot[index]['Budget']}",
                             style: TextStyle(
                               fontSize: 14,
                               color: Colors.green,
                             ),
                           ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 70),
-                          child: Divider(
-                            height: 1,
-                            color: Colors.grey,
-                          ),
-                        ),
+                        dividerPad,
                         ListTile(
                           leading: Icon(Icons.timer),
                           title: Text(
-                            "Duration: ${snapshot.data[1][index]['Duration']}",
+                            "Duration: ${snapshot[index]['Duration']}",
                             style: TextStyle(
                               fontSize: 14,
                               color: Colors.grey,
@@ -350,7 +332,7 @@ class _ManageRequestsState extends State<ManageRequests> {
                               MaterialPageRoute(
                                 builder: (_) => ActiveTaskDetails(
                                   index,
-                                  snapshot.data[1][index].id,
+                                  snapshot[index].id,
                                 ),
                               ),
                             );

@@ -15,6 +15,7 @@ class CompleteProfileForm extends StatefulWidget {
 }
 
 class _CompleteProfileFormState extends State<CompleteProfileForm> {
+  UpdateData updateData = UpdateData();
   final _formKey = GlobalKey<FormState>();
   final List<String> errors = [];
 
@@ -71,10 +72,11 @@ class _CompleteProfileFormState extends State<CompleteProfileForm> {
           FormError(errors: errors),
           SizedBox(height: getProportionateScreenHeight(40)),
           DefaultButton(
-            text: "continue",
+            text: "Continue",
             press: () {
               if (_formKey.currentState.validate()) {
-                UpdateData().saveUserProfile(context, name, gender, phoneNo, address);
+                updateData.saveUserProfile(
+                    context, name, gender, phoneNo, address);
                 auth.currentUser.updateProfile(displayName: name);
               }
             },
@@ -195,5 +197,4 @@ class _CompleteProfileFormState extends State<CompleteProfileForm> {
       ),
     );
   }
-
 }

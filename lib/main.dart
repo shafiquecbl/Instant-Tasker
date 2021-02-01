@@ -10,8 +10,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp().then((value) {
     runApp(MyApp());
-    }
-  );
+  });
 }
 
 class MyApp extends StatelessWidget {
@@ -29,5 +28,5 @@ class MyApp extends StatelessWidget {
   }
 }
 
-
 // flutter pub get
+// 1 Feb, 3:36PM

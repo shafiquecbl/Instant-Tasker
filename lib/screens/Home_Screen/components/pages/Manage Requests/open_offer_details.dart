@@ -457,7 +457,7 @@ class _OpenOfferDetailsState extends State<OpenOfferDetails> {
                                                     Icons.verified_user,
                                                     color: snapshot.data[1][i][
                                                                 'CNIC Status'] ==
-                                                            'Verified'
+                                                            'verified'
                                                         ? kPrimaryColor
                                                             .withOpacity(0.9)
                                                         : Colors.grey[400],
@@ -468,7 +468,7 @@ class _OpenOfferDetailsState extends State<OpenOfferDetails> {
                                                       color: snapshot.data[1][i]
                                                                   [
                                                                   'CNIC Status'] ==
-                                                              'Verified'
+                                                              'verified'
                                                           ? kPrimaryColor
                                                               .withOpacity(0.9)
                                                           : Colors.grey[400],

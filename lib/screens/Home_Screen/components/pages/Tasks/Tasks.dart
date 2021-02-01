@@ -260,7 +260,7 @@ class _TasksState extends State<Tasks> {
                                       textColor: Colors.white,
                                       color: Colors.green,
                                       onPressed: () {
-                                        if (cnicCheck == "Verified") {
+                                        if (cnicCheck == "verified") {
                                           Navigator.push(
                                             context,
                                             MaterialPageRoute(

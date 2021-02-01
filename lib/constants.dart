@@ -32,7 +32,6 @@ final otp = TextStyle(
   height: 1.5,
 );
 
-
 // Form Error
 final RegExp emailValidatorRegExp =
     RegExp(r"^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
@@ -53,7 +52,6 @@ const String kDescriptionNullError = "Please add task Description";
 const String kCategoryNullError = "Please select category";
 const String kdurationNullError = "Please select duration";
 const String kbudgetNullError = "Please add your budget";
-
 
 final otpInputDecoration = InputDecoration(
   contentPadding:
@@ -90,3 +88,21 @@ class UniversalVariables {
       begin: Alignment.topLeft,
       end: Alignment.bottomRight);
 }
+
+BoxDecoration boxDecoration = BoxDecoration(
+  borderRadius: BorderRadius.all(Radius.circular(5)),
+  border: Border.all(color: Colors.grey[200]),
+);
+
+Divider divider = new Divider(
+  height: 1,
+  color: Colors.grey,
+);
+
+Padding dividerPad = new Padding(
+  padding: const EdgeInsets.only(left: 70),
+  child: Divider(
+    height: 1,
+    color: Colors.grey,
+  ),
+);
