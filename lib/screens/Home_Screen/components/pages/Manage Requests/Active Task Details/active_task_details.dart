@@ -155,7 +155,6 @@ class _ActiveTaskDetailsState extends State<ActiveTaskDetails> {
                     SizedBox(
                       height: 20,
                     ),
-                    // ignore: deprecated_member_use
                     RaisedButton(
                       padding:
                           EdgeInsets.symmetric(vertical: 8, horizontal: 100),
@@ -180,18 +179,45 @@ class _ActiveTaskDetailsState extends State<ActiveTaskDetails> {
                       },
                     ),
                     SizedBox(
-                      height: 15,
+                      height: 5,
                     ),
                     RaisedButton(
                       padding:
                           EdgeInsets.symmetric(vertical: 8, horizontal: 10),
                       child: Text('Cancel Order'),
                       textColor: Colors.white,
-                      color: Colors.green,
+                      color: Colors.red,
                       onPressed: () {
                         // acceptOffer(context, snapshot, i);
                       },
                     ),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    snapshot['Status'] == "Submitted"
+                        ? RaisedButton(
+                            padding: EdgeInsets.symmetric(
+                                vertical: 8, horizontal: 10),
+                            child: Text('Take Revesion'),
+                            textColor: Colors.white,
+                            color: Colors.orange,
+                            onPressed: () {
+                              // acceptOffer(context, snapshot, i);
+                            },
+                          )
+                        : Container(),
+                    snapshot['Status'] == "Submitted"
+                        ? RaisedButton(
+                            padding: EdgeInsets.symmetric(
+                                vertical: 8, horizontal: 10),
+                            child: Text('Mark as complete'),
+                            textColor: Colors.white,
+                            color: greenColor,
+                            onPressed: () {
+                              // acceptOffer(context, snapshot, i);
+                            },
+                          )
+                        : Container(),
                   ],
                 ),
               ),

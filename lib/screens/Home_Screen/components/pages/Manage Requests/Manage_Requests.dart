@@ -11,12 +11,12 @@ import 'package:shop_app/models/deleteData.dart';
 import 'dart:async';
 import 'package:shop_app/screens/Home_Screen/components/pages/Manage Requests/Active Task Details/active_task_details.dart';
 
-class ManageRequests extends StatefulWidget {
+class ManageTasks extends StatefulWidget {
   @override
-  _ManageRequestsState createState() => _ManageRequestsState();
+  _ManageTasksState createState() => _ManageTasksState();
 }
 
-class _ManageRequestsState extends State<ManageRequests> {
+class _ManageTasksState extends State<ManageTasks> {
   int postedTaskLength;
   int activeTaskLength;
   GetData getData = GetData();
@@ -24,7 +24,7 @@ class _ManageRequestsState extends State<ManageRequests> {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return DefaultTabController(
-      length: 3,
+      length: 4,
       child: Scaffold(
         appBar: AppBar(
           elevation: 2,
@@ -40,6 +40,7 @@ class _ManageRequestsState extends State<ManageRequests> {
           ),
           backgroundColor: hexColor,
           bottom: TabBar(
+              isScrollable: true,
               labelColor: kPrimaryColor,
               unselectedLabelColor: Colors.grey,
               indicatorColor: kPrimaryColor,
@@ -60,7 +61,8 @@ class _ManageRequestsState extends State<ManageRequests> {
                     return Tab(text: "Active ($activeTaskLength)");
                   },
                 ),
-                Tab(text: "Completed")
+                Tab(text: "Completed"),
+                Tab(text: "Canceled"),
               ]),
         ),
         body: FutureBuilder(
@@ -79,6 +81,7 @@ class _ManageRequestsState extends State<ManageRequests> {
                 postedTask(snapshot.data[0]),
                 activeTask(snapshot.data[1]),
                 Center(child: Text("Completed")),
+                Center(child: Text("Canceled")),
               ],
             );
           },
@@ -180,13 +183,13 @@ class _ManageRequestsState extends State<ManageRequests> {
                         ListTile(
                           leading: Icon(
                             Icons.attach_money,
-                            color: Colors.green,
+                            color: greenColor,
                           ),
                           title: Text(
                             "Budget: ${snapshot[index]['Budget']}",
                             style: TextStyle(
                               fontSize: 14,
-                              color: Colors.green,
+                              color: greenColor,
                             ),
                           ),
                         ),
@@ -301,13 +304,13 @@ class _ManageRequestsState extends State<ManageRequests> {
                         ListTile(
                           leading: Icon(
                             Icons.attach_money,
-                            color: Colors.green,
+                            color: greenColor,
                           ),
                           title: Text(
                             "Budget: ${snapshot[index]['Budget']}",
                             style: TextStyle(
                               fontSize: 14,
-                              color: Colors.green,
+                              color: greenColor,
                             ),
                           ),
                         ),
@@ -349,5 +352,6 @@ class _ManageRequestsState extends State<ManageRequests> {
       );
   }
 
-  completedTask() {}
+  completedTasks() {}
+  cancelledTasks() {}
 }

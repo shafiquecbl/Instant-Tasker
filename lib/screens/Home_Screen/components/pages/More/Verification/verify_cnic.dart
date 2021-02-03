@@ -50,7 +50,7 @@ class _VerifyCNICState extends State<VerifyCNIC> {
                 child: Text(
                   'Verify your CNIC',
                   style: TextStyle(
-                      color: Colors.green,
+                      color: greenColor,
                       fontSize: 18,
                       fontWeight: FontWeight.bold),
                 ),
@@ -75,7 +75,7 @@ class _VerifyCNICState extends State<VerifyCNIC> {
                           'CNIC front side Photo',
                           style: TextStyle(
                               fontSize: 16,
-                              color: Colors.green,
+                              color: greenColor,
                               fontWeight: FontWeight.bold),
                         ),
                         Padding(
@@ -121,7 +121,7 @@ class _VerifyCNICState extends State<VerifyCNIC> {
                           ),
                         ),
                         RaisedButton(
-                          color: Colors.green,
+                          color: greenColor,
                           child: Text('Upload'),
                           onPressed: () {
                             _cnicFrontSide();
@@ -136,7 +136,7 @@ class _VerifyCNICState extends State<VerifyCNIC> {
                           'CNIC back side Photo',
                           style: TextStyle(
                               fontSize: 16,
-                              color: Colors.green,
+                              color: greenColor,
                               fontWeight: FontWeight.bold),
                         ),
                         Padding(
@@ -182,7 +182,7 @@ class _VerifyCNICState extends State<VerifyCNIC> {
                           ),
                         ),
                         RaisedButton(
-                          color: Colors.green,
+                          color: greenColor,
                           child: Text('Upload'),
                           onPressed: () {
                             _cnicBackSide();
@@ -197,7 +197,7 @@ class _VerifyCNICState extends State<VerifyCNIC> {
                           'Upload your photo(For security verifications only)',
                           style: TextStyle(
                               fontSize: 14,
-                              color: Colors.green,
+                              color: greenColor,
                               fontWeight: FontWeight.bold),
                         ),
                         Padding(
@@ -246,11 +246,11 @@ class _VerifyCNICState extends State<VerifyCNIC> {
                           'This photo will not be used as your profile photo',
                           style: TextStyle(
                               fontSize: 14,
-                              color: Colors.green,
+                              color: greenColor,
                               fontWeight: FontWeight.bold),
                         ),
                         RaisedButton(
-                          color: Colors.green,
+                          color: greenColor,
                           child: Text('Upload'),
                           onPressed: () {
                             _userPhoto();
@@ -262,9 +262,7 @@ class _VerifyCNICState extends State<VerifyCNIC> {
                               horizontal: 170, vertical: 10),
                           color: kPrimaryColor,
                           child: Text('Submit'),
-                          onPressed: () {
-                            
-                          },
+                          onPressed: () {},
                         ),
                         SizedBox(height: getProportionateScreenHeight(20)),
                       ],
@@ -289,6 +287,7 @@ class _VerifyCNICState extends State<VerifyCNIC> {
       // uploadProfilePic();
     });
   }
+
   _cnicBackSide() async {
     // ignore: deprecated_member_use
     File image = await ImagePicker.pickImage(
@@ -299,6 +298,7 @@ class _VerifyCNICState extends State<VerifyCNIC> {
       // uploadProfilePic();
     });
   }
+
   _userPhoto() async {
     // ignore: deprecated_member_use
     File image = await ImagePicker.pickImage(

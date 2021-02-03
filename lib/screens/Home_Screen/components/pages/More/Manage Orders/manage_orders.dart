@@ -20,7 +20,7 @@ class _ManageOrdersState extends State<ManageOrders> {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return DefaultTabController(
-      length: 2,
+      length: 3,
       child: Scaffold(
         appBar: AppBar(
           elevation: 2,
@@ -48,7 +48,8 @@ class _ManageOrdersState extends State<ManageOrders> {
                     return Tab(text: "Active ($activeOrdersLength)");
                   },
                 ),
-                Tab(text: "Completed")
+                Tab(text: "Completed"),
+                Tab(text: "Cancelled"),
               ]),
         ),
         body: FutureBuilder(
@@ -64,6 +65,7 @@ class _ManageOrdersState extends State<ManageOrders> {
               children: [
                 activeOrders(snapshot.data[0]),
                 Center(child: Text("Completed")),
+                Center(child: Text("Cancelled")),
               ],
             );
           },
@@ -148,13 +150,13 @@ class _ManageOrdersState extends State<ManageOrders> {
                         ListTile(
                           leading: Icon(
                             Icons.attach_money,
-                            color: Colors.green,
+                            color: greenColor,
                           ),
                           title: Text(
                             "Budget: ${snapshot[index]['Budget']}",
                             style: TextStyle(
                               fontSize: 14,
-                              color: Colors.green,
+                              color: greenColor,
                             ),
                           ),
                         ),
@@ -188,7 +190,6 @@ class _ManageOrdersState extends State<ManageOrders> {
                                   context,
                                   MaterialPageRoute(
                                     builder: (_) => OpenOrderDetails(
-                                      index,
                                       snapshot[index].id,
                                     ),
                                   ),

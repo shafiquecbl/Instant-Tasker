@@ -5,13 +5,13 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:shop_app/constants.dart';
 import 'package:shop_app/models/getData.dart';
 import 'package:shop_app/screens/Home_Screen/components/pages/Inbox/chat_Screen.dart';
+import 'package:shop_app/screens/Home_Screen/components/pages/More/Manage%20Orders/Submit%20Order/submit_order.dart';
 import 'package:shop_app/size_config.dart';
 import 'package:shop_app/widgets/time_ago.dart';
 
 class OpenOrderDetails extends StatefulWidget {
-  final int index;
   final String docID;
-  OpenOrderDetails(this.index, this.docID);
+  OpenOrderDetails(this.docID);
   @override
   _OpenOrderDetailsState createState() => _OpenOrderDetailsState();
 }
@@ -46,7 +46,7 @@ class _OpenOrderDetailsState extends State<OpenOrderDetails> {
           builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting)
               return SpinKitDoubleBounce(color: kPrimaryColor);
-            return offerDetails(snapshot.data[widget.index]);
+            return offerDetails(snapshot.data);
           },
         ),
       ),
@@ -165,7 +165,7 @@ class _OpenOrderDetailsState extends State<OpenOrderDetails> {
                     ),
                     divider,
                     SizedBox(
-                      height: 20,
+                      height: 15,
                     ),
                     RaisedButton(
                       padding:
@@ -191,15 +191,22 @@ class _OpenOrderDetailsState extends State<OpenOrderDetails> {
                       },
                     ),
                     SizedBox(
-                      height: 15,
+                      height: 5,
                     ),
                     RaisedButton(
                       padding:
                           EdgeInsets.symmetric(vertical: 8, horizontal: 10),
                       child: Text('Submit Order'),
                       textColor: Colors.white,
-                      color: Colors.green,
-                      onPressed: () {},
+                      color: greenColor,
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => SubmitOrder(snapshot.id),
+                          ),
+                        );
+                      },
                     ),
                     SizedBox(
                       height: 15,

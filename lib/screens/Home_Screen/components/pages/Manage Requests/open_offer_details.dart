@@ -19,7 +19,7 @@ class OpenOfferDetails extends StatefulWidget {
 
 class _OpenOfferDetailsState extends State<OpenOfferDetails> {
   User user = FirebaseAuth.instance.currentUser;
-  GetData getData =  GetData();
+  GetData getData = GetData();
   int indexLength;
   @override
   Widget build(BuildContext context) {
@@ -45,7 +45,7 @@ class _OpenOfferDetailsState extends State<OpenOfferDetails> {
             onPressed: () {},
             child: Text("Edit",
                 style: TextStyle(
-                    color: Colors.green,
+                    color: greenColor,
                     fontSize: 18,
                     fontWeight: FontWeight.bold)),
           ),
@@ -53,7 +53,7 @@ class _OpenOfferDetailsState extends State<OpenOfferDetails> {
             onPressed: () {},
             child: Text("Delete",
                 style: TextStyle(
-                    color: Colors.green,
+                    color: greenColor,
                     fontSize: 18,
                     fontWeight: FontWeight.bold)),
           ),
@@ -211,7 +211,7 @@ class _OpenOfferDetailsState extends State<OpenOfferDetails> {
                               padding: EdgeInsets.symmetric(vertical: 10),
                               child: Text('Review Offers'),
                               textColor: Colors.white,
-                              color: Colors.green,
+                              color: greenColor,
                               onPressed: () {
                                 Navigator.push(
                                   context,
@@ -357,7 +357,7 @@ class _OpenOfferDetailsState extends State<OpenOfferDetails> {
                                           child: Text(
                                             'Offer : Rs.${snapshot.data[1][i]['Budget']}',
                                             style: TextStyle(
-                                                color: Colors.green,
+                                                color: greenColor,
                                                 fontSize: 16,
                                                 fontWeight: FontWeight.bold),
                                           ),
@@ -492,15 +492,18 @@ class _OpenOfferDetailsState extends State<OpenOfferDetails> {
                                             Text('Chat with Tasker'),
                                           ]),
                                           textColor: Colors.white,
-                                          color: Colors.green,
+                                          color: greenColor,
                                           onPressed: () {
                                             Navigator.push(
                                                 context,
                                                 MaterialPageRoute(
                                                   builder: (_) => ChatScreen(
-                                                    receiverName: snapshot.data[1][i] ['Name'],
-                                                    receiverEmail: snapshot.data[1][i] ['Email'],
-                                                    receiverPhotoURL: snapshot.data[1][i] ['PhotoURL'],
+                                                    receiverName: snapshot
+                                                        .data[1][i]['Name'],
+                                                    receiverEmail: snapshot
+                                                        .data[1][i]['Email'],
+                                                    receiverPhotoURL: snapshot
+                                                        .data[1][i]['PhotoURL'],
                                                     isOnline: true,
                                                   ),
                                                 ));

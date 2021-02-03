@@ -42,13 +42,12 @@ class _VerificationsState extends State<Verifications> {
           storePhoneNo = snapshot.data['Phone Number'];
 
           return SafeArea(
-            child: ListView(
-                children: [
-                 Container(
-                   padding: EdgeInsets.symmetric(horizontal: 15),
-                   child: Column(
-                     children: [
-                        SizedBox(height: getProportionateScreenHeight(10)),
+            child: ListView(children: [
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 15),
+                child: Column(
+                  children: [
+                    SizedBox(height: getProportionateScreenHeight(10)),
                     Text(
                       "Verifications help you to increase your chances of getting selected. People will trust you if you have verified badges on your profile.",
                       style: TextStyle(
@@ -61,37 +60,36 @@ class _VerificationsState extends State<Verifications> {
                           color: Colors.blueGrey, fontWeight: FontWeight.w600),
                     ),
                     SizedBox(height: getProportionateScreenHeight(15)),
-                    
-                     ],
-                     ),
-                 ),
-                 Container(
-                   padding: EdgeInsets.symmetric(horizontal:15),
-                   child: Text(
-                        'ID Verifications',
-                        style: TextStyle(
-                            color: Colors.green,
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold),
-                      ),
-                 ),
-                  SizedBox(height: getProportionateScreenHeight(10)),
-                  Column(
-                    children: [
-                      Card(
-                        margin: EdgeInsets.symmetric(vertical:10),
+                  ],
+                ),
+              ),
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 15),
+                child: Text(
+                  'ID Verifications',
+                  style: TextStyle(
+                      color: greenColor,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold),
+                ),
+              ),
+              SizedBox(height: getProportionateScreenHeight(10)),
+              Column(
+                children: [
+                  Card(
+                    margin: EdgeInsets.symmetric(vertical: 10),
                     child: ListTile(
                       leading: Icon(Icons.email_outlined, color: kPrimaryColor),
                       title: Text("Email"),
                       subtitle: Text(email),
                       trailing: RaisedButton(
                           child: Text('Verified'),
-                          textColor: kWhiteColor,                          
+                          textColor: kWhiteColor,
                           onPressed: null),
                     ),
                   ),
                   Card(
-                    margin: EdgeInsets.symmetric(vertical:10),
+                    margin: EdgeInsets.symmetric(vertical: 10),
                     child: ListTile(
                       leading: Icon(Icons.phone, color: kPrimaryColor),
                       title: Text("Phone"),
@@ -106,12 +104,14 @@ class _VerificationsState extends State<Verifications> {
                     ),
                   ),
                   Card(
-                    margin: EdgeInsets.symmetric(vertical:10),
+                    margin: EdgeInsets.symmetric(vertical: 10),
                     child: ListTile(
-                      leading: Icon(Icons.perm_identity_outlined, color: kPrimaryColor),
+                      leading: Icon(Icons.perm_identity_outlined,
+                          color: kPrimaryColor),
                       title: Text("CNIC"),
-                      subtitle: Text('Give members a reason to choose you - knowing that your identity is verified with NADRA CNIC',
-                      style: TextStyle(fontSize: 11.5),
+                      subtitle: Text(
+                        'Give members a reason to choose you - knowing that your identity is verified with NADRA CNIC',
+                        style: TextStyle(fontSize: 11.5),
                       ),
                       trailing: RaisedButton(
                           child: Text('Verify'),
@@ -123,12 +123,14 @@ class _VerificationsState extends State<Verifications> {
                     ),
                   ),
                   Card(
-                    margin: EdgeInsets.symmetric(vertical:10),
+                    margin: EdgeInsets.symmetric(vertical: 10),
                     child: ListTile(
-                      leading: Icon(Icons.payment_outlined, color: kPrimaryColor),
+                      leading:
+                          Icon(Icons.payment_outlined, color: kPrimaryColor),
                       title: Text("Payment Method"),
-                      subtitle: Text('Make payments with ease by having your payment method verified',
-                      style: TextStyle(fontSize: 11.5),
+                      subtitle: Text(
+                        'Make payments with ease by having your payment method verified',
+                        style: TextStyle(fontSize: 11.5),
                       ),
                       trailing: RaisedButton(
                           child: Text('Add'),
@@ -137,13 +139,15 @@ class _VerificationsState extends State<Verifications> {
                           onPressed: () {}),
                     ),
                   ),
-                  ],)
-                ]),
+                ],
+              )
+            ]),
           );
         },
       ),
     );
   }
+
   // Bottom Sheet Starts
   addMediaModal(context) {
     showModalBottomSheet(
@@ -199,9 +203,7 @@ class _VerificationsState extends State<Verifications> {
                           SizedBox(height: SizeConfig.screenHeight * 0.10),
                           DefaultButton(
                             text: "Verify Code",
-                            press: () {
-                              
-                            },
+                            press: () {},
                           )
                         ],
                       ),

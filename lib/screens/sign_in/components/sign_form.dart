@@ -26,7 +26,6 @@ class _SignFormState extends State<SignForm> {
   String email;
   String password;
   bool remember = false;
-  bool isLoading = false;
 
   final List<String> errors = [];
 

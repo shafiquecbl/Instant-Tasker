@@ -154,7 +154,7 @@ class _UserProfileState extends State<UserProfile> {
                       "Online",
                       style: TextStyle(
                         fontSize: 13,
-                        color: Colors.green,
+                        color: greenColor,
                         letterSpacing: 2.0,
                         fontWeight: FontWeight.w600,
                       ),

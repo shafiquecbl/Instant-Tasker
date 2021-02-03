@@ -4,6 +4,7 @@ import 'package:shop_app/size_config.dart';
 const kPrimaryColor = Color(0xFFFF7643);
 const kPrimaryLightColor = Color(0xFFFFECDF);
 const kGreenColor = Color(0xFF388E3C);
+const greenColor = Colors.green;
 const kWhiteColor = Colors.white;
 const hexColor = Color(0xFFf5f4f4);
 const kOfferColor = Color(0xFFE3E9F5);

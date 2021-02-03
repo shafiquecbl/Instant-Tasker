@@ -73,14 +73,14 @@ class _TasksState extends State<Tasks> {
         ],
       ),
       body: FutureBuilder(
-        initialData: [list,cnicCheck],
+        initialData: [list, cnicCheck],
         future: Future.wait([
           getData.getRequests(),
           getData.getCNIC(),
-          ]),
+        ]),
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-          if(snapshot.connectionState == ConnectionState.waiting)
-          return SpinKitDoubleBounce(color: kPrimaryColor);
+          if (snapshot.connectionState == ConnectionState.waiting)
+            return SpinKitDoubleBounce(color: kPrimaryColor);
           indexLength = snapshot.data[0].length;
           cnicCheck = snapshot.data[1];
           if (indexLength == 0)
@@ -95,64 +95,66 @@ class _TasksState extends State<Tasks> {
                 ),
               ),
             );
-            return SizedBox(
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: indexLength,
-                physics: PageScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
-                controller: PageController(viewportFraction: 1.0),
-                itemBuilder: (context, i) {
-                  return SingleChildScrollView(
-                    child: Container(
-                      margin: EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(5)),
-                        border: Border.all(color: Colors.grey[300]),
-                      ),
-                      child: Wrap(
-                        direction: Axis.vertical,
-                        children: <Widget>[
-                          Container(
-                            width: 390,
-                            child: ListTile(
-                              leading: CircleAvatar(
-                                  backgroundColor: kPrimaryColor.withOpacity(0.8),
-                                  backgroundImage:
-                                      AssetImage('assets/images/nullUser.png'),
-                                  child: snapshot.data[0][i]['PhotoURL'] != null
-                                      ? ClipRRect(
-                                          borderRadius: BorderRadius.circular(50),
-                                          child: Image.network(
-                                            snapshot.data[0][i]['PhotoURL'],
-                                            width: 50,
-                                            height: 50,
-                                            fit: BoxFit.cover,
-                                          ),
-                                        )
-                                      : ClipRRect(
-                                          borderRadius: BorderRadius.circular(50),
-                                          child: Image.asset(
-                                            'assets/images/nullUser.png',
-                                            width: 50,
-                                            height: 50,
-                                            fit: BoxFit.cover,
-                                          ),
-                                        )),
-                              title: Text(
-                                snapshot.data[0][i]['Email'],
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w700,
-                                  color: Colors.black.withOpacity(0.7),
-                                ),
-                              ),
-                              subtitle: Text(
-                                TimeAgo.timeAgoSinceDate(snapshot.data[0][i]['Time']),
-                                style: TextStyle(
-                                    color: Colors.black.withOpacity(0.6)),
+          return SizedBox(
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: indexLength,
+              physics:
+                  PageScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+              controller: PageController(viewportFraction: 1.0),
+              itemBuilder: (context, i) {
+                return SingleChildScrollView(
+                  child: Container(
+                    margin: EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(5)),
+                      border: Border.all(color: Colors.grey[300]),
+                    ),
+                    child: Wrap(
+                      direction: Axis.vertical,
+                      children: <Widget>[
+                        Container(
+                          width: 390,
+                          child: ListTile(
+                            leading: CircleAvatar(
+                                backgroundColor: kPrimaryColor.withOpacity(0.8),
+                                backgroundImage:
+                                    AssetImage('assets/images/nullUser.png'),
+                                child: snapshot.data[0][i]['PhotoURL'] != null
+                                    ? ClipRRect(
+                                        borderRadius: BorderRadius.circular(50),
+                                        child: Image.network(
+                                          snapshot.data[0][i]['PhotoURL'],
+                                          width: 50,
+                                          height: 50,
+                                          fit: BoxFit.cover,
+                                        ),
+                                      )
+                                    : ClipRRect(
+                                        borderRadius: BorderRadius.circular(50),
+                                        child: Image.asset(
+                                          'assets/images/nullUser.png',
+                                          width: 50,
+                                          height: 50,
+                                          fit: BoxFit.cover,
+                                        ),
+                                      )),
+                            title: Text(
+                              snapshot.data[0][i]['Email'],
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w700,
+                                color: Colors.black.withOpacity(0.7),
                               ),
                             ),
+                            subtitle: Text(
+                              TimeAgo.timeAgoSinceDate(
+                                  snapshot.data[0][i]['Time']),
+                              style: TextStyle(
+                                  color: Colors.black.withOpacity(0.6)),
+                            ),
                           ),
+                        ),
                         Container(
                           width: 390,
                           child: Padding(
@@ -254,29 +256,29 @@ class _TasksState extends State<Tasks> {
                                   height: 35,
                                 ),
                                 RaisedButton(
-                                      padding:
-                                          EdgeInsets.symmetric(vertical: 10),
-                                      child: Text('Send Offer'),
-                                      textColor: Colors.white,
-                                      color: Colors.green,
-                                      onPressed: () {
-                                        if (cnicCheck == "verified") {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (_) => SendOffer(snapshot.data[0][i].id),
-                                            ),
-                                          );
-                                        } else {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (_) => VerifyCNIC(),
-                                            ),
-                                          );
-                                        }
-                                      },
-                                    ),
+                                  padding: EdgeInsets.symmetric(vertical: 10),
+                                  child: Text('Send Offer'),
+                                  textColor: Colors.white,
+                                  color: greenColor,
+                                  onPressed: () {
+                                    if (cnicCheck == "verified") {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (_) =>
+                                              SendOffer(snapshot.data[0][i].id),
+                                        ),
+                                      );
+                                    } else {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (_) => VerifyCNIC(),
+                                        ),
+                                      );
+                                    }
+                                  },
+                                ),
                                 SizedBox(
                                   height: 15,
                                 ),
@@ -290,13 +292,13 @@ class _TasksState extends State<Tasks> {
                             ),
                           ),
                         )
-                        ],
-                      ),
+                      ],
                     ),
-                  );
-                },
-              ),
-            );
+                  ),
+                );
+              },
+            ),
+          );
         },
       ),
     );

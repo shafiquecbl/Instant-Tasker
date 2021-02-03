@@ -197,14 +197,14 @@ class _ReviewOffersState extends State<ReviewOffers> {
                                             Text(
                                               'Payable Amount',
                                               style: TextStyle(
-                                                  color: Colors.green,
+                                                  color: greenColor,
                                                   fontSize: 16,
                                                   fontWeight: FontWeight.bold),
                                             ),
                                             Text(
                                               'Rs ${snapshot.data[0][i]['Budget']}',
                                               style: TextStyle(
-                                                  color: Colors.green,
+                                                  color: greenColor,
                                                   fontSize: 16,
                                                   fontWeight: FontWeight.bold),
                                             ),
@@ -361,7 +361,7 @@ class _ReviewOffersState extends State<ReviewOffers> {
                                             vertical: 8, horizontal: 10),
                                         child: Text('Accept Offer'),
                                         textColor: Colors.white,
-                                        color: Colors.green,
+                                        color: greenColor,
                                         onPressed: () {
                                           acceptOffer(context, snapshot, i);
                                         },
