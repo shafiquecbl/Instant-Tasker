@@ -5,6 +5,7 @@ import 'package:shop_app/constants.dart';
 import 'package:shop_app/models/setData.dart';
 import 'package:shop_app/size_config.dart';
 import 'package:shop_app/components/custom_surfix_icon.dart';
+import 'package:shop_app/widgets/outline_input_border.dart';
 import 'package:shop_app/widgets/snack_bar.dart';
 
 class PostTaskForm extends StatefulWidget {
@@ -28,10 +29,10 @@ class _PostTaskFormState extends State<PostTaskForm> {
   void handleRadioValueChanged(int value) {
     setState(() {
       radioValue = value;
-      if(radioValue == 0)
-      isVisible = true;
+      if (radioValue == 0)
+        isVisible = true;
       else
-      isVisible = false;
+        isVisible = false;
     });
   }
 
@@ -150,52 +151,49 @@ class _PostTaskFormState extends State<PostTaskForm> {
           SizedBox(height: getProportionateScreenHeight(30)),
           Center(
             child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Icon(Icons.pin_drop_outlined),
-                        Radio(
-                          value: 0,
-                          groupValue: radioValue,
-                          onChanged: handleRadioValueChanged,
-                        ),
-                        Text(
-                          'Physical',
-                          style: new TextStyle(fontSize: 16.0),
-                        ),
-                        SizedBox(
-                          width: 50,
-                        ),
-                        Icon(Icons.online_prediction_outlined),
-                        Radio(
-                          value: 1,
-                          groupValue: radioValue,
-                          onChanged: handleRadioValueChanged,
-                        ),
-                        Text(
-                          'Online',
-                          style: new TextStyle(
-                            fontSize: 16.0,
-                          ),
-                        ),
-                      ],
-                    ),
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Icon(Icons.pin_drop_outlined),
+                Radio(
+                  value: 0,
+                  groupValue: radioValue,
+                  onChanged: handleRadioValueChanged,
+                ),
+                Text(
+                  'Physical',
+                  style: new TextStyle(fontSize: 16.0),
+                ),
+                SizedBox(
+                  width: 50,
+                ),
+                Icon(Icons.online_prediction_outlined),
+                Radio(
+                  value: 1,
+                  groupValue: radioValue,
+                  onChanged: handleRadioValueChanged,
+                ),
+                Text(
+                  'Online',
+                  style: new TextStyle(
+                    fontSize: 16.0,
+                  ),
+                ),
+              ],
+            ),
           ),
           SizedBox(height: getProportionateScreenHeight(30)),
-          if(isVisible == true)
-          getLocationFormField(),
-          
+          if (isVisible == true) getLocationFormField(),
           FormError(errors: errors),
           SizedBox(height: getProportionateScreenHeight(40)),
           DefaultButton(
             text: "Post Task",
             press: () async {
               if (_formKey.currentState.validate()) {
-                try{
-                  if(location == null)
-                  location = "Online";
-                SetData().postTask(context, description, category, duration, budget, location);
-                }
-                catch(e){
+                try {
+                  if (location == null) location = "Online";
+                  SetData().postTask(context, description, category, duration,
+                      budget, location);
+                } catch (e) {
                   Snack_Bar.show(context, e.message);
                 }
               }
@@ -232,6 +230,7 @@ class _PostTaskFormState extends State<PostTaskForm> {
         hintText: "Select category",
         floatingLabelBehavior: FloatingLabelBehavior.always,
         suffixIcon: Icon(Icons.category_outlined),
+        border: rectangularBorder,
       ),
       items: popUpcategories,
     );
@@ -262,6 +261,7 @@ class _PostTaskFormState extends State<PostTaskForm> {
         hintText: "Select duration",
         floatingLabelBehavior: FloatingLabelBehavior.always,
         suffixIcon: Icon(Icons.view_day_sharp),
+        border: rectangularBorder,
       ),
       items: popUpdurations,
     );
@@ -295,6 +295,7 @@ class _PostTaskFormState extends State<PostTaskForm> {
           hintText: "Enter task description",
           floatingLabelBehavior: FloatingLabelBehavior.always,
           suffixIcon: Icon(Icons.description_outlined),
+          border: rectangularBorder,
         ),
       ),
     );
@@ -323,6 +324,7 @@ class _PostTaskFormState extends State<PostTaskForm> {
         hintText: "Enter your budget (Rs.)",
         floatingLabelBehavior: FloatingLabelBehavior.always,
         suffixIcon: Icon(Icons.attach_money),
+        border: rectangularBorder,
       ),
     );
   }
@@ -350,7 +352,9 @@ class _PostTaskFormState extends State<PostTaskForm> {
         labelText: "Location",
         hintText: "Enter your Location",
         floatingLabelBehavior: FloatingLabelBehavior.always,
-        suffixIcon: CustomSurffixIcon(svgIcon: "assets/icons/Location point.svg"),
+        suffixIcon:
+            CustomSurffixIcon(svgIcon: "assets/icons/Location point.svg"),
+        border: rectangularBorder,
       ),
     );
   }

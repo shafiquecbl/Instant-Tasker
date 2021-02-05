@@ -151,4 +151,30 @@ class SetData {
       'Status': "Pending"
     });
   }
+
+  Future sumbitOrder(receiverDocID, docID, description, receiverEmail) async {
+    await FirebaseFirestore.instance
+        .collection('Users')
+        .doc(receiverEmail)
+        .collection('Assigned Tasks')
+        .doc(receiverDocID)
+        .collection("Received Work")
+        .add({
+      'Time': dateTime,
+      'Description': description,
+      'timestamp': FieldValue.serverTimestamp(),
+    });
+
+    return await FirebaseFirestore.instance
+        .collection('Users')
+        .doc(email)
+        .collection("Orders")
+        .doc(docID)
+        .collection("Submitted Work")
+        .add({
+      'Time': dateTime,
+      'Description': description,
+      'timestamp': FieldValue.serverTimestamp(),
+    });
+  }
 }

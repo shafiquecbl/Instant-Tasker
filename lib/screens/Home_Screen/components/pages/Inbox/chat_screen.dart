@@ -6,6 +6,7 @@ import 'package:shop_app/constants.dart';
 import 'package:shop_app/models/getData.dart';
 import 'package:shop_app/models/messages.dart';
 import 'package:shop_app/screens/Home_Screen/components/pages/Inbox/modal_tile.dart';
+import 'package:shop_app/widgets/outline_input_border.dart';
 
 class ChatScreen extends StatefulWidget {
   final String receiverName;
@@ -302,11 +303,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 hintStyle: TextStyle(
                   color: UniversalVariables.greyColor,
                 ),
-                border: OutlineInputBorder(
-                    borderRadius: const BorderRadius.all(
-                      const Radius.circular(50.0),
-                    ),
-                    borderSide: BorderSide.none),
+                border: outlineBorder,
                 contentPadding:
                     EdgeInsets.symmetric(horizontal: 20, vertical: 5),
                 filled: true,

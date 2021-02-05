@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:shop_app/components/default_button.dart';
 import 'package:shop_app/components/form_error.dart';
-import 'package:shop_app/constants.dart';
-import 'package:shop_app/size_config.dart';
 import 'package:shop_app/models/getData.dart';
+import 'package:shop_app/models/setData.dart';
+import 'package:shop_app/models/updateData.dart';
+import 'package:shop_app/size_config.dart';
+import 'package:shop_app/widgets/outline_input_border.dart';
+import 'package:shop_app/widgets/snack_bar.dart';
 
 class SubmitOrderForm extends StatefulWidget {
   final String docID;
-  SubmitOrderForm(this.docID);
+  final String receiverEmail;
+  final String time;
+  SubmitOrderForm(this.docID, this.receiverEmail, this.time);
   @override
   _SubmitOrderFormState createState() => _SubmitOrderFormState();
 }
@@ -15,6 +20,8 @@ class SubmitOrderForm extends StatefulWidget {
 class _SubmitOrderFormState extends State<SubmitOrderForm> {
   final _formKey = GlobalKey<FormState>();
   final List<String> errors = [];
+  SetData setData = SetData();
+  UpdateData updateData = UpdateData();
 
   String description;
 
@@ -35,8 +42,7 @@ class _SubmitOrderFormState extends State<SubmitOrderForm> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      initialData: [],
-      future: GetData().getUserProfile(),
+      future: GetData().getDocumentID(widget.receiverEmail, widget.time),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         return Form(
           key: _formKey,
@@ -45,13 +51,30 @@ class _SubmitOrderFormState extends State<SubmitOrderForm> {
               getDescriptionFormField(),
               SizedBox(height: getProportionateScreenHeight(30)),
               FormError(errors: errors),
-              SizedBox(height: getProportionateScreenHeight(30)),
+              SizedBox(height: getProportionateScreenHeight(20)),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 15),
                 child: DefaultButton(
                   text: "Submit Order",
                   press: () async {
-                    if (_formKey.currentState.validate()) {}
+                    if (_formKey.currentState.validate()) {
+                      updateData
+                          .updateOrderStatus(snapshot.data[0].id, widget.docID,
+                              widget.receiverEmail)
+                          .then((value) => {
+                                setData
+                                    .sumbitOrder(
+                                        snapshot.data[0].id,
+                                        widget.docID,
+                                        description,
+                                        widget.receiverEmail)
+                                    .then((value) => {Navigator.pop(context)})
+                              })
+                          .then((value) => {
+                                Snack_Bar.show(
+                                    context, "Order Submitted Successfully")
+                              });
+                    }
                   },
                 ),
               ),
@@ -75,13 +98,13 @@ class _SubmitOrderFormState extends State<SubmitOrderForm> {
         onSaved: (newValue) => description = newValue,
         onChanged: (value) {
           if (value.isNotEmpty) {
-            removeError(error: kDescriptionNullError);
+            removeError(error: "Please add description");
             description = value;
           } else {}
         },
         validator: (value) {
           if (value.isEmpty) {
-            addError(error: kDescriptionNullError);
+            addError(error: "Please add description");
             return "";
           }
           return null;
@@ -91,6 +114,7 @@ class _SubmitOrderFormState extends State<SubmitOrderForm> {
           hintText: "Add a description to\nyour order",
           floatingLabelBehavior: FloatingLabelBehavior.always,
           suffixIcon: Icon(Icons.description_outlined),
+          border: rectangularBorder,
         ),
       ),
     );

@@ -203,7 +203,8 @@ class _OpenOrderDetailsState extends State<OpenOrderDetails> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (_) => SubmitOrder(snapshot.id),
+                            builder: (_) => SubmitOrder(snapshot.id,
+                                snapshot['Client Email'], snapshot['Time']),
                           ),
                         );
                       },

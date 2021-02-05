@@ -4,7 +4,9 @@ import 'package:shop_app/size_config.dart';
 
 class SubmitOrder extends StatefulWidget {
   final String docID;
-  SubmitOrder(this.docID);
+  final String receiverEmail;
+  final String time;
+  SubmitOrder(this.docID, this.receiverEmail, this.time);
   @override
   _SubmitOrderState createState() => _SubmitOrderState();
 }
@@ -27,7 +29,8 @@ class _SubmitOrderState extends State<SubmitOrder> {
               child: Column(
                 children: [
                   SizedBox(height: SizeConfig.screenHeight * 0.04),
-                  SubmitOrderForm(widget.docID),
+                  SubmitOrderForm(
+                      widget.docID, widget.receiverEmail, widget.time),
                 ],
               ),
             ),

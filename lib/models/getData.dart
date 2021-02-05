@@ -87,4 +87,14 @@ class GetData {
         .get();
     return snapshot.docs;
   }
+
+  getDocumentID(receiverEmail, time) async {
+    QuerySnapshot snapshot = await firestore
+        .collection("Users")
+        .doc(receiverEmail)
+        .collection("Assigned Tasks")
+        .where("Time", isEqualTo: time)
+        .get();
+    return snapshot.docs;
+  }
 }

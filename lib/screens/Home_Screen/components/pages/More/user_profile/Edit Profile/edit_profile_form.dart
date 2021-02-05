@@ -7,7 +7,7 @@ import 'package:shop_app/size_config.dart';
 import 'package:shop_app/models/getData.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:shop_app/constants.dart';
-
+import 'package:shop_app/widgets/outline_input_border.dart';
 
 class EditProfileForm extends StatefulWidget {
   @override
@@ -71,7 +71,9 @@ class _EditProfileFormState extends State<EditProfileForm> {
         future: GetData().getUserProfile(),
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting)
-          return SpinKitDoubleBounce(color: kPrimaryColor,);
+            return SpinKitDoubleBounce(
+              color: kPrimaryColor,
+            );
           storeName = snapshot.data['Name'];
           storePhoneNo = snapshot.data['Phone Number'];
           storeGender = snapshot.data['Gender'];
@@ -108,15 +110,23 @@ class _EditProfileFormState extends State<EditProfileForm> {
                   text: "Update Profile",
                   press: () async {
                     if (_formKey.currentState.validate()) {
-                      UpdateData().updateUserProfile(context, name, gender, phoneNo, address,
-                          about, education, specialities, languages, work);
+                      UpdateData().updateUserProfile(
+                          context,
+                          name,
+                          gender,
+                          phoneNo,
+                          address,
+                          about,
+                          education,
+                          specialities,
+                          languages,
+                          work);
                     }
                   },
                 ),
                 SizedBox(height: getProportionateScreenHeight(10)),
               ],
             ),
-            
           );
         });
   }
@@ -124,31 +134,31 @@ class _EditProfileFormState extends State<EditProfileForm> {
   ///////////////////////////////////////////////////////////////////////////////
   TextFormField getNameFormField() {
     return TextFormField(
-        initialValue: storeName,
-        onSaved: (newValue) => name = newValue,
-        onChanged: (value) {
-          if (value.isNotEmpty) {
-            removeError(error: kNamelNullError);
-            name = value;
-          }else if(value == null) {
-            storeName = value;
-          }
-          else{}
-        },
-        validator: (value) {
-          if (value.isEmpty) {
-            addError(error: kNamelNullError);
-            return "";
-          }
-          return null;
-        },
-        decoration: InputDecoration(
-          labelText: "Name",
-          hintText: "Enter your name",
-          floatingLabelBehavior: FloatingLabelBehavior.always,
-          suffixIcon: CustomSurffixIcon(svgIcon: "assets/icons/User.svg"),
-        ),
-      );
+      initialValue: storeName,
+      onSaved: (newValue) => name = newValue,
+      onChanged: (value) {
+        if (value.isNotEmpty) {
+          removeError(error: kNamelNullError);
+          name = value;
+        } else if (value == null) {
+          storeName = value;
+        } else {}
+      },
+      validator: (value) {
+        if (value.isEmpty) {
+          addError(error: kNamelNullError);
+          return "";
+        }
+        return null;
+      },
+      decoration: InputDecoration(
+        labelText: "Name",
+        hintText: "Enter your name",
+        floatingLabelBehavior: FloatingLabelBehavior.always,
+        suffixIcon: CustomSurffixIcon(svgIcon: "assets/icons/User.svg"),
+        border: rectangularBorder,
+      ),
+    );
   }
 
   ///////////////////////////////////////////////////////////////////////////////
@@ -161,7 +171,7 @@ class _EditProfileFormState extends State<EditProfileForm> {
         if (value.isNotEmpty) {
           removeError(error: kPhoneNumberNullError);
           phoneNo = value;
-        }else {
+        } else {
           storePhoneNo = value;
         }
       },
@@ -177,6 +187,7 @@ class _EditProfileFormState extends State<EditProfileForm> {
         hintText: "Enter Phone No",
         floatingLabelBehavior: FloatingLabelBehavior.always,
         suffixIcon: CustomSurffixIcon(svgIcon: "assets/icons/Phone.svg"),
+        border: rectangularBorder,
       ),
     );
   }
@@ -206,6 +217,7 @@ class _EditProfileFormState extends State<EditProfileForm> {
         hintText: "Select your gender",
         floatingLabelBehavior: FloatingLabelBehavior.always,
         suffixIcon: CustomSurffixIcon(svgIcon: "assets/icons/gender.svg"),
+        border: rectangularBorder,
       ),
       items: popUpMenuItem,
     );
@@ -226,7 +238,7 @@ class _EditProfileFormState extends State<EditProfileForm> {
           if (value.isNotEmpty) {
             removeError(error: kAddressNullError);
             address = value;
-          }else {
+          } else {
             storeAddress = value;
           }
         },
@@ -243,6 +255,7 @@ class _EditProfileFormState extends State<EditProfileForm> {
           floatingLabelBehavior: FloatingLabelBehavior.always,
           suffixIcon:
               CustomSurffixIcon(svgIcon: "assets/icons/Location point.svg"),
+          border: rectangularBorder,
         ),
       ),
     );
@@ -263,7 +276,7 @@ class _EditProfileFormState extends State<EditProfileForm> {
           if (value.isNotEmpty) {
             removeError(error: kAboutNullError);
             about = value;
-          }else {
+          } else {
             storeAbout = value;
           }
         },
@@ -279,6 +292,7 @@ class _EditProfileFormState extends State<EditProfileForm> {
           hintText: "Describe Yourself",
           floatingLabelBehavior: FloatingLabelBehavior.always,
           suffixIcon: CustomSurffixIcon(svgIcon: "assets/icons/User.svg"),
+          border: rectangularBorder,
         ),
       ),
     );
@@ -294,7 +308,7 @@ class _EditProfileFormState extends State<EditProfileForm> {
         if (value.isNotEmpty) {
           removeError(error: kEducationNullError);
           education = value;
-        }else {
+        } else {
           storeEducation = value;
         }
       },
@@ -310,6 +324,7 @@ class _EditProfileFormState extends State<EditProfileForm> {
         hintText: "Enter your education",
         floatingLabelBehavior: FloatingLabelBehavior.always,
         suffixIcon: CustomSurffixIcon(svgIcon: "assets/icons/User.svg"),
+        border: rectangularBorder,
       ),
     );
   }
@@ -347,6 +362,7 @@ class _EditProfileFormState extends State<EditProfileForm> {
           hintText: "Enter your specialities",
           floatingLabelBehavior: FloatingLabelBehavior.always,
           suffixIcon: CustomSurffixIcon(svgIcon: "assets/icons/User.svg"),
+          border: rectangularBorder,
         ),
       ),
     );
@@ -362,7 +378,7 @@ class _EditProfileFormState extends State<EditProfileForm> {
         if (value.isNotEmpty) {
           removeError(error: kLanguagesNullError);
           languages = value;
-        }else {
+        } else {
           storeLanguages = value;
         }
       },
@@ -378,6 +394,7 @@ class _EditProfileFormState extends State<EditProfileForm> {
         hintText: "Enter Your Languages",
         floatingLabelBehavior: FloatingLabelBehavior.always,
         suffixIcon: CustomSurffixIcon(svgIcon: "assets/icons/User.svg"),
+        border: rectangularBorder,
       ),
     );
   }
@@ -408,6 +425,7 @@ class _EditProfileFormState extends State<EditProfileForm> {
         hintText: "What you do?",
         floatingLabelBehavior: FloatingLabelBehavior.always,
         suffixIcon: CustomSurffixIcon(svgIcon: "assets/icons/User.svg"),
+        border: rectangularBorder,
       ),
     );
   }

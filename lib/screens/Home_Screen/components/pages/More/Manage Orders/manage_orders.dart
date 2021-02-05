@@ -25,7 +25,6 @@ class _ManageOrdersState extends State<ManageOrders> {
         appBar: AppBar(
           elevation: 2,
           shadowColor: kPrimaryColor,
-          automaticallyImplyLeading: false,
           centerTitle: false,
           title: Padding(
             padding: const EdgeInsets.only(left: 0),

@@ -5,6 +5,7 @@ import 'package:shop_app/constants.dart';
 import 'package:shop_app/models/setData.dart';
 import 'package:shop_app/size_config.dart';
 import 'package:shop_app/models/getData.dart';
+import 'package:shop_app/widgets/outline_input_border.dart';
 
 class SendOfferForm extends StatefulWidget {
   final String docID;
@@ -114,10 +115,10 @@ class _SendOfferFormState extends State<SendOfferForm> {
                   press: () async {
                     if (_formKey.currentState.validate()) {
                       SetData().sendOffer(
-                        context, 
-                        widget.docID, 
-                        description, 
-                        duration, 
+                        context,
+                        widget.docID,
+                        description,
+                        duration,
                         budget,
                         snapshot.data['Rating as Seller'],
                         snapshot.data['Reviews as Seller'],
@@ -126,7 +127,7 @@ class _SendOfferFormState extends State<SendOfferForm> {
                         snapshot.data['Phone Number status'],
                         snapshot.data['Payment Status'],
                         snapshot.data['CNIC'],
-                        );
+                      );
                     }
                   },
                 ),
@@ -164,6 +165,7 @@ class _SendOfferFormState extends State<SendOfferForm> {
         hintText: "Select delivery time",
         floatingLabelBehavior: FloatingLabelBehavior.always,
         suffixIcon: Icon(Icons.view_day_sharp),
+        border: rectangularBorder,
       ),
       items: popUpdurations,
     );
@@ -197,6 +199,7 @@ class _SendOfferFormState extends State<SendOfferForm> {
           hintText: "Add a description to\nyour offer",
           floatingLabelBehavior: FloatingLabelBehavior.always,
           suffixIcon: Icon(Icons.description_outlined),
+          border: rectangularBorder,
         ),
       ),
     );
@@ -225,6 +228,7 @@ class _SendOfferFormState extends State<SendOfferForm> {
         hintText: "Enter Total offer amount (Rs.)",
         floatingLabelBehavior: FloatingLabelBehavior.always,
         suffixIcon: Icon(Icons.attach_money),
+        border: rectangularBorder,
       ),
     );
   }
