@@ -114,4 +114,20 @@ class UpdateData {
         .doc(docID)
         .update({'Status': "Waiting for rating"});
   }
+
+  Future orderRevesion(receiverDocID, docID, receiverEmail) async {
+    await FirebaseFirestore.instance
+        .collection('Users')
+        .doc(email)
+        .collection("Assigned Tasks")
+        .doc(docID)
+        .update({'Status': "Revision"});
+
+    return await FirebaseFirestore.instance
+        .collection('Users')
+        .doc(receiverEmail)
+        .collection('Orders')
+        .doc(receiverDocID)
+        .update({'Status': "Revision"});
+  }
 }

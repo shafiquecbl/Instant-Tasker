@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:shop_app/components/default_button.dart';
 import 'package:shop_app/components/form_error.dart';
@@ -58,22 +59,7 @@ class _SubmitOrderFormState extends State<SubmitOrderForm> {
                   text: "Submit Order",
                   press: () async {
                     if (_formKey.currentState.validate()) {
-                      updateData
-                          .updateOrderStatus(snapshot.data[0].id, widget.docID,
-                              widget.receiverEmail)
-                          .then((value) => {
-                                setData
-                                    .sumbitOrder(
-                                        snapshot.data[0].id,
-                                        widget.docID,
-                                        description,
-                                        widget.receiverEmail)
-                                    .then((value) => {Navigator.pop(context)})
-                              })
-                          .then((value) => {
-                                Snack_Bar.show(
-                                    context, "Order Submitted Successfully")
-                              });
+                      submitOrder(snapshot.data[0]);
                     }
                   },
                 ),
@@ -121,5 +107,16 @@ class _SubmitOrderFormState extends State<SubmitOrderForm> {
   }
 
   ///////////////////////////////////////////////////////////////////////////////
-
+  submitOrder(DocumentSnapshot snapshot) {
+    updateData
+        .updateOrderStatus(snapshot.id, widget.docID, widget.receiverEmail)
+        .then((value) => {
+              setData
+                  .sumbitOrder(snapshot.id, widget.docID, description,
+                      widget.receiverEmail)
+                  .then((value) => {Navigator.pop(context)})
+                  .then((value) =>
+                      {Snack_Bar.show(context, "Order Submitted Successfully")})
+            });
+  }
 }
