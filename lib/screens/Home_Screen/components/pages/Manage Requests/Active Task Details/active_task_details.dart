@@ -178,86 +178,98 @@ class _ActiveTaskDetailsState extends State<ActiveTaskDetails> {
                 SizedBox(
                   height: 20,
                 ),
-                RaisedButton(
-                  padding: EdgeInsets.symmetric(vertical: 8, horizontal: 100),
-                  child: Row(children: [
-                    Icon(Icons.chat),
-                    SizedBox(width: 10),
-                    Text('Chat with Tasker'),
-                  ]),
-                  textColor: Colors.white,
-                  color: Colors.black.withOpacity(0.7),
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => ChatScreen(
-                            receiverName: snapshot['Seller Name'],
-                            receiverEmail: snapshot['Seller Email'],
-                            receiverPhotoURL: snapshot['Seller PhotoURL'],
-                            isOnline: true,
-                          ),
-                        ));
-                  },
-                ),
+                chatWithTasker(snapshot),
                 SizedBox(
                   height: 5,
                 ),
-                RaisedButton(
-                  padding: EdgeInsets.symmetric(vertical: 8, horizontal: 10),
-                  child: Text('Cancel Order'),
-                  textColor: Colors.white,
-                  color: Colors.red,
-                  onPressed: () {},
-                ),
+                cancelOrder(),
                 SizedBox(
                   height: 5,
                 ),
                 snapshot['Status'] == "Submitted"
-                    ? FutureBuilder(
-                        // initialData: [],
-                        future: getData.getorderDocID(
-                            snapshot['Seller Email'], snapshot['Time']),
-                        builder: (BuildContext context, AsyncSnapshot snap) {
-                          return RaisedButton(
-                            padding: EdgeInsets.symmetric(
-                                vertical: 8, horizontal: 10),
-                            child: Text('Take Revesion'),
-                            textColor: Colors.white,
-                            color: Colors.orange,
-                            onPressed: () {
-                              updateData
-                                  .orderRevesion(snap.data[0].id, snapshot.id,
-                                      snapshot['Seller Email'])
-                                  .then((value) => {
-                                        Snack_Bar.show(context,
-                                            "Asked for Revesion successfully")
-                                      })
-                                  .then((value) => {
-                                        setState(() {
-                                          getData.getActiveTask();
-                                        })
-                                      });
-                            },
-                          );
-                        },
-                      )
+                    ? takeRevision(snapshot)
                     : Container(),
                 snapshot['Status'] == "Submitted"
-                    ? RaisedButton(
-                        padding:
-                            EdgeInsets.symmetric(vertical: 8, horizontal: 10),
-                        child: Text('Mark as complete'),
-                        textColor: Colors.white,
-                        color: greenColor,
-                        onPressed: () {},
-                      )
+                    ? markAsComplete()
                     : Container(),
               ],
             ),
           ),
         ],
       ),
+    );
+  }
+
+  chatWithTasker(DocumentSnapshot snapshot) {
+    return RaisedButton(
+      padding: EdgeInsets.symmetric(vertical: 8, horizontal: 100),
+      child: Row(children: [
+        Icon(Icons.chat),
+        SizedBox(width: 10),
+        Text('Chat with Tasker'),
+      ]),
+      textColor: Colors.white,
+      color: Colors.black.withOpacity(0.7),
+      onPressed: () {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => ChatScreen(
+                receiverName: snapshot['Seller Name'],
+                receiverEmail: snapshot['Seller Email'],
+                receiverPhotoURL: snapshot['Seller PhotoURL'],
+                isOnline: true,
+              ),
+            ));
+      },
+    );
+  }
+
+  cancelOrder() {
+    return RaisedButton(
+      padding: EdgeInsets.symmetric(vertical: 8, horizontal: 10),
+      child: Text('Cancel Order'),
+      textColor: Colors.white,
+      color: Colors.red,
+      onPressed: () {},
+    );
+  }
+
+  takeRevision(DocumentSnapshot snapshot) {
+    return FutureBuilder(
+      // initialData: [],
+      future: getData.getorderDocID(snapshot['Seller Email'], snapshot['Time']),
+      builder: (BuildContext context, AsyncSnapshot snap) {
+        return RaisedButton(
+          padding: EdgeInsets.symmetric(vertical: 8, horizontal: 10),
+          child: Text('Take Revesion'),
+          textColor: Colors.white,
+          color: Colors.orange,
+          onPressed: () {
+            updateData
+                .orderRevesion(
+                    snap.data[0].id, snapshot.id, snapshot['Seller Email'])
+                .then((value) => {
+                      Snack_Bar.show(context, "Asked for Revesion successfully")
+                    })
+                .then((value) => {
+                      setState(() {
+                        getData.getActiveTask();
+                      })
+                    });
+          },
+        );
+      },
+    );
+  }
+
+  markAsComplete() {
+    return RaisedButton(
+      padding: EdgeInsets.symmetric(vertical: 8, horizontal: 10),
+      child: Text('Mark as complete'),
+      textColor: Colors.white,
+      color: greenColor,
+      onPressed: () {},
     );
   }
 

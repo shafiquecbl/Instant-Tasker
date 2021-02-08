@@ -7,9 +7,7 @@ class MainScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async => false,
-      child: Scaffold(
-        body: Body(),
-      ),
+      child: Body(),
     );
   }
 }

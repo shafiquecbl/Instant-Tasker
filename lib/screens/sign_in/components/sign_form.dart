@@ -83,7 +83,6 @@ class _SignFormState extends State<SignForm> {
             press: () async {
               if (_formKey.currentState.validate()) {
                 _formKey.currentState.save();
-                user = auth.currentUser;
                 FirebaseFirestore.instance.terminate();
                 FirebaseFirestore.instance
                     .clearPersistence()

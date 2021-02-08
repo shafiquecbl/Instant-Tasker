@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shop_app/size_config.dart';
 
@@ -53,6 +54,8 @@ const String kDescriptionNullError = "Please add task Description";
 const String kCategoryNullError = "Please select category";
 const String kdurationNullError = "Please select duration";
 const String kbudgetNullError = "Please add your budget";
+final String initText =
+    "Hi ${FirebaseAuth.instance.currentUser.displayName}. This is Muhammad Shafique from Instant Tasker. I'll be accompanying you in this chat, please don't share your contact details or any other personal information in this chat.";
 
 final otpInputDecoration = InputDecoration(
   contentPadding:

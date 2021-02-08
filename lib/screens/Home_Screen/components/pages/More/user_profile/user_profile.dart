@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:ui';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +9,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:shop_app/constants.dart';
 import 'package:shop_app/models/getData.dart';
 import 'package:shop_app/models/updateData.dart';
+import 'package:shop_app/screens/Home_Screen/components/pages/More/Verification/verification.dart';
 import 'package:shop_app/screens/Home_Screen/components/pages/More/user_profile/Edit Profile/edit_profile.dart';
 import 'package:shop_app/screens/Home_Screen/components/pages/Tasks/widgets/common_widgets.dart';
 import 'package:shop_app/size_config.dart';
@@ -23,9 +25,6 @@ class _UserProfileState extends State<UserProfile> {
   User user = FirebaseAuth.instance.currentUser;
   String email = FirebaseAuth.instance.currentUser.email;
   final auth = FirebaseAuth.instance;
-
-  String smsCode;
-  String verificationCode;
   String profilePic;
 
   @override
@@ -59,8 +58,11 @@ class _UserProfileState extends State<UserProfile> {
               },
             ),
           ]),
-      body: FutureBuilder(
-        future: GetData().getUserProfile(),
+      body: StreamBuilder(
+        stream: FirebaseFirestore.instance
+            .collection('Users')
+            .doc(email)
+            .snapshots(),
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting)
             return SpinKitDoubleBounce(
@@ -72,7 +74,10 @@ class _UserProfileState extends State<UserProfile> {
             child: RefreshIndicator(
               onRefresh: () async {
                 setState(() {
-                  GetData().getUserProfile();
+                  FirebaseFirestore.instance
+                      .collection('Users')
+                      .doc(email)
+                      .snapshots();
                 });
               },
               child: ListView(children: [
@@ -328,15 +333,24 @@ class _UserProfileState extends State<UserProfile> {
                             subtitle: Text(email),
                           ),
                           ListTile(
-                            leading: Icon(Icons.phone, color: kPrimaryColor),
-                            title: Text("Phone"),
-                            subtitle: Text(snapshot.data['Phone Number']),
-                            trailing: RaisedButton(
-                                child: Text('Verify'),
-                                textColor: kWhiteColor,
-                                color: kPrimaryColor.withOpacity(0.9),
-                                onPressed: () {}),
-                          ),
+                              leading: Icon(Icons.phone, color: kPrimaryColor),
+                              title: Text("Phone"),
+                              subtitle: Text(snapshot.data['Phone Number']),
+                              trailing: snapshot.data['Phone Number status'] !=
+                                      "Verified"
+                                  ? RaisedButton(
+                                      child: Text('Verify'),
+                                      textColor: kWhiteColor,
+                                      color: kPrimaryColor.withOpacity(0.9),
+                                      onPressed: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (_) => Verifications(),
+                                          ),
+                                        );
+                                      })
+                                  : null),
                         ])),
                     Container(
                       alignment: Alignment.centerLeft,

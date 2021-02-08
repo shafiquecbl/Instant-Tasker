@@ -150,18 +150,13 @@ class _MoreState extends State<More> {
                   text: "Sign Out",
                   icon: "assets/icons/Log out.svg",
                   press: () async {
-                    try {
-                      await FirebaseAuth.instance.signOut().whenComplete(() {
-                        Navigator.of(context).pushReplacement(
-                          MaterialPageRoute(
-                              builder: (context) => SignInScreen()),
-                        );
-                      }).catchError((e) {
-                        Snack_Bar.show(context, e.message);
-                      });
-                    } catch (e) {
+                    FirebaseAuth.instance.signOut().whenComplete(() {
+                      Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(builder: (context) => SignInScreen()),
+                      );
+                    }).catchError((e) {
                       Snack_Bar.show(context, e.message);
-                    }
+                    });
                   },
                 ),
               ],

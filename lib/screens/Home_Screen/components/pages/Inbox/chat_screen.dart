@@ -29,6 +29,7 @@ class _ChatScreenState extends State<ChatScreen> {
   final email = FirebaseAuth.instance.currentUser.email;
   TextEditingController textFieldController = TextEditingController();
   bool isWriting = false;
+
   GetData getData = GetData();
 
   @override
@@ -99,7 +100,7 @@ class _ChatScreenState extends State<ChatScreen> {
           .orderBy("timestamp", descending: true)
           .snapshots(),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-        if (snapshot.data == null)
+        if (snapshot.connectionState == ConnectionState.waiting)
           return SpinKitDoubleBounce(color: kPrimaryColor);
         if (snapshot.hasData)
           return ListView.builder(
@@ -107,13 +108,44 @@ class _ChatScreenState extends State<ChatScreen> {
               padding: EdgeInsets.all(20),
               itemCount: snapshot.data.docs.length,
               itemBuilder: (BuildContext context, int index) {
-                if (!snapshot.hasData)
-                  return Container(
-                    child: Text('Inbox is Empty'),
-                  );
                 return chatMessageItem(snapshot.data.docs[index]);
               });
-        return Center(child: Container());
+        return ListView.builder(
+            padding: EdgeInsets.all(20),
+            itemCount: 1,
+            itemBuilder: (BuildContext context, int index) {
+              return Container(
+                margin: EdgeInsets.symmetric(vertical: 15),
+                child: Container(
+                  alignment: Alignment.centerLeft,
+                  child: Container(
+                    constraints: BoxConstraints(
+                      maxWidth: MediaQuery.of(context).size.width * 0.80,
+                    ),
+                    padding: EdgeInsets.all(10),
+                    margin: EdgeInsets.symmetric(vertical: 0),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(15),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.5),
+                          spreadRadius: 2,
+                          blurRadius: 5,
+                        ),
+                      ],
+                    ),
+                    child: Text(
+                      initText,
+                      style: TextStyle(
+                        color: Colors.black54,
+                        fontSize: 16.0,
+                      ),
+                    ),
+                  ),
+                ),
+              );
+            });
       },
     );
   }
@@ -329,8 +361,6 @@ class _ChatScreenState extends State<ChatScreen> {
       ),
     );
   }
-
-  /////////////////////////////////////////////////////////////////////
 
   /////////////////////////////////////////////////////////////////////
 }

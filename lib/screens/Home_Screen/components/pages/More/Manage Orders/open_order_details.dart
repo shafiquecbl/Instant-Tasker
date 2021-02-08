@@ -7,6 +7,7 @@ import 'package:shop_app/models/getData.dart';
 import 'package:shop_app/screens/Home_Screen/components/pages/Inbox/chat_Screen.dart';
 import 'package:shop_app/screens/Home_Screen/components/pages/More/Manage%20Orders/Submit%20Order/submit_order.dart';
 import 'package:shop_app/size_config.dart';
+import 'package:shop_app/widgets/customAppBar.dart';
 import 'package:shop_app/widgets/time_ago.dart';
 
 class OpenOrderDetails extends StatefulWidget {
@@ -24,22 +25,7 @@ class _OpenOrderDetailsState extends State<OpenOrderDetails> {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return Scaffold(
-      appBar: AppBar(
-        elevation: 2,
-        shadowColor: kPrimaryColor,
-        automaticallyImplyLeading: false,
-        centerTitle: false,
-        title: Padding(
-          padding: const EdgeInsets.only(left: 0),
-          child: Text(
-            'Order Details',
-            style: TextStyle(
-              color: kPrimaryColor,
-            ),
-          ),
-        ),
-        backgroundColor: hexColor,
-      ),
+      appBar: customAppBar("Order Details"),
       body: SingleChildScrollView(
         child: FutureBuilder(
           initialData: [],

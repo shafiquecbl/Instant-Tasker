@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shop_app/screens/Home_Screen/components/pages/More/Manage%20Orders/Submit%20Order/submit_order_form.dart';
 import 'package:shop_app/size_config.dart';
+import 'package:shop_app/widgets/customAppBar.dart';
 
 class SubmitOrder extends StatefulWidget {
   final String docID;
@@ -16,9 +17,7 @@ class _SubmitOrderState extends State<SubmitOrder> {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Submit Order"),
-      ),
+      appBar: customAppBar("Submit Order"),
       body: SafeArea(
         child: SizedBox(
           width: double.infinity,

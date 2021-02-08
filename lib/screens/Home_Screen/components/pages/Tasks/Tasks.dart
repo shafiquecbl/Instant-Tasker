@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shop_app/constants.dart';
@@ -72,26 +73,23 @@ class _TasksState extends State<Tasks> {
           ),
         ],
       ),
-      body: FutureBuilder(
-        initialData: [list, cnicCheck],
-        future: Future.wait([
-          getData.getRequests(),
-          getData.getCNIC(),
-        ]),
+      body: StreamBuilder(
+        stream: FirebaseFirestore.instance
+            .collection("Buyer Requests")
+            .where("Email",
+                isNotEqualTo: FirebaseAuth.instance.currentUser.email)
+            .snapshots(),
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting)
             return SpinKitDoubleBounce(color: kPrimaryColor);
-          indexLength = snapshot.data[0].length;
-          cnicCheck = snapshot.data[1];
+          indexLength = snapshot.data.docs.length;
           if (indexLength == 0)
             return SizedBox(
               child: Center(
                 child: Text(
                   "No Buyer Requests",
                   style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
-                      color: kPrimaryColor),
+                      fontWeight: FontWeight.bold, color: kPrimaryColor),
                 ),
               ),
             );
@@ -120,11 +118,11 @@ class _TasksState extends State<Tasks> {
                                 backgroundColor: kPrimaryColor.withOpacity(0.8),
                                 backgroundImage:
                                     AssetImage('assets/images/nullUser.png'),
-                                child: snapshot.data[0][i]['PhotoURL'] != null
+                                child: snapshot.data.docs[i]['PhotoURL'] != null
                                     ? ClipRRect(
                                         borderRadius: BorderRadius.circular(50),
                                         child: Image.network(
-                                          snapshot.data[0][i]['PhotoURL'],
+                                          snapshot.data.docs[i]['PhotoURL'],
                                           width: 50,
                                           height: 50,
                                           fit: BoxFit.cover,
@@ -140,7 +138,7 @@ class _TasksState extends State<Tasks> {
                                         ),
                                       )),
                             title: Text(
-                              snapshot.data[0][i]['Email'],
+                              snapshot.data.docs[i]['Email'],
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w700,
@@ -149,7 +147,7 @@ class _TasksState extends State<Tasks> {
                             ),
                             subtitle: Text(
                               TimeAgo.timeAgoSinceDate(
-                                  snapshot.data[0][i]['Time']),
+                                  snapshot.data.docs[i]['Time']),
                               style: TextStyle(
                                   color: Colors.black.withOpacity(0.6)),
                             ),
@@ -170,7 +168,7 @@ class _TasksState extends State<Tasks> {
                                   ),
                                   padding: EdgeInsets.all(10),
                                   child: Text(
-                                    snapshot.data[0][i]['Description'],
+                                    snapshot.data.docs[i]['Description'],
                                     style: TextStyle(
                                         color: Colors.black.withOpacity(0.6)),
                                   ),
@@ -187,7 +185,7 @@ class _TasksState extends State<Tasks> {
                                   child: ListTile(
                                     leading: Icon(Icons.category_outlined),
                                     title: Text(
-                                      'Category : ${snapshot.data[0][i]['Category']}',
+                                      'Category : ${snapshot.data.docs[i]['Category']}',
                                       style: TextStyle(
                                         fontSize: 14,
                                         color: Colors.grey,
@@ -205,7 +203,7 @@ class _TasksState extends State<Tasks> {
                                   child: ListTile(
                                     leading: Icon(Icons.location_pin),
                                     title: Text(
-                                      snapshot.data[0][i]['Location'],
+                                      snapshot.data.docs[i]['Location'],
                                       style: TextStyle(
                                         fontSize: 14,
                                         color: Colors.grey,
@@ -226,7 +224,7 @@ class _TasksState extends State<Tasks> {
                                       color: kGreenColor,
                                     ),
                                     title: Text(
-                                      'Budget : Rs.${snapshot.data[0][i]['Budget']}',
+                                      'Budget : Rs.${snapshot.data.docs[i]['Budget']}',
                                       style: TextStyle(
                                         fontSize: 14,
                                         color: kGreenColor,
@@ -244,7 +242,7 @@ class _TasksState extends State<Tasks> {
                                   child: ListTile(
                                     leading: Icon(Icons.timer),
                                     title: Text(
-                                      'Duration : ${snapshot.data[0][i]['Duration']}',
+                                      'Duration : ${snapshot.data.docs[i]['Duration']}',
                                       style: TextStyle(
                                         fontSize: 14,
                                         color: Colors.grey,
@@ -255,28 +253,36 @@ class _TasksState extends State<Tasks> {
                                 SizedBox(
                                   height: 35,
                                 ),
-                                RaisedButton(
-                                  padding: EdgeInsets.symmetric(vertical: 10),
-                                  child: Text('Send Offer'),
-                                  textColor: Colors.white,
-                                  color: greenColor,
-                                  onPressed: () {
-                                    if (cnicCheck == "verified") {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (_) =>
-                                              SendOffer(snapshot.data[0][i].id),
-                                        ),
-                                      );
-                                    } else {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (_) => VerifyCNIC(),
-                                        ),
-                                      );
-                                    }
+                                FutureBuilder(
+                                  future: getData.getCNIC(),
+                                  builder: (BuildContext context,
+                                      AsyncSnapshot snap) {
+                                    cnicCheck = snap.data;
+                                    return RaisedButton(
+                                      padding:
+                                          EdgeInsets.symmetric(vertical: 10),
+                                      child: Text('Send Offer'),
+                                      textColor: Colors.white,
+                                      color: greenColor,
+                                      onPressed: () {
+                                        if (cnicCheck == "verified") {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (_) => SendOffer(
+                                                  snapshot.data.docs[i].id),
+                                            ),
+                                          );
+                                        } else {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (_) => VerifyCNIC(),
+                                            ),
+                                          );
+                                        }
+                                      },
+                                    );
                                   },
                                 ),
                                 SizedBox(

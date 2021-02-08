@@ -79,9 +79,6 @@ class _InboxState extends State<Inbox> {
             return SpinKitDoubleBounce(color: kPrimaryColor);
           if (snapshot.data.docs.length == 0)
             return Center(
-                child: Container(
-              margin: EdgeInsets.symmetric(vertical: 300),
-              color: kPrimaryColor.withOpacity(0.9),
               child: Padding(
                 padding:
                     const EdgeInsets.symmetric(vertical: 8.0, horizontal: 20),
@@ -90,9 +87,9 @@ class _InboxState extends State<Inbox> {
                   style: TextStyle(color: kWhiteColor),
                 ),
               ),
-            ));
+            );
           return RefreshIndicator(
-            onRefresh: () async{
+            onRefresh: () async {
               setState(() {
                 FirebaseFirestore.instance
                     .collection('Users')
@@ -202,7 +199,7 @@ class _InboxState extends State<Inbox> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Container(
-                        width: 150,
+                        width: 145,
                         // margin: EdgeInsets.only(bottom:15),
                         alignment: Alignment.topLeft,
                         child: Text(

@@ -13,14 +13,6 @@ class GetData {
     return document;
   }
 
-  Future getRequests() async {
-    QuerySnapshot snapshot = await firestore
-        .collection("Buyer Requests")
-        .where("Email", isNotEqualTo: email)
-        .get();
-    return snapshot.docs;
-  }
-
   Future getPostedTask() async {
     QuerySnapshot snapshot = await firestore
         .collection("Buyer Requests")
