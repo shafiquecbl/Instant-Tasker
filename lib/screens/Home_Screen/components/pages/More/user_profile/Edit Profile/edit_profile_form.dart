@@ -17,7 +17,8 @@ class EditProfileForm extends StatefulWidget {
 class _EditProfileFormState extends State<EditProfileForm> {
   final _formKey = GlobalKey<FormState>();
   final List<String> errors = [];
-  bool isLoading = true;
+  GetData getData = GetData();
+  UpdateData updateData = UpdateData();
 
   String name;
   String phoneNo;
@@ -68,7 +69,7 @@ class _EditProfileFormState extends State<EditProfileForm> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: GetData().getUserProfile(),
+        future: getData.getUserProfile(),
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting)
             return SpinKitDoubleBounce(
@@ -110,7 +111,7 @@ class _EditProfileFormState extends State<EditProfileForm> {
                   text: "Update Profile",
                   press: () async {
                     if (_formKey.currentState.validate()) {
-                      UpdateData().updateUserProfile(
+                      updateData.updateUserProfile(
                           context,
                           name,
                           gender,
@@ -291,7 +292,7 @@ class _EditProfileFormState extends State<EditProfileForm> {
           labelText: "About",
           hintText: "Describe Yourself",
           floatingLabelBehavior: FloatingLabelBehavior.always,
-          suffixIcon: CustomSurffixIcon(svgIcon: "assets/icons/User.svg"),
+          suffixIcon: Icon(Icons.info_outline),
           border: rectangularBorder,
         ),
       ),
@@ -323,7 +324,7 @@ class _EditProfileFormState extends State<EditProfileForm> {
         labelText: "Education",
         hintText: "Enter your education",
         floatingLabelBehavior: FloatingLabelBehavior.always,
-        suffixIcon: CustomSurffixIcon(svgIcon: "assets/icons/User.svg"),
+        suffixIcon: Icon(Icons.cast_for_education_outlined),
         border: rectangularBorder,
       ),
     );
@@ -361,7 +362,7 @@ class _EditProfileFormState extends State<EditProfileForm> {
           labelText: "Specialities",
           hintText: "Enter your specialities",
           floatingLabelBehavior: FloatingLabelBehavior.always,
-          suffixIcon: CustomSurffixIcon(svgIcon: "assets/icons/User.svg"),
+          suffixIcon: Icon(Icons.star_border_outlined),
           border: rectangularBorder,
         ),
       ),
@@ -393,7 +394,7 @@ class _EditProfileFormState extends State<EditProfileForm> {
         labelText: "Languages",
         hintText: "Enter Your Languages",
         floatingLabelBehavior: FloatingLabelBehavior.always,
-        suffixIcon: CustomSurffixIcon(svgIcon: "assets/icons/User.svg"),
+        suffixIcon: Icon(Icons.language_outlined),
         border: rectangularBorder,
       ),
     );
@@ -424,7 +425,7 @@ class _EditProfileFormState extends State<EditProfileForm> {
         labelText: "Work",
         hintText: "What you do?",
         floatingLabelBehavior: FloatingLabelBehavior.always,
-        suffixIcon: CustomSurffixIcon(svgIcon: "assets/icons/User.svg"),
+        suffixIcon: Icon(Icons.work_outline),
         border: rectangularBorder,
       ),
     );

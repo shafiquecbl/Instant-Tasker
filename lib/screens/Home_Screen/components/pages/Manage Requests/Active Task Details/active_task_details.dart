@@ -10,6 +10,7 @@ import 'package:shop_app/size_config.dart';
 import 'package:shop_app/widgets/snack_bar.dart';
 import 'package:shop_app/widgets/time_ago.dart';
 import 'package:shop_app/widgets/customAppBar.dart';
+import 'package:shop_app/screens/Home_Screen/components/pages/Manage%20Requests/Active%20Task%20Details/mark_order_asComplete.dart';
 
 class ActiveTaskDetails extends StatefulWidget {
   final int index;
@@ -237,7 +238,6 @@ class _ActiveTaskDetailsState extends State<ActiveTaskDetails> {
 
   takeRevision(DocumentSnapshot snapshot) {
     return FutureBuilder(
-      // initialData: [],
       future: getData.getorderDocID(snapshot['Seller Email'], snapshot['Time']),
       builder: (BuildContext context, AsyncSnapshot snap) {
         return RaisedButton(
@@ -246,19 +246,60 @@ class _ActiveTaskDetailsState extends State<ActiveTaskDetails> {
           textColor: Colors.white,
           color: Colors.orange,
           onPressed: () {
-            updateData
-                .orderRevesion(
-                    snap.data[0].id, snapshot.id, snapshot['Seller Email'])
-                .then((value) => {
-                      Snack_Bar.show(context, "Asked for Revesion successfully")
-                    })
-                .then((value) => {
-                      setState(() {
-                        getData.getActiveTask();
-                      })
-                    });
+            confirmRevision(context, snapshot.id, snap.data[0].id,
+                snapshot['Seller Email']);
           },
         );
+      },
+    );
+  }
+
+  confirmRevision(BuildContext context, taskID, orderID, email) {
+    // set up the button
+    Widget acceptButton = FlatButton(
+      child: Text("Yes"),
+      onPressed: () {
+        updateData
+            .orderRevesion(orderID, taskID, email)
+            .then((value) => Navigator.pop(context))
+            .then((value) =>
+                {Snack_Bar.show(context, "Asked for Revesion successfully")})
+            .then((value) => {
+                  setState(() {
+                    getData.getActiveTask();
+                  })
+                });
+      },
+    );
+    Widget cancelButton = FlatButton(
+      child: Text("No"),
+      onPressed: () {
+        Navigator.pop(context);
+      },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      elevation: 5.0,
+      backgroundColor: hexColor,
+      title: Text(
+        "Confirmation!",
+        style: TextStyle(
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+      content: Text("Do you want to take revision?"),
+      actions: [
+        cancelButton,
+        acceptButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
       },
     );
   }
@@ -269,7 +310,54 @@ class _ActiveTaskDetailsState extends State<ActiveTaskDetails> {
       child: Text('Mark as complete'),
       textColor: Colors.white,
       color: greenColor,
-      onPressed: () {},
+      onPressed: () {
+        confirmCompletetion(context);
+      },
+    );
+  }
+
+  confirmCompletetion(BuildContext context) {
+    // set up the button
+    Widget acceptButton = FlatButton(
+      child: Text("Yes"),
+      onPressed: () {
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => CompleteOrder(widget.index, widget.docID),
+            ));
+      },
+    );
+    Widget cancelButton = FlatButton(
+      child: Text("No"),
+      onPressed: () {
+        Navigator.pop(context);
+      },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      elevation: 5.0,
+      backgroundColor: hexColor,
+      title: Text(
+        "Confirmation!",
+        style: TextStyle(
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+      content: Text("Do you want to mark order as complete?"),
+      actions: [
+        cancelButton,
+        acceptButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
     );
   }
 

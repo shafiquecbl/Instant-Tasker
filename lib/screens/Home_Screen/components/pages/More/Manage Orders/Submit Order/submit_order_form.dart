@@ -23,7 +23,6 @@ class _SubmitOrderFormState extends State<SubmitOrderForm> {
   final List<String> errors = [];
   SetData setData = SetData();
   UpdateData updateData = UpdateData();
-
   String description;
 
   void addError({String error}) {

@@ -250,7 +250,8 @@ class _OpenOrderDetailsState extends State<OpenOrderDetails> {
           .orderBy("timestamp", descending: true)
           .snapshots(),
       builder: (BuildContext context, AsyncSnapshot snap) {
-        if (snap.data == null) return Container();
+        if (snap.data == null)
+          return Center(child: CircularProgressIndicator.adaptive());
         if (snap.data.docs.length == 0)
           return Container(
             padding: EdgeInsets.symmetric(vertical: 30),
