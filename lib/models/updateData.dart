@@ -29,6 +29,8 @@ class UpdateData {
             'Reviews as Seller': intValue,
             'Completion Rate': intValue,
             'Completed Task': intValue,
+            'Cancelled Task': intValue,
+            'Total Task': intValue,
             'About': "",
             'Education': "",
             'Specialities': "",
@@ -129,5 +131,49 @@ class UpdateData {
         .collection('Orders')
         .doc(receiverDocID)
         .update({'Status': "Revision"});
+  }
+
+  Future completeOrder(receiverDocID, docID, receiverEmail, cTask, cRate,
+      revSeller, double ratSeller, double rating, totalTasks, review) async {
+    int comTask = (cTask + 1);
+    int totTask = (totalTasks + 1);
+    double comRate = (comTask / totTask) * 100;
+    int reviewsSeller = (revSeller + 1);
+    double rating1 = ((rating + ratSeller) / comTask);
+
+    await FirebaseFirestore.instance
+        .collection('Users')
+        .doc(email)
+        .collection("Assigned Tasks")
+        .doc(docID)
+        .update({'Status': "Completed"});
+
+    await FirebaseFirestore.instance
+        .collection('Users')
+        .doc(receiverEmail)
+        .collection('Orders')
+        .doc(receiverDocID)
+        .update({'Status': "Completed"});
+
+    await FirebaseFirestore.instance
+        .collection('Users')
+        .doc(receiverEmail)
+        .update({
+      'Total Tasks': totTask,
+      'Completed Task': comTask,
+      'Completion Rate': comRate,
+      'Reviews as Seller': reviewsSeller,
+      'Rating as Seller': rating1,
+    });
+
+    return await FirebaseFirestore.instance
+        .collection('Users')
+        .doc(receiverEmail)
+        .collection('Reviews')
+        .doc()
+        .set({
+      'Review': review,
+      'Name': user.displayName,
+    });
   }
 }

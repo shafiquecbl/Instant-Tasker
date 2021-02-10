@@ -7,20 +7,18 @@ import 'package:shop_app/models/getData.dart';
 import 'package:shop_app/models/updateData.dart';
 import 'package:shop_app/screens/Home_Screen/components/pages/Inbox/chat_Screen.dart';
 import 'package:shop_app/size_config.dart';
-import 'package:shop_app/widgets/snack_bar.dart';
 import 'package:shop_app/widgets/time_ago.dart';
 import 'package:shop_app/widgets/customAppBar.dart';
-import 'package:shop_app/screens/Home_Screen/components/pages/Manage%20Requests/Active%20Task%20Details/mark_order_asComplete.dart';
 
-class ActiveTaskDetails extends StatefulWidget {
+class CompletedTaskDetails extends StatefulWidget {
   final int index;
   final String docID;
-  ActiveTaskDetails(this.index, this.docID);
+  CompletedTaskDetails(this.index, this.docID);
   @override
-  _ActiveTaskDetailsState createState() => _ActiveTaskDetailsState();
+  _CompletedTaskDetailsState createState() => _CompletedTaskDetailsState();
 }
 
-class _ActiveTaskDetailsState extends State<ActiveTaskDetails> {
+class _CompletedTaskDetailsState extends State<CompletedTaskDetails> {
   User user = FirebaseAuth.instance.currentUser;
   GetData getData = GetData();
   UpdateData updateData = UpdateData();
@@ -34,11 +32,11 @@ class _ActiveTaskDetailsState extends State<ActiveTaskDetails> {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return Scaffold(
-      appBar: customAppBar('Active Task Details'),
+      appBar: customAppBar('Completed Task Details'),
       body: SingleChildScrollView(
         child: FutureBuilder(
           initialData: [],
-          future: getData.getActiveTask(),
+          future: getData.getCompletedTask(),
           builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting)
               return SpinKitDoubleBounce(color: kPrimaryColor);
@@ -184,19 +182,6 @@ class _ActiveTaskDetailsState extends State<ActiveTaskDetails> {
                   height: 20,
                 ),
                 chatWithTasker(snapshot),
-                SizedBox(
-                  height: 5,
-                ),
-                cancelOrder(),
-                SizedBox(
-                  height: 5,
-                ),
-                snapshot['Status'] == "Submitted"
-                    ? takeRevision(snapshot)
-                    : Container(),
-                snapshot['Status'] == "Submitted"
-                    ? markAsComplete(snapshot['Seller Email'])
-                    : Container(),
               ],
             ),
           ),
@@ -226,154 +211,6 @@ class _ActiveTaskDetailsState extends State<ActiveTaskDetails> {
                 isOnline: true,
               ),
             ));
-      },
-    );
-  }
-
-  cancelOrder() {
-    return RaisedButton(
-      padding: EdgeInsets.symmetric(vertical: 8, horizontal: 10),
-      child: Text('Cancel Order'),
-      textColor: Colors.white,
-      color: Colors.red,
-      onPressed: () {},
-    );
-  }
-
-  takeRevision(DocumentSnapshot snapshot) {
-    return FutureBuilder(
-      future: getData.getorderDocID(snapshot['Seller Email'], snapshot['Time']),
-      builder: (BuildContext context, AsyncSnapshot snap) {
-        if (snap.connectionState == ConnectionState.waiting)
-          return RaisedButton(
-              padding: EdgeInsets.symmetric(vertical: 8, horizontal: 10),
-              child: Text('Take Revesion'),
-              textColor: Colors.white,
-              color: Colors.orange,
-              onPressed: () {});
-        taskID = snapshot.id;
-        orderID = snap.data[0].id;
-        email = snapshot['Seller Email'];
-        return RaisedButton(
-          padding: EdgeInsets.symmetric(vertical: 8, horizontal: 10),
-          child: Text('Take Revesion'),
-          textColor: Colors.white,
-          color: Colors.orange,
-          onPressed: () {
-            confirmRevision(context, taskID, orderID, email);
-          },
-        );
-      },
-    );
-  }
-
-  confirmRevision(BuildContext context, taskID, orderID, email) {
-    // set up the button
-    Widget acceptButton = FlatButton(
-      child: Text("Yes"),
-      onPressed: () {
-        updateData
-            .orderRevesion(orderID, taskID, email)
-            .then((value) => Navigator.pop(context))
-            .then((value) =>
-                {Snack_Bar.show(context, "Asked for Revesion successfully")})
-            .then((value) => {
-                  setState(() {
-                    getData.getActiveTask();
-                  })
-                });
-      },
-    );
-    Widget cancelButton = FlatButton(
-      child: Text("No"),
-      onPressed: () {
-        Navigator.pop(context);
-      },
-    );
-
-    // set up the AlertDialog
-    AlertDialog alert = AlertDialog(
-      elevation: 5.0,
-      backgroundColor: hexColor,
-      title: Text(
-        "Confirmation!",
-        style: TextStyle(
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-      content: Text("Do you want to take revision?"),
-      actions: [
-        cancelButton,
-        acceptButton,
-      ],
-    );
-
-    // show the dialog
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return alert;
-      },
-    );
-  }
-
-  markAsComplete(userEmail) {
-    return RaisedButton(
-      padding: EdgeInsets.symmetric(vertical: 8, horizontal: 10),
-      child: Text('Mark as complete'),
-      textColor: Colors.white,
-      color: greenColor,
-      onPressed: () {
-        confirmCompletetion(context);
-      },
-    );
-  }
-
-  confirmCompletetion(BuildContext context) {
-    // set up the button
-    Widget acceptButton = FlatButton(
-      child: Text("Yes"),
-      onPressed: () {
-        Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => CompleteOrder(
-                taskID: taskID,
-                orderID: orderID,
-                userEmail: email,
-              ),
-            ));
-      },
-    );
-    Widget cancelButton = FlatButton(
-      child: Text("No"),
-      onPressed: () {
-        Navigator.pop(context);
-      },
-    );
-
-    // set up the AlertDialog
-    AlertDialog alert = AlertDialog(
-      elevation: 5.0,
-      backgroundColor: hexColor,
-      title: Text(
-        "Confirmation!",
-        style: TextStyle(
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-      content: Text("Do you want to mark order as complete?"),
-      actions: [
-        cancelButton,
-        acceptButton,
-      ],
-    );
-
-    // show the dialog
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return alert;
       },
     );
   }

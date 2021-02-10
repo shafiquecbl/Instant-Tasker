@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shop_app/constants.dart';
 import 'package:shop_app/models/getData.dart';
+import 'package:shop_app/screens/Home_Screen/components/pages/Manage%20Requests/Completed%20Task/Completed_Task_Details.dart';
 import 'package:shop_app/screens/Home_Screen/components/pages/Manage%20Requests/open_offer_details.dart';
 import 'package:shop_app/screens/Home_Screen/components/pages/More/Post%20a%20Task/post_task.dart';
 import 'package:shop_app/size_config.dart';
@@ -18,6 +19,7 @@ class ManageTasks extends StatefulWidget {
 class _ManageTasksState extends State<ManageTasks> {
   int postedTaskLength;
   int activeTaskLength;
+  int completedTaskLength;
   GetData getData = GetData();
   @override
   Widget build(BuildContext context) {
@@ -57,7 +59,14 @@ class _ManageTasksState extends State<ManageTasks> {
                       return Tab(text: "Active ($activeTaskLength)");
                     },
                   ),
-                  Tab(text: "Completed"),
+                  FutureBuilder(
+                    initialData: [],
+                    future: getData.getCompletedTask(),
+                    builder: (BuildContext context, AsyncSnapshot snapshot) {
+                      completedTaskLength = snapshot.data.length;
+                      return Tab(text: "Completed ($completedTaskLength)");
+                    },
+                  ),
                   Tab(text: "Canceled"),
                 ]),
           ),
@@ -65,7 +74,7 @@ class _ManageTasksState extends State<ManageTasks> {
             children: [
               postedTask(),
               activeTask(),
-              Center(child: Text("Completed")),
+              completedTasks(),
               Center(child: Text("Canceled")),
             ],
           )),
@@ -239,6 +248,7 @@ class _ManageTasksState extends State<ManageTasks> {
           .collection("Users")
           .doc(FirebaseAuth.instance.currentUser.email)
           .collection("Assigned Tasks")
+          .where('Status', isNotEqualTo: "Completed")
           .snapshots(),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting)
@@ -360,7 +370,134 @@ class _ManageTasksState extends State<ManageTasks> {
     );
   }
 
-  completedTasks() {}
+  completedTasks() {
+    return StreamBuilder(
+      stream: FirebaseFirestore.instance
+          .collection("Users")
+          .doc(FirebaseAuth.instance.currentUser.email)
+          .collection("Assigned Tasks")
+          .where('Status', isEqualTo: "Completed")
+          .snapshots(),
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting)
+          return Center(child: CircularProgressIndicator());
+        activeTaskLength = snapshot.data.docs.length;
+        if (activeTaskLength == 0)
+          return Center(
+            child: Text(
+              "No Completed Tasks Yet",
+              style:
+                  TextStyle(fontWeight: FontWeight.bold, color: kPrimaryColor),
+            ),
+          );
+        return RefreshIndicator(
+          onRefresh: () async {
+            setState(() {
+              getData.getCompletedTask();
+            });
+          },
+          child: ListView.builder(
+            itemCount: activeTaskLength,
+            itemBuilder: (context, index) {
+              return Container(
+                margin: EdgeInsets.all(10),
+                decoration: boxDecoration,
+                child: Wrap(
+                  children: <Widget>[
+                    Container(
+                      margin: EdgeInsets.only(left: 17, top: 5, right: 17),
+                      child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                TimeAgo.timeAgoSinceDate(
+                                    snapshot.data.docs[index]['Time']),
+                                style: TextStyle(color: Colors.grey),
+                              ),
+                            ),
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                snapshot.data.docs[index]['Status'],
+                                style: TextStyle(color: kPrimaryColor),
+                              ),
+                            ),
+                          ]),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 8),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(5)),
+                              color: Colors.grey[200],
+                            ),
+                            padding: EdgeInsets.all(10),
+                            child: Text(
+                              snapshot.data.docs[index]['Description'],
+                              style: TextStyle(
+                                  color: Colors.black.withOpacity(0.6)),
+                            ),
+                          ),
+                          ListTile(
+                            leading: Icon(
+                              Icons.attach_money,
+                              color: greenColor,
+                            ),
+                            title: Text(
+                              "Budget: ${snapshot.data.docs[index]['Budget']}",
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: greenColor,
+                              ),
+                            ),
+                          ),
+                          dividerPad,
+                          ListTile(
+                            leading: Icon(Icons.timer),
+                            title: Text(
+                              "Duration: ${snapshot.data.docs[index]['Duration']}",
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Colors.grey,
+                              ),
+                            ),
+                          ),
+                          RaisedButton(
+                            child: Text('View Details'),
+                            textColor: Colors.white,
+                            color: kPrimaryColor,
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => CompletedTaskDetails(
+                                    index,
+                                    snapshot.data.docs[index].id,
+                                  ),
+                                ),
+                              );
+                            },
+                          )
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+        );
+      },
+    );
+  }
+
   cancelledTasks() {}
 
   deleteRequest(BuildContext context, String taskID) {

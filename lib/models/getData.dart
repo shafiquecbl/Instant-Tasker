@@ -13,6 +13,12 @@ class GetData {
     return document;
   }
 
+  Future getUserData(userEmail) async {
+    DocumentSnapshot document =
+        await firestore.collection('Users').doc(userEmail).get();
+    return document;
+  }
+
   Future getPostedTask() async {
     QuerySnapshot snapshot = await firestore
         .collection("Buyer Requests")
@@ -26,6 +32,17 @@ class GetData {
         .collection("Users")
         .doc(email)
         .collection("Assigned Tasks")
+        .where('Status', isNotEqualTo: "Completed")
+        .get();
+    return snapshot.docs;
+  }
+
+  Future getCompletedTask() async {
+    QuerySnapshot snapshot = await firestore
+        .collection("Users")
+        .doc(email)
+        .collection("Assigned Tasks")
+        .where('Status', isEqualTo: "Completed")
         .get();
     return snapshot.docs;
   }
@@ -41,6 +58,10 @@ class GetData {
         .collection("Users")
         .doc(email)
         .collection("Orders")
+        .where(
+          'Status',
+          isNotEqualTo: "Completed",
+        )
         .get();
     return snapshot.docs;
   }

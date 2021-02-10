@@ -5,6 +5,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:shop_app/constants.dart';
 import 'package:shop_app/models/getData.dart';
 import 'package:shop_app/models/updateData.dart';
+import 'package:shop_app/screens/Home_Screen/home_screen.dart';
 import 'package:shop_app/size_config.dart';
 import 'package:shop_app/widgets/customAppBar.dart';
 import 'package:shop_app/components/default_button.dart';
@@ -14,9 +15,13 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:shop_app/widgets/snack_bar.dart';
 
 class CompleteOrder extends StatefulWidget {
-  final int index;
-  final String docID;
-  CompleteOrder(this.index, this.docID);
+  final String taskID;
+  final String orderID;
+  final String userEmail;
+  CompleteOrder(
+      {@required this.taskID,
+      @required this.orderID,
+      @required this.userEmail});
   @override
   _CompleteOrderState createState() => _CompleteOrderState();
 }
@@ -29,8 +34,7 @@ class _CompleteOrderState extends State<CompleteOrder> {
 
   final _formKey = GlobalKey<FormState>();
   final List<String> errors = [];
-  // SetData setData = SetData();
-  String description;
+  String review;
 
   void addError({String error}) {
     if (!errors.contains(error))
@@ -53,14 +57,12 @@ class _CompleteOrderState extends State<CompleteOrder> {
       appBar: customAppBar('Complete Order'),
       body: SingleChildScrollView(
         child: FutureBuilder(
-          future: Future.wait([
-            getData.getActiveTask(),
-          ]),
+          future: Future.wait(
+              [getData.getActiveTask(), getData.getUserData(widget.userEmail)]),
           builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
             if (snapshot.data == null)
               return SpinKitDoubleBounce(color: kPrimaryColor);
-            if (snapshot.hasData)
-              return taskDetails(snapshot.data[0][widget.index]);
+            if (snapshot.hasData) return reviewForm(snapshot);
             return Container();
           },
         ),
@@ -68,15 +70,7 @@ class _CompleteOrderState extends State<CompleteOrder> {
     );
   }
 
-  taskDetails(DocumentSnapshot snapshot) {
-    return Column(
-      children: [
-        details(snapshot),
-      ],
-    );
-  }
-
-  details(DocumentSnapshot snapshot) {
+  reviewForm(AsyncSnapshot<dynamic> snapshot) {
     return Container(
       margin: EdgeInsets.all(10),
       child: Wrap(
@@ -88,14 +82,14 @@ class _CompleteOrderState extends State<CompleteOrder> {
                 child: Column(
                   children: [
                     getReviewFormField(),
-                    SizedBox(height: getProportionateScreenHeight(10)),
+                    SizedBox(height: getProportionateScreenHeight(20)),
                     ratingText(),
                     SizedBox(height: getProportionateScreenHeight(20)),
                     ratingBar(),
                     SizedBox(height: getProportionateScreenHeight(30)),
                     FormError(errors: errors),
                     SizedBox(height: getProportionateScreenHeight(30)),
-                    markAsComplete(),
+                    markAsComplete(snapshot.data[1]),
                     SizedBox(height: getProportionateScreenHeight(30)),
                   ],
                 ),
@@ -105,18 +99,16 @@ class _CompleteOrderState extends State<CompleteOrder> {
     );
   }
 
+  ///////////////////////////////////////////////////////////////////////////////
+
   ratingText() {
-    return Padding(
-      padding: const EdgeInsets.only(left: 8),
-      child: Align(
-        alignment: Alignment.topLeft,
-        child: Text(
-          "Rating ( Please provide rating )",
-          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-        ),
-      ),
+    return Text(
+      "Rating ( Please provide rating )",
+      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
     );
   }
+
+  ///////////////////////////////////////////////////////////////////////////////
 
   ratingBar() {
     return RatingBar(
@@ -140,7 +132,9 @@ class _CompleteOrderState extends State<CompleteOrder> {
     );
   }
 
-  markAsComplete() {
+  ///////////////////////////////////////////////////////////////////////////////
+
+  markAsComplete(DocumentSnapshot snapshot) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15),
       child: DefaultButton(
@@ -149,13 +143,31 @@ class _CompleteOrderState extends State<CompleteOrder> {
           if (_formKey.currentState.validate()) {
             if (saveRating == null) {
               Snack_Bar.show(context, "Please provide Rating!");
-            } else
-              Snack_Bar.show(context, "$saveRating");
+            } else {
+              updateData
+                  .completeOrder(
+                      widget.orderID,
+                      widget.taskID,
+                      widget.userEmail,
+                      snapshot['Completed Task'],
+                      snapshot['Completion Rate'],
+                      snapshot['Reviews as Seller'],
+                      snapshot['Rating as Seller'],
+                      saveRating,
+                      snapshot['Total Tasks'],
+                      review)
+                  .then((value) => {})
+                  .then((value) => Navigator.push(
+                      context, MaterialPageRoute(builder: (_) => MainScreen())))
+                  .then((value) =>
+                      Snack_Bar(message: "Order Marked as Completed!"));
+            }
           }
         },
       ),
     );
   }
+
   ///////////////////////////////////////////////////////////////////////////////
 
   Container getReviewFormField() {
@@ -165,11 +177,11 @@ class _CompleteOrderState extends State<CompleteOrder> {
         expands: true,
         minLines: null,
         maxLines: null,
-        onSaved: (newValue) => description = newValue,
+        onSaved: (newValue) => review = newValue,
         onChanged: (value) {
           if (value.isNotEmpty) {
             removeError(error: "Please add Review");
-            description = value;
+            review = value;
           } else {}
         },
         validator: (value) {

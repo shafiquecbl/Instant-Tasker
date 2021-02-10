@@ -12,7 +12,6 @@ class Snack_Bar {
     BuildContext context,
     String message,
   ) {
-    // ignore: deprecated_member_use
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         backgroundColor: Colors.red,
