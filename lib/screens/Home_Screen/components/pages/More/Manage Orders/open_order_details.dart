@@ -9,6 +9,7 @@ import 'package:shop_app/screens/Home_Screen/components/pages/More/Manage%20Orde
 import 'package:shop_app/size_config.dart';
 import 'package:shop_app/widgets/customAppBar.dart';
 import 'package:shop_app/widgets/time_ago.dart';
+import 'package:shop_app/screens/Home_Screen/components/pages/More/Manage%20Orders/Submit%20Review/submit_review.dart';
 
 class OpenOrderDetails extends StatefulWidget {
   final String docID;
@@ -199,28 +200,31 @@ class _OpenOrderDetailsState extends State<OpenOrderDetails> {
                 SizedBox(
                   height: 5,
                 ),
-                RaisedButton(
-                  padding: EdgeInsets.symmetric(vertical: 8, horizontal: 10),
-                  child: Text(
-                    snapshot['Status'] == "Pending"
-                        ? "Submit Order"
-                        : "Submit Again",
-                  ),
-                  textColor: Colors.white,
-                  color: greenColor,
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => SubmitOrder(
-                          snapshot.id,
-                          snapshot['Client Email'],
-                          snapshot['Time'],
+                snapshot['Status'] != "Completed"
+                    ? RaisedButton(
+                        padding:
+                            EdgeInsets.symmetric(vertical: 8, horizontal: 10),
+                        child: Text(
+                          snapshot['Status'] == "Pending"
+                              ? "Submit Order"
+                              : "Submit Again",
                         ),
-                      ),
-                    );
-                  },
-                ),
+                        textColor: Colors.white,
+                        color: greenColor,
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => SubmitOrder(
+                                snapshot.id,
+                                snapshot['Client Email'],
+                                snapshot['Time'],
+                              ),
+                            ),
+                          );
+                        },
+                      )
+                    : submitReview(snapshot['Client Email']),
                 SizedBox(
                   height: 15,
                 ),
@@ -236,6 +240,29 @@ class _OpenOrderDetailsState extends State<OpenOrderDetails> {
           ),
         ],
       ),
+    );
+  }
+
+  submitReview(userEmail) {
+    return FutureBuilder(
+      initialData: [],
+      future: getData.getUserData(userEmail),
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
+        return RaisedButton(
+          padding: EdgeInsets.symmetric(vertical: 8, horizontal: 10),
+          child: Text("Submit Review"),
+          textColor: Colors.white,
+          color: kPrimaryColor,
+          onPressed: () {
+            Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (_) => SubmitReview(
+                          userEmail: userEmail,
+                        )));
+          },
+        );
+      },
     );
   }
 

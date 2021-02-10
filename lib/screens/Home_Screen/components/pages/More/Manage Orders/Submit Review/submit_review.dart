@@ -5,7 +5,6 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:shop_app/constants.dart';
 import 'package:shop_app/models/getData.dart';
 import 'package:shop_app/models/updateData.dart';
-import 'package:shop_app/screens/Home_Screen/home_screen.dart';
 import 'package:shop_app/size_config.dart';
 import 'package:shop_app/widgets/customAppBar.dart';
 import 'package:shop_app/components/default_button.dart';
@@ -13,20 +12,16 @@ import 'package:shop_app/components/form_error.dart';
 import 'package:shop_app/widgets/outline_input_border.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:shop_app/widgets/snack_bar.dart';
+import 'package:shop_app/screens/Home_Screen/home_screen.dart';
 
-class CompleteOrder extends StatefulWidget {
-  final String taskID;
-  final String orderID;
+class SubmitReview extends StatefulWidget {
   final String userEmail;
-  CompleteOrder(
-      {@required this.taskID,
-      @required this.orderID,
-      @required this.userEmail});
+  SubmitReview({@required this.userEmail});
   @override
-  _CompleteOrderState createState() => _CompleteOrderState();
+  _SubmitReviewState createState() => _SubmitReviewState();
 }
 
-class _CompleteOrderState extends State<CompleteOrder> {
+class _SubmitReviewState extends State<SubmitReview> {
   User user = FirebaseAuth.instance.currentUser;
   double saveRating;
   GetData getData = GetData();
@@ -89,7 +84,7 @@ class _CompleteOrderState extends State<CompleteOrder> {
                     SizedBox(height: getProportionateScreenHeight(30)),
                     FormError(errors: errors),
                     SizedBox(height: getProportionateScreenHeight(30)),
-                    markAsComplete(snapshot.data[1]),
+                    submitReview(snapshot.data[1]),
                     SizedBox(height: getProportionateScreenHeight(30)),
                   ],
                 ),
@@ -134,32 +129,26 @@ class _CompleteOrderState extends State<CompleteOrder> {
 
   ///////////////////////////////////////////////////////////////////////////////
 
-  markAsComplete(DocumentSnapshot snapshot) {
+  submitReview(DocumentSnapshot snapshot) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15),
       child: DefaultButton(
-        text: "Submit and Complete",
+        text: "Submit Review",
         press: () async {
           if (_formKey.currentState.validate()) {
             if (saveRating == null) {
               Snack_Bar.show(context, "Please provide Rating!");
             } else {
               updateData
-                  .completeOrder(
-                      widget.orderID,
-                      widget.taskID,
-                      widget.userEmail,
-                      snapshot['Completed Task'],
-                      snapshot['Completion Rate'],
-                      snapshot['Reviews as Seller'],
-                      snapshot['Rating as Seller'],
-                      saveRating,
-                      snapshot['Total Tasks'],
-                      review)
-                  .then((value) => Navigator.push(
-                      context, MaterialPageRoute(builder: (_) => MainScreen())))
-                  .then((value) =>
-                      Snack_Bar(message: "Order Marked as Completed!"));
+                  .submitReview(
+                      receiverEmail: snapshot['Email'],
+                      cTask: snapshot['Completed Task as Buyer'],
+                      revBuyer: snapshot['Reviews as Buyer'],
+                      ratBuyer: snapshot['Rating as Buyer'],
+                      rating: saveRating,
+                      review: review)
+                  .then((value) => Navigator.push(context,
+                      MaterialPageRoute(builder: (_) => MainScreen())));
             }
           }
         },

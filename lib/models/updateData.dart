@@ -29,6 +29,7 @@ class UpdateData {
             'Reviews as Seller': intValue,
             'Completion Rate': intValue,
             'Completed Task': intValue,
+            'Completed Task as Buyer': intValue,
             'Cancelled Task': intValue,
             'Total Task': intValue,
             'About': "",
@@ -174,6 +175,37 @@ class UpdateData {
         .set({
       'Review': review,
       'Name': user.displayName,
+    }).then((value) => Snack_Bar(message: "Order Marked as Completed!"));
+  }
+
+  Future submitReview(
+      {@required receiverEmail,
+      @required cTask,
+      @required revBuyer,
+      @required double ratBuyer,
+      @required double rating,
+      @required review}) async {
+    int comTask = (cTask + 1);
+    int reviewsSeller = (revBuyer + 1);
+    double rating1 = ((rating + revBuyer) / comTask);
+
+    await FirebaseFirestore.instance
+        .collection('Users')
+        .doc(receiverEmail)
+        .update({
+      'Completed Task as Buyer': comTask,
+      'Reviews as Buyer': reviewsSeller,
+      'Rating as Buyer': rating1,
     });
+
+    return await FirebaseFirestore.instance
+        .collection('Users')
+        .doc(receiverEmail)
+        .collection('Reviews')
+        .doc()
+        .set({
+      'Review': review,
+      'Name': user.displayName,
+    }).then((value) => Snack_Bar(message: "Review Submitted!"));
   }
 }

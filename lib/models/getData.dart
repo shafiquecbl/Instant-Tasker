@@ -66,6 +66,19 @@ class GetData {
     return snapshot.docs;
   }
 
+  Future getCompletedOrders() async {
+    QuerySnapshot snapshot = await firestore
+        .collection("Users")
+        .doc(email)
+        .collection("Orders")
+        .where(
+          'Status',
+          isEqualTo: "Completed",
+        )
+        .get();
+    return snapshot.docs;
+  }
+
   Future<String> getCNIC() async {
     DocumentSnapshot document =
         await firestore.collection('Users').doc(email).get();

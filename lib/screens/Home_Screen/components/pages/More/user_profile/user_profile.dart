@@ -261,9 +261,7 @@ class _UserProfileState extends State<UserProfile> {
                                                     getProportionateScreenHeight(
                                                         10)),
                                             Text(
-                                                '${snapshot.data['Completion Rate']}% Completetion Rate'),
-                                            Text(
-                                                '${snapshot.data['Completed Task']} Completed Tasks'),
+                                                '${snapshot.data['Completed Task as Buyer']} Completed Tasks'),
                                           ],
                                         )),
                                       ),
