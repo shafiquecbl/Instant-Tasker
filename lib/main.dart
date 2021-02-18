@@ -21,8 +21,9 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Instant Tasker',
       theme: theme(),
-      initialRoute:
-          user != null ? MainScreen.routeName : SplashScreen.routeName,
+      initialRoute: user != null && user.emailVerified
+          ? MainScreen.routeName
+          : SplashScreen.routeName,
       routes: routes,
     );
   }

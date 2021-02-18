@@ -582,7 +582,10 @@ class _UserProfileState extends State<UserProfile> {
     auth.currentUser
         .updateProfile(photoURL: dowurl)
         .then((value) => setState(() {
-              GetData().getUserProfile();
+              FirebaseFirestore.instance
+                  .collection('Users')
+                  .doc(email)
+                  .snapshots();
             }));
   }
 }

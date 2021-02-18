@@ -64,6 +64,10 @@ class _VerifyEmailState extends State<VerifyEmail> {
               style:
                   TextStyle(fontWeight: FontWeight.w500, color: kPrimaryColor),
             ),
+            SizedBox(height: 5),
+            Text("( Verify first to continue! )",
+                style: TextStyle(
+                    fontWeight: FontWeight.bold, color: Colors.green)),
           ],
         ),
       ),
