@@ -32,7 +32,7 @@ class GetData {
         .collection("Users")
         .doc(email)
         .collection("Assigned Tasks")
-        .where('Status', isNotEqualTo: "Completed")
+        .where('TOstatus', isEqualTo: "Active")
         .get();
     return snapshot.docs;
   }
@@ -42,7 +42,7 @@ class GetData {
         .collection("Users")
         .doc(email)
         .collection("Assigned Tasks")
-        .where('Status', isEqualTo: "Completed")
+        .where('TOstatus', isEqualTo: "Completed")
         .get();
     return snapshot.docs;
   }

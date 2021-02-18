@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shop_app/components/custom_surfix_icon.dart';
 import 'package:shop_app/components/default_button.dart';
@@ -68,10 +70,13 @@ class _EditProfileFormState extends State<EditProfileForm> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-        future: getData.getUserProfile(),
+    return StreamBuilder(
+        stream: FirebaseFirestore.instance
+            .collection('Users')
+            .doc(FirebaseAuth.instance.currentUser.email)
+            .snapshots(),
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting)
+          if (snapshot.data == null)
             return SpinKitDoubleBounce(
               color: kPrimaryColor,
             );
@@ -110,18 +115,47 @@ class _EditProfileFormState extends State<EditProfileForm> {
                 DefaultButton(
                   text: "Update Profile",
                   press: () async {
-                    if (_formKey.currentState.validate()) {
-                      updateData.updateUserProfile(
-                          context,
-                          name,
-                          gender,
-                          phoneNo,
-                          address,
-                          about,
-                          education,
-                          specialities,
-                          languages,
-                          work);
+                    if (gender == null) {
+                      addError(error: "Please select your Gender");
+                    } else if (gender != null) {
+                      removeError(error: "Please select your Gender");
+                      if (_formKey.currentState.validate()) {
+                        if (name == null) {
+                          name = storeName;
+                        }
+                        if (phoneNo == null) {
+                          phoneNo = storePhoneNo;
+                        }
+                        if (address == null) {
+                          address = storeAddress;
+                        }
+                        if (about == null) {
+                          about = storeAbout;
+                        }
+                        if (education == null) {
+                          education = storeEducation;
+                        }
+                        if (specialities == null) {
+                          specialities = storeSpecialities;
+                        }
+                        if (languages == null) {
+                          languages = storeLanguages;
+                        }
+                        if (work == null) {
+                          work = storeWork;
+                        }
+                        updateData.updateUserProfile(
+                            context,
+                            name,
+                            gender,
+                            phoneNo,
+                            address,
+                            about,
+                            education,
+                            specialities,
+                            languages,
+                            work);
+                      }
                     }
                   },
                 ),
@@ -141,8 +175,6 @@ class _EditProfileFormState extends State<EditProfileForm> {
         if (value.isNotEmpty) {
           removeError(error: kNamelNullError);
           name = value;
-        } else if (value == null) {
-          storeName = value;
         } else {}
       },
       validator: (value) {
@@ -172,9 +204,7 @@ class _EditProfileFormState extends State<EditProfileForm> {
         if (value.isNotEmpty) {
           removeError(error: kPhoneNumberNullError);
           phoneNo = value;
-        } else {
-          storePhoneNo = value;
-        }
+        } else {}
       },
       validator: (value) {
         if (value.isEmpty) {
@@ -197,21 +227,12 @@ class _EditProfileFormState extends State<EditProfileForm> {
 
   DropdownButtonFormField getGenderFormField() {
     return DropdownButtonFormField(
-      onSaved: (newValue) {
-        gender = newValue;
-      },
+      onSaved: (newValue) => gender = newValue,
       onChanged: (value) {
         if (value.isNotEmpty) {
           removeError(error: kNamelNullError);
-        }
-        gender = value;
-      },
-      validator: (value) {
-        if (value.isEmpty) {
-          addError(error: kNamelNullError);
-          return "";
-        }
-        return null;
+          gender = value;
+        } else {}
       },
       decoration: InputDecoration(
         labelText: "Gender",
@@ -239,9 +260,7 @@ class _EditProfileFormState extends State<EditProfileForm> {
           if (value.isNotEmpty) {
             removeError(error: kAddressNullError);
             address = value;
-          } else {
-            storeAddress = value;
-          }
+          } else {}
         },
         validator: (value) {
           if (value.isEmpty) {
@@ -277,9 +296,7 @@ class _EditProfileFormState extends State<EditProfileForm> {
           if (value.isNotEmpty) {
             removeError(error: kAboutNullError);
             about = value;
-          } else {
-            storeAbout = value;
-          }
+          } else {}
         },
         validator: (value) {
           if (value.isEmpty) {
@@ -309,9 +326,7 @@ class _EditProfileFormState extends State<EditProfileForm> {
         if (value.isNotEmpty) {
           removeError(error: kEducationNullError);
           education = value;
-        } else {
-          storeEducation = value;
-        }
+        } else {}
       },
       validator: (value) {
         if (value.isEmpty) {
@@ -344,12 +359,8 @@ class _EditProfileFormState extends State<EditProfileForm> {
         onChanged: (value) {
           if (value.isNotEmpty) {
             removeError(error: kSkillsNullError);
-          }
-          if (value.isNotEmpty) {
             specialities = value;
-          } else {
-            storeSpecialities = value;
-          }
+          } else {}
         },
         validator: (value) {
           if (value.isEmpty) {
@@ -379,9 +390,7 @@ class _EditProfileFormState extends State<EditProfileForm> {
         if (value.isNotEmpty) {
           removeError(error: kLanguagesNullError);
           languages = value;
-        } else {
-          storeLanguages = value;
-        }
+        } else {}
       },
       validator: (value) {
         if (value.isEmpty) {
@@ -410,9 +419,7 @@ class _EditProfileFormState extends State<EditProfileForm> {
         if (value.isNotEmpty) {
           removeError(error: kWorkNullError);
           work = value;
-        } else {
-          storeWork = value;
-        }
+        } else {}
       },
       validator: (value) {
         if (value.isEmpty) {

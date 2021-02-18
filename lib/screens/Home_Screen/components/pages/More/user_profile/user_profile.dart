@@ -69,7 +69,6 @@ class _UserProfileState extends State<UserProfile> {
               color: kPrimaryColor,
             );
           profilePic = snapshot.data['PhotoURL'];
-
           return SafeArea(
             child: RefreshIndicator(
               onRefresh: () async {
@@ -88,7 +87,7 @@ class _UserProfileState extends State<UserProfile> {
                       child: Stack(
                         children: [
                           CircleAvatar(
-                            radius: snapshot.data['PhotoURL'] == null ? 54 : 68,
+                            radius: snapshot.data['PhotoURL'] == null ? 50 : 68,
                             backgroundColor: kPrimaryColor.withOpacity(0.8),
                             child: user.photoURL != null
                                 ? ClipRRect(
@@ -102,15 +101,15 @@ class _UserProfileState extends State<UserProfile> {
                                   )
                                 : Container(
                                     decoration: BoxDecoration(
+                                        image: DecorationImage(
+                                            fit: BoxFit.cover,
+                                            image: AssetImage(
+                                                "assets/images/nullUser.png")),
                                         color: Colors.grey[200],
                                         borderRadius:
-                                            BorderRadius.circular(50)),
-                                    width: 100,
-                                    height: 100,
-                                    child: Icon(
-                                      Icons.camera_alt,
-                                      color: Colors.grey[800],
-                                    ),
+                                            BorderRadius.circular(70)),
+                                    width: 132,
+                                    height: 132,
                                   ),
                           ),
                           Positioned(
@@ -123,14 +122,11 @@ class _UserProfileState extends State<UserProfile> {
                                   decoration: BoxDecoration(
                                     shape: BoxShape.circle,
                                     border: Border.all(
-                                      width: 4,
-                                      color: Theme.of(context)
-                                          .scaffoldBackgroundColor,
-                                    ),
+                                        width: 3, color: Colors.white),
                                     color: kPrimaryColor,
                                   ),
                                   child: Icon(
-                                    Icons.edit,
+                                    Icons.camera_alt,
                                     color: Colors.white,
                                   ),
                                 ),

@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:shop_app/constants.dart';
 import 'package:shop_app/models/getData.dart';
 import 'package:shop_app/screens/Home_Screen/components/pages/More/Manage%20Orders/open_order_details.dart';
@@ -77,8 +76,8 @@ class _ManageOrdersState extends State<ManageOrders> {
           .doc(FirebaseAuth.instance.currentUser.email)
           .collection("Orders")
           .where(
-            'Status',
-            isNotEqualTo: "Completed",
+            'TOstatus',
+            isEqualTo: "Active",
           )
           .snapshots(),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
@@ -222,7 +221,7 @@ class _ManageOrdersState extends State<ManageOrders> {
           .doc(FirebaseAuth.instance.currentUser.email)
           .collection("Orders")
           .where(
-            'Status',
+            'TOstatus',
             isEqualTo: "Completed",
           )
           .snapshots(),

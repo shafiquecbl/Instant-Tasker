@@ -108,7 +108,7 @@ class UpdateData {
         .doc(receiverEmail)
         .collection('Assigned Tasks')
         .doc(receiverDocID)
-        .update({'Status': "Submitted"});
+        .update({'Status': "Waiting for rating"});
 
     return await FirebaseFirestore.instance
         .collection('Users')
@@ -147,14 +147,20 @@ class UpdateData {
         .doc(email)
         .collection("Assigned Tasks")
         .doc(docID)
-        .update({'Status': "Completed"});
+        .update({
+      'Status': "Completed",
+      'TOstatus': "Completed",
+    });
 
     await FirebaseFirestore.instance
         .collection('Users')
         .doc(receiverEmail)
         .collection('Orders')
         .doc(receiverDocID)
-        .update({'Status': "Completed"});
+        .update({
+      'Status': "Completed",
+      'TOstatus': "Completed",
+    });
 
     await FirebaseFirestore.instance
         .collection('Users')

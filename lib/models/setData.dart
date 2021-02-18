@@ -130,7 +130,8 @@ class SetData {
       'Category': category,
       'Client PhotoURL': user.photoURL,
       'timestamp': FieldValue.serverTimestamp(),
-      'Status': "Pending"
+      'Status': "Pending",
+      'TOstatus': "Active",
     });
 
     return await FirebaseFirestore.instance
@@ -148,7 +149,8 @@ class SetData {
       'Category': category,
       'Seller PhotoURL': receiverPhoto,
       'timestamp': FieldValue.serverTimestamp(),
-      'Status': "Pending"
+      'Status': "Pending",
+      'TOstatus': "Active",
     });
   }
 

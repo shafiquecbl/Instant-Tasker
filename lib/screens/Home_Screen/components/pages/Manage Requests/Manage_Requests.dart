@@ -75,7 +75,7 @@ class _ManageTasksState extends State<ManageTasks> {
               postedTask(),
               activeTask(),
               completedTasks(),
-              Center(child: Text("Canceled")),
+              Center(child: Text("Cancelled")),
             ],
           )),
     );
@@ -248,7 +248,7 @@ class _ManageTasksState extends State<ManageTasks> {
           .collection("Users")
           .doc(FirebaseAuth.instance.currentUser.email)
           .collection("Assigned Tasks")
-          .where('Status', isNotEqualTo: "Completed")
+          .where('TOstatus', isEqualTo: "Active")
           .snapshots(),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting)
@@ -376,7 +376,7 @@ class _ManageTasksState extends State<ManageTasks> {
           .collection("Users")
           .doc(FirebaseAuth.instance.currentUser.email)
           .collection("Assigned Tasks")
-          .where('Status', isEqualTo: "Completed")
+          .where('TOstatus', isEqualTo: "Completed")
           .snapshots(),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting)
