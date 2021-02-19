@@ -452,7 +452,7 @@ class _OpenOfferDetailsState extends State<OpenOfferDetails> {
                       Text('Chat with Tasker'),
                     ]),
                     textColor: Colors.white,
-                    color: greenColor,
+                    color: Colors.black.withOpacity(0.7),
                     onPressed: () {
                       Navigator.push(
                           context,

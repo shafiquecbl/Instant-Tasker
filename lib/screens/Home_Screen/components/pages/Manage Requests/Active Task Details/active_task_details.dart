@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:shop_app/constants.dart';
@@ -194,6 +195,9 @@ class _ActiveTaskDetailsState extends State<ActiveTaskDetails> {
                 snapshot['Status'] == "Waiting for rating"
                     ? takeRevision(snapshot)
                     : Container(),
+                SizedBox(
+                  height: 5,
+                ),
                 snapshot['Status'] == "Waiting for rating"
                     ? markAsComplete(snapshot['Seller Email'])
                     : Container(),
@@ -269,7 +273,7 @@ class _ActiveTaskDetailsState extends State<ActiveTaskDetails> {
 
   confirmRevision(BuildContext context, taskID, orderID, email) {
     // set up the button
-    Widget acceptButton = FlatButton(
+    Widget acceptButton = CupertinoDialogAction(
       child: Text("Yes"),
       onPressed: () {
         updateData
@@ -285,7 +289,7 @@ class _ActiveTaskDetailsState extends State<ActiveTaskDetails> {
                 });
       },
     );
-    Widget cancelButton = FlatButton(
+    Widget cancelButton = CupertinoDialogAction(
       child: Text("No"),
       onPressed: () {
         Navigator.pop(context);
@@ -293,9 +297,7 @@ class _ActiveTaskDetailsState extends State<ActiveTaskDetails> {
     );
 
     // set up the AlertDialog
-    AlertDialog alert = AlertDialog(
-      elevation: 5.0,
-      backgroundColor: hexColor,
+    CupertinoAlertDialog alert = CupertinoAlertDialog(
       title: Text(
         "Confirmation!",
         style: TextStyle(
@@ -332,7 +334,7 @@ class _ActiveTaskDetailsState extends State<ActiveTaskDetails> {
 
   confirmCompletetion(BuildContext context) {
     // set up the button
-    Widget acceptButton = FlatButton(
+    Widget acceptButton = CupertinoDialogAction(
       child: Text("Yes"),
       onPressed: () {
         Navigator.pushReplacement(
@@ -346,7 +348,7 @@ class _ActiveTaskDetailsState extends State<ActiveTaskDetails> {
             ));
       },
     );
-    Widget cancelButton = FlatButton(
+    Widget cancelButton = CupertinoDialogAction(
       child: Text("No"),
       onPressed: () {
         Navigator.pop(context);
@@ -354,9 +356,7 @@ class _ActiveTaskDetailsState extends State<ActiveTaskDetails> {
     );
 
     // set up the AlertDialog
-    AlertDialog alert = AlertDialog(
-      elevation: 5.0,
-      backgroundColor: hexColor,
+    CupertinoAlertDialog alert = CupertinoAlertDialog(
       title: Text(
         "Confirmation!",
         style: TextStyle(

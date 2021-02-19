@@ -59,8 +59,8 @@ class GetData {
         .doc(email)
         .collection("Orders")
         .where(
-          'Status',
-          isNotEqualTo: "Completed",
+          'TOStatus',
+          isEqualTo: "Active",
         )
         .get();
     return snapshot.docs;
@@ -72,7 +72,7 @@ class GetData {
         .doc(email)
         .collection("Orders")
         .where(
-          'Status',
+          'TOStatus',
           isEqualTo: "Completed",
         )
         .get();

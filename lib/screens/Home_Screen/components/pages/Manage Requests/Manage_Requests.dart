@@ -21,6 +21,7 @@ class _ManageTasksState extends State<ManageTasks> {
   int activeTaskLength;
   int completedTaskLength;
   GetData getData = GetData();
+  String email = FirebaseAuth.instance.currentUser.email;
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -43,27 +44,46 @@ class _ManageTasksState extends State<ManageTasks> {
                 unselectedLabelColor: Colors.grey,
                 indicatorColor: kPrimaryColor,
                 tabs: [
-                  FutureBuilder(
-                    initialData: [],
-                    future: getData.getPostedTask(),
+                  StreamBuilder(
+                    stream: FirebaseFirestore.instance
+                        .collection("Buyer Requests")
+                        .where("Email", isEqualTo: email)
+                        .snapshots(),
                     builder: (BuildContext context, AsyncSnapshot snapshot) {
-                      postedTaskLength = snapshot.data.length;
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return Tab(text: "Posted (0)");
+                      }
+                      postedTaskLength = snapshot.data.docs.length;
                       return Tab(text: "Posted ($postedTaskLength)");
                     },
                   ),
-                  FutureBuilder(
-                    initialData: [],
-                    future: getData.getActiveTask(),
+                  StreamBuilder(
+                    stream: FirebaseFirestore.instance
+                        .collection("Users")
+                        .doc(email)
+                        .collection("Assigned Tasks")
+                        .where('TOstatus', isEqualTo: "Active")
+                        .snapshots(),
                     builder: (BuildContext context, AsyncSnapshot snapshot) {
-                      activeTaskLength = snapshot.data.length;
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return Tab(text: "Active (0)");
+                      }
+                      activeTaskLength = snapshot.data.docs.length;
                       return Tab(text: "Active ($activeTaskLength)");
                     },
                   ),
-                  FutureBuilder(
-                    initialData: [],
-                    future: getData.getCompletedTask(),
+                  StreamBuilder(
+                    stream: FirebaseFirestore.instance
+                        .collection("Users")
+                        .doc(email)
+                        .collection("Assigned Tasks")
+                        .where('TOstatus', isEqualTo: "Completed")
+                        .snapshots(),
                     builder: (BuildContext context, AsyncSnapshot snapshot) {
-                      completedTaskLength = snapshot.data.length;
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return Tab(text: "Completed (0)");
+                      }
+                      completedTaskLength = snapshot.data.docs.length;
                       return Tab(text: "Completed ($completedTaskLength)");
                     },
                   ),
@@ -265,7 +285,12 @@ class _ManageTasksState extends State<ManageTasks> {
         return RefreshIndicator(
           onRefresh: () async {
             setState(() {
-              getData.getActiveTask();
+              FirebaseFirestore.instance
+                  .collection("Users")
+                  .doc(FirebaseAuth.instance.currentUser.email)
+                  .collection("Assigned Tasks")
+                  .where('TOstatus', isEqualTo: "Active")
+                  .snapshots();
             });
           },
           child: ListView.builder(
@@ -393,7 +418,12 @@ class _ManageTasksState extends State<ManageTasks> {
         return RefreshIndicator(
           onRefresh: () async {
             setState(() {
-              getData.getCompletedTask();
+              FirebaseFirestore.instance
+                  .collection("Users")
+                  .doc(FirebaseAuth.instance.currentUser.email)
+                  .collection("Assigned Tasks")
+                  .where('TOstatus', isEqualTo: "Completed")
+                  .snapshots();
             });
           },
           child: ListView.builder(

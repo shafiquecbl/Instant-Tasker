@@ -16,6 +16,7 @@ class _ManageOrdersState extends State<ManageOrders> {
   int activeOrdersLength;
   int completedOrdersLength;
   GetData getData = GetData();
+  String email = FirebaseAuth.instance.currentUser.email;
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -39,19 +40,39 @@ class _ManageOrdersState extends State<ManageOrders> {
               unselectedLabelColor: Colors.grey,
               indicatorColor: kPrimaryColor,
               tabs: [
-                FutureBuilder(
-                  initialData: [],
-                  future: getData.getActiveOrders(),
+                StreamBuilder(
+                  stream: FirebaseFirestore.instance
+                      .collection("Users")
+                      .doc(email)
+                      .collection("Orders")
+                      .where(
+                        'TOstatus',
+                        isEqualTo: "Active",
+                      )
+                      .snapshots(),
                   builder: (BuildContext context, AsyncSnapshot snapshot) {
-                    activeOrdersLength = snapshot.data.length;
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Tab(text: "Active (0)");
+                    }
+                    activeOrdersLength = snapshot.data.docs.length;
                     return Tab(text: "Active ($activeOrdersLength)");
                   },
                 ),
-                FutureBuilder(
-                  initialData: [],
-                  future: getData.getCompletedOrders(),
+                StreamBuilder(
+                  stream: FirebaseFirestore.instance
+                      .collection("Users")
+                      .doc(FirebaseAuth.instance.currentUser.email)
+                      .collection("Orders")
+                      .where(
+                        'TOstatus',
+                        isEqualTo: "Completed",
+                      )
+                      .snapshots(),
                   builder: (BuildContext context, AsyncSnapshot snapshot) {
-                    completedOrdersLength = snapshot.data.length;
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Tab(text: "Completed (0)");
+                    }
+                    completedOrdersLength = snapshot.data.docs.length;
                     return Tab(text: "Completed ($completedOrdersLength)");
                   },
                 ),
@@ -73,7 +94,7 @@ class _ManageOrdersState extends State<ManageOrders> {
     return StreamBuilder(
       stream: FirebaseFirestore.instance
           .collection("Users")
-          .doc(FirebaseAuth.instance.currentUser.email)
+          .doc(email)
           .collection("Orders")
           .where(
             'TOstatus',
@@ -83,6 +104,7 @@ class _ManageOrdersState extends State<ManageOrders> {
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting)
           return Center(child: CircularProgressIndicator());
+        activeOrdersLength = snapshot.data.docs.length;
         if (activeOrdersLength == 0)
           return SizedBox(
             child: Center(
@@ -96,7 +118,15 @@ class _ManageOrdersState extends State<ManageOrders> {
         return RefreshIndicator(
           onRefresh: () async {
             setState(() {
-              getData.getCompletedOrders();
+              FirebaseFirestore.instance
+                  .collection("Users")
+                  .doc(email)
+                  .collection("Orders")
+                  .where(
+                    'TOstatus',
+                    isEqualTo: "Active",
+                  )
+                  .snapshots();
             });
           },
           child: ListView.builder(
@@ -228,6 +258,7 @@ class _ManageOrdersState extends State<ManageOrders> {
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting)
           return Center(child: CircularProgressIndicator());
+        completedOrdersLength = snapshot.data.docs.length;
         if (completedOrdersLength == 0)
           return SizedBox(
             child: Center(
@@ -241,7 +272,15 @@ class _ManageOrdersState extends State<ManageOrders> {
         return RefreshIndicator(
           onRefresh: () async {
             setState(() {
-              getData.getCompletedOrders();
+              FirebaseFirestore.instance
+                  .collection("Users")
+                  .doc(FirebaseAuth.instance.currentUser.email)
+                  .collection("Orders")
+                  .where(
+                    'TOstatus',
+                    isEqualTo: "Completed",
+                  )
+                  .snapshots();
             });
           },
           child: ListView.builder(

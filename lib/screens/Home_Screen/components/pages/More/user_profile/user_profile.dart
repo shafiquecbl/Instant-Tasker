@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shop_app/constants.dart';
-import 'package:shop_app/models/getData.dart';
 import 'package:shop_app/models/updateData.dart';
 import 'package:shop_app/screens/Home_Screen/components/pages/More/Verification/verification.dart';
 import 'package:shop_app/screens/Home_Screen/components/pages/More/user_profile/Edit Profile/edit_profile.dart';

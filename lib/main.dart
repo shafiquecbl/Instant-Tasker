@@ -28,6 +28,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
-// flutter pub get
-// 1 Feb, 3:36PM

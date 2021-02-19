@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shop_app/constants.dart';
 import 'package:shop_app/models/deleteData.dart';
@@ -383,7 +384,7 @@ class _ReviewOffersState extends State<ReviewOffers> {
 
   acceptOffer(BuildContext context, AsyncSnapshot<dynamic> snapshot, int i) {
     // set up the button
-    Widget acceptButton = FlatButton(
+    Widget acceptButton = CupertinoDialogAction(
       child: Text("Yes"),
       onPressed: () {
         SetData()
@@ -408,7 +409,7 @@ class _ReviewOffersState extends State<ReviewOffers> {
                 }));
       },
     );
-    Widget cancelButton = FlatButton(
+    Widget cancelButton = CupertinoDialogAction(
       child: Text("No"),
       onPressed: () {
         Navigator.pop(context);
@@ -416,9 +417,7 @@ class _ReviewOffersState extends State<ReviewOffers> {
     );
 
     // set up the AlertDialog
-    AlertDialog alert = AlertDialog(
-      elevation: 5.0,
-      backgroundColor: hexColor,
+    CupertinoAlertDialog alert = CupertinoAlertDialog(
       title: Text(
         "Confirmation!",
         style: TextStyle(
