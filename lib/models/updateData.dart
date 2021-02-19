@@ -166,7 +166,7 @@ class UpdateData {
         .collection('Users')
         .doc(receiverEmail)
         .update({
-      'Total Tasks': totTask,
+      'Total Task': totTask,
       'Completed Task': comTask,
       'Completion Rate': comRate,
       'Reviews as Seller': reviewsSeller,

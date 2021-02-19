@@ -154,7 +154,7 @@ class _CompleteOrderState extends State<CompleteOrder> {
                       snapshot['Reviews as Seller'],
                       snapshot['Rating as Seller'],
                       saveRating,
-                      snapshot['Total Tasks'],
+                      snapshot['Total Task'],
                       review)
                   .then((value) => Navigator.push(
                       context, MaterialPageRoute(builder: (_) => MainScreen())))

@@ -102,49 +102,49 @@ class _ChatScreenState extends State<ChatScreen> {
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (snapshot.data == null)
           return SpinKitDoubleBounce(color: kPrimaryColor);
-        if (snapshot.hasData)
+        if (snapshot.data.docs.length == 0)
           return ListView.builder(
-              reverse: true,
               padding: EdgeInsets.all(20),
-              itemCount: snapshot.data.docs.length,
+              itemCount: 1,
               itemBuilder: (BuildContext context, int index) {
-                return chatMessageItem(snapshot.data.docs[index]);
-              });
-        return ListView.builder(
-            padding: EdgeInsets.all(20),
-            itemCount: 1,
-            itemBuilder: (BuildContext context, int index) {
-              return Container(
-                margin: EdgeInsets.symmetric(vertical: 15),
-                child: Container(
-                  alignment: Alignment.centerLeft,
+                return Container(
+                  margin: EdgeInsets.symmetric(vertical: 15),
                   child: Container(
-                    constraints: BoxConstraints(
-                      maxWidth: MediaQuery.of(context).size.width * 0.80,
-                    ),
-                    padding: EdgeInsets.all(10),
-                    margin: EdgeInsets.symmetric(vertical: 0),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(15),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.5),
-                          spreadRadius: 2,
-                          blurRadius: 5,
+                    alignment: Alignment.centerLeft,
+                    child: Container(
+                      constraints: BoxConstraints(
+                        maxWidth: MediaQuery.of(context).size.width * 0.80,
+                      ),
+                      padding: EdgeInsets.all(10),
+                      margin: EdgeInsets.symmetric(vertical: 0),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(15),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.5),
+                            spreadRadius: 2,
+                            blurRadius: 5,
+                          ),
+                        ],
+                      ),
+                      child: Text(
+                        initText,
+                        style: TextStyle(
+                          color: Colors.black54,
+                          fontSize: 16.0,
                         ),
-                      ],
-                    ),
-                    child: Text(
-                      initText,
-                      style: TextStyle(
-                        color: Colors.black54,
-                        fontSize: 16.0,
                       ),
                     ),
                   ),
-                ),
-              );
+                );
+              });
+        return ListView.builder(
+            reverse: true,
+            padding: EdgeInsets.all(20),
+            itemCount: snapshot.data.docs.length,
+            itemBuilder: (BuildContext context, int index) {
+              return chatMessageItem(snapshot.data.docs[index]);
             });
       },
     );

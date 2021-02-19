@@ -126,7 +126,7 @@ class _SendOfferFormState extends State<SendOfferForm> {
                         snapshot.data['Email status'],
                         snapshot.data['Phone Number status'],
                         snapshot.data['Payment Status'],
-                        snapshot.data['CNIC'],
+                        snapshot.data['CNIC Status'],
                       );
                     }
                   },

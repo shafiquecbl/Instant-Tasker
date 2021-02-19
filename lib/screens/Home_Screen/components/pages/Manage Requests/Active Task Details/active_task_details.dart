@@ -191,10 +191,10 @@ class _ActiveTaskDetailsState extends State<ActiveTaskDetails> {
                 SizedBox(
                   height: 5,
                 ),
-                snapshot['Status'] == "Submitted"
+                snapshot['Status'] == "Waiting for rating"
                     ? takeRevision(snapshot)
                     : Container(),
-                snapshot['Status'] == "Submitted"
+                snapshot['Status'] == "Waiting for rating"
                     ? markAsComplete(snapshot['Seller Email'])
                     : Container(),
               ],
@@ -274,9 +274,10 @@ class _ActiveTaskDetailsState extends State<ActiveTaskDetails> {
       onPressed: () {
         updateData
             .orderRevesion(orderID, taskID, email)
-            .then((value) => Navigator.pop(context))
-            .then((value) =>
-                {Snack_Bar.show(context, "Asked for Revesion successfully")})
+            .then((value) => {
+                  Snack_Bar.show(context, "Asked for Revesion successfully"),
+                  Navigator.pop(context)
+                })
             .then((value) => {
                   setState(() {
                     getData.getActiveTask();

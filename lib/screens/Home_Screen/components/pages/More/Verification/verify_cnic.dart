@@ -91,12 +91,7 @@ class _VerifyCNICState extends State<VerifyCNIC> {
                                     height: 200,
                                     child: _cnicFrontPhoto != null
                                         ? ClipRRect(
-                                            child:
-                                                // Image.network(uRLString,
-                                                // width: 130,
-                                                //   height: 130,
-                                                //   fit: BoxFit.cover,),
-                                                Image.file(
+                                            child: Image.file(
                                               _cnicFrontPhoto,
                                               width: 400,
                                               height: 200,
@@ -152,12 +147,7 @@ class _VerifyCNICState extends State<VerifyCNIC> {
                                     height: 200,
                                     child: _cnicBackPhoto != null
                                         ? ClipRRect(
-                                            child:
-                                                // Image.network(uRLString,
-                                                // width: 130,
-                                                //   height: 130,
-                                                //   fit: BoxFit.cover,),
-                                                Image.file(
+                                            child: Image.file(
                                               _cnicBackPhoto,
                                               width: 400,
                                               height: 200,
@@ -213,12 +203,7 @@ class _VerifyCNICState extends State<VerifyCNIC> {
                                     height: 200,
                                     child: _userPic != null
                                         ? ClipRRect(
-                                            child:
-                                                // Image.network(uRLString,
-                                                // width: 130,
-                                                //   height: 130,
-                                                //   fit: BoxFit.cover,),
-                                                Image.file(
+                                            child: Image.file(
                                               _userPic,
                                               width: 400,
                                               height: 200,

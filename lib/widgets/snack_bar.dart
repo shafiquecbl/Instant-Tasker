@@ -14,6 +14,7 @@ class Snack_Bar {
   ) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
+        duration: Duration(seconds: 2),
         backgroundColor: Colors.red,
         behavior: SnackBarBehavior.floating,
         content: Text(message),

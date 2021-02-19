@@ -113,9 +113,10 @@ class _SubmitOrderFormState extends State<SubmitOrderForm> {
               setData
                   .sumbitOrder(snapshot.id, widget.docID, description,
                       widget.receiverEmail)
-                  .then((value) => {Navigator.pop(context)})
-                  .then((value) =>
-                      {Snack_Bar.show(context, "Order Submitted Successfully")})
+                  .then((value) => {
+                        Snack_Bar.show(context, "Order Submitted Successfully"),
+                        Navigator.pop(context)
+                      })
             });
   }
 }
