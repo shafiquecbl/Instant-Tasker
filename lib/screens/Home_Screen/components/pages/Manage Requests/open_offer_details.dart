@@ -253,7 +253,7 @@ class _OpenOfferDetailsState extends State<OpenOfferDetails> {
                   textColor: Colors.white,
                   color: greenColor,
                   onPressed: () {
-                    Navigator.push(
+                    Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
                         builder: (_) => ReviewOffers(widget.docID),
@@ -454,7 +454,7 @@ class _OpenOfferDetailsState extends State<OpenOfferDetails> {
                     textColor: Colors.white,
                     color: Colors.black.withOpacity(0.7),
                     onPressed: () {
-                      Navigator.push(
+                      Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
                             builder: (_) => ChatScreen(

@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shop_app/constants.dart';
 import 'package:shop_app/models/getData.dart';
@@ -125,7 +126,7 @@ class _ManageTasksState extends State<ManageTasks> {
                     color: kWhiteColor),
               ),
               onPressed: () {
-                Navigator.push(
+                Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
                     builder: (_) => PostTask(),
@@ -236,7 +237,7 @@ class _ManageTasksState extends State<ManageTasks> {
                                 textColor: Colors.white,
                                 color: kPrimaryColor,
                                 onPressed: () {
-                                  Navigator.push(
+                                  Navigator.pushReplacement(
                                     context,
                                     MaterialPageRoute(
                                       builder: (_) => OpenOfferDetails(
@@ -371,7 +372,7 @@ class _ManageTasksState extends State<ManageTasks> {
                             textColor: Colors.white,
                             color: kPrimaryColor,
                             onPressed: () {
-                              Navigator.push(
+                              Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
                                   builder: (_) => ActiveTaskDetails(
@@ -504,7 +505,7 @@ class _ManageTasksState extends State<ManageTasks> {
                             textColor: Colors.white,
                             color: kPrimaryColor,
                             onPressed: () {
-                              Navigator.push(
+                              Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
                                   builder: (_) => CompletedTaskDetails(
@@ -532,13 +533,13 @@ class _ManageTasksState extends State<ManageTasks> {
 
   deleteRequest(BuildContext context, String taskID) {
     // set up the button
-    Widget acceptButton = FlatButton(
+    Widget acceptButton = CupertinoDialogAction(
       child: Text("Yes"),
       onPressed: () {
         deleteUserRequest(taskID).then((value) => Navigator.pop(context));
       },
     );
-    Widget cancelButton = FlatButton(
+    Widget cancelButton = CupertinoDialogAction(
       child: Text("No"),
       onPressed: () {
         Navigator.pop(context);
@@ -546,9 +547,7 @@ class _ManageTasksState extends State<ManageTasks> {
     );
 
     // set up the AlertDialog
-    AlertDialog alert = AlertDialog(
-      elevation: 5.0,
-      backgroundColor: hexColor,
+    CupertinoAlertDialog alert = CupertinoAlertDialog(
       title: Text(
         "Confirmation!",
         style: TextStyle(

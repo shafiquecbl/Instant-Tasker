@@ -102,210 +102,197 @@ class _TasksState extends State<Tasks> {
               controller: PageController(viewportFraction: 1.0),
               itemBuilder: (context, i) {
                 return SingleChildScrollView(
-                  child: Container(
-                    margin: EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(5)),
-                      border: Border.all(color: Colors.grey[300]),
-                    ),
-                    child: Wrap(
-                      direction: Axis.vertical,
-                      children: <Widget>[
-                        Container(
-                          width: 390,
-                          child: ListTile(
-                            leading: CircleAvatar(
-                                backgroundColor: kPrimaryColor.withOpacity(0.8),
-                                backgroundImage:
-                                    AssetImage('assets/images/nullUser.png'),
-                                child: snapshot.data.docs[i]['PhotoURL'] != null
-                                    ? ClipRRect(
-                                        borderRadius: BorderRadius.circular(50),
-                                        child: Image.network(
-                                          snapshot.data.docs[i]['PhotoURL'],
-                                          width: 50,
-                                          height: 50,
-                                          fit: BoxFit.cover,
-                                        ),
-                                      )
-                                    : ClipRRect(
-                                        borderRadius: BorderRadius.circular(50),
-                                        child: Image.asset(
-                                          'assets/images/nullUser.png',
-                                          width: 50,
-                                          height: 50,
-                                          fit: BoxFit.cover,
-                                        ),
-                                      )),
-                            title: Text(
-                              snapshot.data.docs[i]['Email'],
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w700,
-                                color: Colors.black.withOpacity(0.7),
-                              ),
-                            ),
-                            subtitle: Text(
-                              TimeAgo.timeAgoSinceDate(
-                                  snapshot.data.docs[i]['Time']),
-                              style: TextStyle(
-                                  color: Colors.black.withOpacity(0.6)),
-                            ),
-                          ),
-                        ),
-                        Container(
-                          width: 390,
-                          child: Padding(
-                            padding: const EdgeInsets.all(16.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              children: [
-                                Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(5)),
-                                    color: Colors.grey[200],
-                                  ),
-                                  padding: EdgeInsets.all(10),
-                                  child: Text(
-                                    snapshot.data.docs[i]['Description'],
-                                    style: TextStyle(
-                                        color: Colors.black.withOpacity(0.6)),
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 8,
-                                ),
-                                Container(
-                                  decoration: BoxDecoration(
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(5)),
-                                      border:
-                                          Border.all(color: Colors.grey[300])),
-                                  child: ListTile(
-                                    leading: Icon(Icons.category_outlined),
-                                    title: Text(
-                                      'Category : ${snapshot.data.docs[i]['Category']}',
-                                      style: TextStyle(
-                                        fontSize: 14,
-                                        color: Colors.grey,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(height: 8),
-                                Container(
-                                  decoration: BoxDecoration(
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(5)),
-                                      border:
-                                          Border.all(color: Colors.grey[300])),
-                                  child: ListTile(
-                                    leading: Icon(Icons.location_pin),
-                                    title: Text(
-                                      snapshot.data.docs[i]['Location'],
-                                      style: TextStyle(
-                                        fontSize: 14,
-                                        color: Colors.grey,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(height: 8),
-                                Container(
-                                  decoration: BoxDecoration(
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(5)),
-                                      border:
-                                          Border.all(color: Colors.grey[300])),
-                                  child: ListTile(
-                                    leading: Icon(
-                                      Icons.attach_money,
-                                      color: kGreenColor,
-                                    ),
-                                    title: Text(
-                                      'Budget : Rs.${snapshot.data.docs[i]['Budget']}',
-                                      style: TextStyle(
-                                        fontSize: 14,
-                                        color: kGreenColor,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(height: 8),
-                                Container(
-                                  decoration: BoxDecoration(
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(5)),
-                                      border:
-                                          Border.all(color: Colors.grey[300])),
-                                  child: ListTile(
-                                    leading: Icon(Icons.timer),
-                                    title: Text(
-                                      'Duration : ${snapshot.data.docs[i]['Duration']}',
-                                      style: TextStyle(
-                                        fontSize: 14,
-                                        color: Colors.grey,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 35,
-                                ),
-                                FutureBuilder(
-                                  future: getData.getCNIC(),
-                                  builder: (BuildContext context,
-                                      AsyncSnapshot snap) {
-                                    cnicCheck = snap.data;
-                                    return RaisedButton(
-                                      padding:
-                                          EdgeInsets.symmetric(vertical: 10),
-                                      child: Text('Send Offer'),
-                                      textColor: Colors.white,
-                                      color: greenColor,
-                                      onPressed: () {
-                                        if (cnicCheck == "verified") {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (_) => SendOffer(
-                                                  snapshot.data.docs[i].id),
-                                            ),
-                                          );
-                                        } else {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (_) => VerifyCNIC(),
-                                            ),
-                                          );
-                                        }
-                                      },
-                                    );
-                                  },
-                                ),
-                                SizedBox(
-                                  height: 15,
-                                ),
-                                Center(
-                                  child: Text(
-                                    "${i + 1}/$indexLength",
-                                    style: TextStyle(fontSize: 13),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                );
+                    child: container(snapshot.data.docs[i], i));
               },
             ),
           );
         },
+      ),
+    );
+  }
+
+  container(QueryDocumentSnapshot snapshot, i) {
+    return Container(
+      margin: EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.all(Radius.circular(5)),
+        border: Border.all(color: Colors.grey[300]),
+      ),
+      child: Wrap(
+        direction: Axis.vertical,
+        children: <Widget>[
+          Container(
+            width: 390,
+            child: ListTile(
+              leading: CircleAvatar(
+                  backgroundColor: kPrimaryColor.withOpacity(0.8),
+                  backgroundImage: AssetImage('assets/images/nullUser.png'),
+                  child: snapshot['PhotoURL'] != null
+                      ? ClipRRect(
+                          borderRadius: BorderRadius.circular(50),
+                          child: Image.network(
+                            snapshot['PhotoURL'],
+                            width: 50,
+                            height: 50,
+                            fit: BoxFit.cover,
+                          ),
+                        )
+                      : ClipRRect(
+                          borderRadius: BorderRadius.circular(50),
+                          child: Image.asset(
+                            'assets/images/nullUser.png',
+                            width: 50,
+                            height: 50,
+                            fit: BoxFit.cover,
+                          ),
+                        )),
+              title: Text(
+                snapshot['Email'],
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
+                  color: Colors.black.withOpacity(0.7),
+                ),
+              ),
+              subtitle: Text(
+                TimeAgo.timeAgoSinceDate(snapshot['Time']),
+                style: TextStyle(color: Colors.black.withOpacity(0.6)),
+              ),
+            ),
+          ),
+          Container(
+            width: 390,
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(5)),
+                      color: Colors.grey[200],
+                    ),
+                    padding: EdgeInsets.all(10),
+                    child: Text(
+                      snapshot['Description'],
+                      style: TextStyle(color: Colors.black.withOpacity(0.6)),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 8,
+                  ),
+                  Container(
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(5)),
+                        border: Border.all(color: Colors.grey[300])),
+                    child: ListTile(
+                      leading: Icon(Icons.category_outlined),
+                      title: Text(
+                        'Category : ${snapshot['Category']}',
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Colors.grey,
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 8),
+                  Container(
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(5)),
+                        border: Border.all(color: Colors.grey[300])),
+                    child: ListTile(
+                      leading: Icon(Icons.location_pin),
+                      title: Text(
+                        snapshot['Location'],
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Colors.grey,
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 8),
+                  Container(
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(5)),
+                        border: Border.all(color: Colors.grey[300])),
+                    child: ListTile(
+                      leading: Icon(
+                        Icons.attach_money,
+                        color: kGreenColor,
+                      ),
+                      title: Text(
+                        'Budget : Rs.${snapshot['Budget']}',
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: kGreenColor,
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 8),
+                  Container(
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(5)),
+                        border: Border.all(color: Colors.grey[300])),
+                    child: ListTile(
+                      leading: Icon(Icons.timer),
+                      title: Text(
+                        'Duration : ${snapshot['Duration']}',
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Colors.grey,
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 35,
+                  ),
+                  FutureBuilder(
+                    future: getData.getCNIC(),
+                    builder: (BuildContext context, AsyncSnapshot snap) {
+                      cnicCheck = snap.data;
+                      return RaisedButton(
+                        padding: EdgeInsets.symmetric(vertical: 10),
+                        child: Text('Send Offer'),
+                        textColor: Colors.white,
+                        color: greenColor,
+                        onPressed: () {
+                          if (cnicCheck == "verified") {
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => SendOffer(snapshot.id),
+                              ),
+                            );
+                          } else {
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => VerifyCNIC(),
+                              ),
+                            );
+                          }
+                        },
+                      );
+                    },
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  Center(
+                    child: Text(
+                      "${i + 1}/$indexLength",
+                      style: TextStyle(fontSize: 13),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          )
+        ],
       ),
     );
   }

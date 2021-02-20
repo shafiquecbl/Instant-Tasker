@@ -48,7 +48,7 @@ class _UserProfileState extends State<UserProfile> {
                 color: kPrimaryColor,
               ),
               onPressed: () {
-                Navigator.push(
+                Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
                     builder: (_) => EditProfile(),
@@ -336,7 +336,7 @@ class _UserProfileState extends State<UserProfile> {
                                       textColor: kWhiteColor,
                                       color: kPrimaryColor.withOpacity(0.9),
                                       onPressed: () {
-                                        Navigator.push(
+                                        Navigator.pushReplacement(
                                           context,
                                           MaterialPageRoute(
                                             builder: (_) => Verifications(),

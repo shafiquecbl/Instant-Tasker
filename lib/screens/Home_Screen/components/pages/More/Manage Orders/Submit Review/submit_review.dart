@@ -147,7 +147,7 @@ class _SubmitReviewState extends State<SubmitReview> {
                       ratBuyer: snapshot['Rating as Buyer'],
                       rating: saveRating,
                       review: review)
-                  .then((value) => Navigator.push(context,
+                  .then((value) => Navigator.pushReplacement(context,
                       MaterialPageRoute(builder: (_) => MainScreen())));
             }
           }

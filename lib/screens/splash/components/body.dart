@@ -18,17 +18,17 @@ class _BodyState extends State<Body> {
   List<Map<String, String>> splashData = [
     {
       "text1": "Post your Task",
-      "text":  "Tell us what you need. Its FREE to post",
+      "text": "Tell us what you need. Its FREE to post",
       "image": "assets/images/splash_1.png"
     },
     {
       "text1": "Review offers",
-      "text":  "Recieve offers from trusted Taskers",
+      "text": "Recieve offers from trusted Taskers",
       "image": "assets/images/splash_2.png"
     },
     {
       "text1": "Hire the right Tasker",
-      "text":  "Choose the right person for the task",
+      "text": "Choose the right person for the task",
       "image": "assets/images/splash_3.png"
     },
   ];
@@ -74,7 +74,8 @@ class _BodyState extends State<Body> {
                     DefaultButton(
                       text: "Continue",
                       press: () {
-                        Navigator.pushNamed(context, SignInScreen.routeName);
+                        Navigator.pushReplacementNamed(
+                            context, SignInScreen.routeName);
                       },
                     ),
                     Spacer(),

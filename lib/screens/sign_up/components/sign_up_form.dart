@@ -182,12 +182,9 @@ class _SignUpFormState extends State<SignUpForm> {
     try {
       await auth
           .createUserWithEmailAndPassword(email: email, password: password)
-          .then(
-            (currentUser){
-                Navigator.pushReplacementNamed(context, VerifyEmail.routeName);
-            }
-          )
-          .catchError((e) {
+          .then((currentUser) {
+        Navigator.pushReplacementNamed(context, VerifyEmail.routeName);
+      }).catchError((e) {
         Snack_Bar.show(context, e.message);
       });
     } catch (e) {

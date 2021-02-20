@@ -102,7 +102,7 @@ class _MoreState extends State<More> {
                   text: "My Profile",
                   icon: "assets/icons/User Icon.svg",
                   press: () => {
-                    Navigator.push(
+                    Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
                         builder: (_) => UserProfile(),
@@ -114,7 +114,7 @@ class _MoreState extends State<More> {
                   text: "Post a Task",
                   icon: "assets/icons/posttask.svg",
                   press: () => {
-                    Navigator.push(
+                    Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
                         builder: (_) => PostTask(),
@@ -126,7 +126,7 @@ class _MoreState extends State<More> {
                   text: "Manage Orders",
                   icon: "assets/icons/orders.svg",
                   press: () => {
-                    Navigator.push(
+                    Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
                         builder: (_) => ManageOrders(),
@@ -138,7 +138,7 @@ class _MoreState extends State<More> {
                   text: "Verifications",
                   icon: "assets/icons/verified.svg",
                   press: () => {
-                    Navigator.push(
+                    Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
                         builder: (_) => Verifications(),

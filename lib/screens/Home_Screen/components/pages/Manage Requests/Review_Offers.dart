@@ -337,7 +337,7 @@ class _ReviewOffersState extends State<ReviewOffers> {
                                         textColor: Colors.white,
                                         color: Colors.black.withOpacity(0.7),
                                         onPressed: () {
-                                          Navigator.push(
+                                          Navigator.pushReplacement(
                                               context,
                                               MaterialPageRoute(
                                                 builder: (_) => ChatScreen(

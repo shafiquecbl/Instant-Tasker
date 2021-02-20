@@ -219,7 +219,7 @@ class _ManageOrdersState extends State<ManageOrders> {
                                 textColor: Colors.white,
                                 color: kPrimaryColor,
                                 onPressed: () {
-                                  Navigator.push(
+                                  Navigator.pushReplacement(
                                     context,
                                     MaterialPageRoute(
                                       builder: (_) => OpenOrderDetails(
@@ -373,7 +373,7 @@ class _ManageOrdersState extends State<ManageOrders> {
                                 textColor: Colors.white,
                                 color: kPrimaryColor,
                                 onPressed: () {
-                                  Navigator.push(
+                                  Navigator.pushReplacement(
                                     context,
                                     MaterialPageRoute(
                                       builder: (_) => OpenOrderDetails(
