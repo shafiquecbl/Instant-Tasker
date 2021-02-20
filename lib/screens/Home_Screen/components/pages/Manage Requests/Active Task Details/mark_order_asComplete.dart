@@ -156,7 +156,7 @@ class _CompleteOrderState extends State<CompleteOrder> {
                       saveRating,
                       snapshot['Total Task'],
                       review)
-                  .then((value) => Navigator.pushReplacement(
+                  .then((value) => Navigator.push(
                       context, MaterialPageRoute(builder: (_) => MainScreen())))
                   .then((value) =>
                       Snack_Bar(message: "Order Marked as Completed!"));

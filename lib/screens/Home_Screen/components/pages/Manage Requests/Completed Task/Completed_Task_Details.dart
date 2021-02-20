@@ -201,7 +201,7 @@ class _CompletedTaskDetailsState extends State<CompletedTaskDetails> {
       textColor: Colors.white,
       color: Colors.black.withOpacity(0.7),
       onPressed: () {
-        Navigator.pushReplacement(
+        Navigator.push(
             context,
             MaterialPageRoute(
               builder: (_) => ChatScreen(

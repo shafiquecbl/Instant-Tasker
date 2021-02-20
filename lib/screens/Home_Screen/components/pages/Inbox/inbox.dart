@@ -113,7 +113,7 @@ class _InboxState extends State<Inbox> {
 
   Widget userList(DocumentSnapshot snapshot) {
     return GestureDetector(
-      onTap: () => Navigator.pushReplacement(
+      onTap: () => Navigator.push(
         context,
         MaterialPageRoute(
           builder: (_) => ChatScreen(

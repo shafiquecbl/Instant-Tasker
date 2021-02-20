@@ -185,7 +185,7 @@ class _OpenOrderDetailsState extends State<OpenOrderDetails> {
                   textColor: Colors.white,
                   color: Colors.black.withOpacity(0.7),
                   onPressed: () {
-                    Navigator.pushReplacement(
+                    Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (_) => ChatScreen(
@@ -212,7 +212,7 @@ class _OpenOrderDetailsState extends State<OpenOrderDetails> {
                         textColor: Colors.white,
                         color: greenColor,
                         onPressed: () {
-                          Navigator.pushReplacement(
+                          Navigator.push(
                             context,
                             MaterialPageRoute(
                               builder: (_) => SubmitOrder(
@@ -254,7 +254,7 @@ class _OpenOrderDetailsState extends State<OpenOrderDetails> {
           textColor: Colors.white,
           color: kPrimaryColor,
           onPressed: () {
-            Navigator.pushReplacement(
+            Navigator.push(
                 context,
                 MaterialPageRoute(
                     builder: (_) => SubmitReview(

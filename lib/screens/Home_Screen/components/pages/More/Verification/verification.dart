@@ -118,8 +118,7 @@ class _VerificationsState extends State<Verifications> {
                           textColor: kWhiteColor,
                           color: kPrimaryColor.withOpacity(0.9),
                           onPressed: () {
-                            Navigator.pushReplacementNamed(
-                                context, VerifyCNIC.routeName);
+                            Navigator.pushNamed(context, VerifyCNIC.routeName);
                           }),
                     ),
                   ),

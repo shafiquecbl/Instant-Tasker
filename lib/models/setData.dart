@@ -23,8 +23,8 @@ class SetData {
           'Uid': uid,
           'Email status': "Verified",
         })
-        .then((value) => Navigator.pushReplacementNamed(
-            context, CompleteProfileScreen.routeName))
+        .then((value) =>
+            Navigator.pushNamed(context, CompleteProfileScreen.routeName))
         .catchError((e) {
           print(e);
         });

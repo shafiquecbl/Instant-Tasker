@@ -126,7 +126,7 @@ class _ManageTasksState extends State<ManageTasks> {
                     color: kWhiteColor),
               ),
               onPressed: () {
-                Navigator.pushReplacement(
+                Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder: (_) => PostTask(),
@@ -237,7 +237,7 @@ class _ManageTasksState extends State<ManageTasks> {
                                 textColor: Colors.white,
                                 color: kPrimaryColor,
                                 onPressed: () {
-                                  Navigator.pushReplacement(
+                                  Navigator.push(
                                     context,
                                     MaterialPageRoute(
                                       builder: (_) => OpenOfferDetails(
@@ -372,7 +372,7 @@ class _ManageTasksState extends State<ManageTasks> {
                             textColor: Colors.white,
                             color: kPrimaryColor,
                             onPressed: () {
-                              Navigator.pushReplacement(
+                              Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                   builder: (_) => ActiveTaskDetails(
@@ -505,7 +505,7 @@ class _ManageTasksState extends State<ManageTasks> {
                             textColor: Colors.white,
                             color: kPrimaryColor,
                             onPressed: () {
-                              Navigator.pushReplacement(
+                              Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                   builder: (_) => CompletedTaskDetails(

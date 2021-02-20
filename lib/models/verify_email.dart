@@ -79,7 +79,7 @@ class _VerifyEmailState extends State<VerifyEmail> {
     await user.reload();
     if (user.emailVerified) {
       timer.cancel();
-      Navigator.pushReplacementNamed(context, CompleteProfileScreen.routeName);
+      Navigator.pushNamed(context, CompleteProfileScreen.routeName);
       SetData().saveNewUser(email, context);
     }
   }

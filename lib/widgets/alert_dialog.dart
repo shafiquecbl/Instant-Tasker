@@ -34,7 +34,7 @@ verifyEmailDialog(BuildContext context, title, content) {
   Widget okButton = CupertinoDialogAction(
     child: Text("Verify"),
     onPressed: () {
-      Navigator.pushReplacementNamed(context, VerifyEmail.routeName);
+      Navigator.pushNamed(context, VerifyEmail.routeName);
     },
   );
 

@@ -16,7 +16,6 @@ customAppBar(
       ),
     ),
     backgroundColor: hexColor,
-    actions: [],
   );
   return appBar;
 }

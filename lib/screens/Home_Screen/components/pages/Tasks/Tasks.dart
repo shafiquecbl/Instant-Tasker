@@ -261,14 +261,14 @@ class _TasksState extends State<Tasks> {
                         color: greenColor,
                         onPressed: () {
                           if (cnicCheck == "verified") {
-                            Navigator.pushReplacement(
+                            Navigator.push(
                               context,
                               MaterialPageRoute(
                                 builder: (_) => SendOffer(snapshot.id),
                               ),
                             );
                           } else {
-                            Navigator.pushReplacement(
+                            Navigator.push(
                               context,
                               MaterialPageRoute(
                                 builder: (_) => VerifyCNIC(),

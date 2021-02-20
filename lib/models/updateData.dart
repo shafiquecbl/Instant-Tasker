@@ -43,8 +43,7 @@ class UpdateData {
             "Payment Method": "Not Available",
           },
         )
-        .then((value) =>
-            Navigator.pushReplacementNamed(context, MainScreen.routeName))
+        .then((value) => Navigator.pushNamed(context, MainScreen.routeName))
         .catchError((e) {
           Snack_Bar.show(context, e.message);
         });

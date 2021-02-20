@@ -27,6 +27,7 @@ class _OpenOfferDetailsState extends State<OpenOfferDetails> {
     SizeConfig().init(context);
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: true,
         elevation: 2,
         shadowColor: kPrimaryColor,
         centerTitle: false,
@@ -253,7 +254,7 @@ class _OpenOfferDetailsState extends State<OpenOfferDetails> {
                   textColor: Colors.white,
                   color: greenColor,
                   onPressed: () {
-                    Navigator.pushReplacement(
+                    Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (_) => ReviewOffers(widget.docID),
@@ -454,7 +455,7 @@ class _OpenOfferDetailsState extends State<OpenOfferDetails> {
                     textColor: Colors.white,
                     color: Colors.black.withOpacity(0.7),
                     onPressed: () {
-                      Navigator.pushReplacement(
+                      Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (_) => ChatScreen(
