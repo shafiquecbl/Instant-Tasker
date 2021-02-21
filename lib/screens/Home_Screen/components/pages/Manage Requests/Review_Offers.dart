@@ -36,7 +36,7 @@ class _ReviewOffersState extends State<ReviewOffers> {
         ]),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting)
-            return SpinKitDoubleBounce(color: kPrimaryColor);
+            return SpinKitCircle(color: kPrimaryColor);
           indexLength = snapshot.data[0].length;
           return indexLength == 0
               ? Container(
@@ -403,10 +403,7 @@ class _ReviewOffersState extends State<ReviewOffers> {
           Navigator.pop(context);
           Navigator.pop(context);
           Navigator.pop(context);
-        }).then((value) => setState(() {
-                  getData.getPostedTask();
-                  getData.getActiveTask();
-                }));
+        });
       },
     );
     Widget cancelButton = CupertinoDialogAction(

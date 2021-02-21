@@ -4,49 +4,42 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:shop_app/constants.dart';
 import 'package:shop_app/models/getData.dart';
-import 'package:shop_app/models/updateData.dart';
 import 'package:shop_app/screens/Home_Screen/components/pages/Inbox/chat_Screen.dart';
 import 'package:shop_app/size_config.dart';
-import 'package:shop_app/widgets/time_ago.dart';
 import 'package:shop_app/widgets/customAppBar.dart';
+import 'package:shop_app/widgets/time_ago.dart';
 
-class CompletedTaskDetails extends StatefulWidget {
+class CancelledOrders extends StatefulWidget {
   final String docID;
-  CompletedTaskDetails(this.docID);
+  CancelledOrders(this.docID);
   @override
-  _CompletedTaskDetailsState createState() => _CompletedTaskDetailsState();
+  _CancelledOrdersState createState() => _CancelledOrdersState();
 }
 
-class _CompletedTaskDetailsState extends State<CompletedTaskDetails> {
+class _CancelledOrdersState extends State<CancelledOrders> {
+  int indexLength = 0;
   User user = FirebaseAuth.instance.currentUser;
   GetData getData = GetData();
-  UpdateData updateData = UpdateData();
-
-  //
-  String taskID;
-  String orderID;
-  String email;
-  //
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return Scaffold(
-      appBar: customAppBar('Completed Task Details'),
+      appBar: customAppBar("Cancelled Order Details"),
       body: SingleChildScrollView(
         child: FutureBuilder(
           initialData: [],
-          future: getData.getCompletedTask(widget.docID),
+          future: getData.getOrders(widget.docID),
           builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting)
               return SpinKitCircle(color: kPrimaryColor);
-            return taskDetails(snapshot.data);
+            return offerDetails(snapshot.data);
           },
         ),
       ),
     );
   }
 
-  taskDetails(DocumentSnapshot snapshot) {
+  offerDetails(DocumentSnapshot snapshot) {
     return Column(
       children: [
         details(snapshot),
@@ -56,14 +49,14 @@ class _CompletedTaskDetailsState extends State<CompletedTaskDetails> {
           height: 50,
           color: Colors.blueGrey[200].withOpacity(0.3),
           child: Text(
-            'Received Work',
+            'Submitted Work',
             style: TextStyle(
                 color: Colors.black.withOpacity(0.7),
                 fontSize: 16,
                 fontWeight: FontWeight.bold),
           ),
         ),
-        receivedWork(snapshot),
+        submittedWork(snapshot)
       ],
     );
   }
@@ -76,11 +69,11 @@ class _CompletedTaskDetailsState extends State<CompletedTaskDetails> {
           ListTile(
             leading: CircleAvatar(
                 backgroundColor: kPrimaryColor.withOpacity(0.8),
-                child: snapshot['Seller PhotoURL'] != null
+                child: snapshot['Client PhotoURL'] != null
                     ? ClipRRect(
                         borderRadius: BorderRadius.circular(50),
                         child: Image.network(
-                          snapshot['Seller PhotoURL'],
+                          snapshot['Client PhotoURL'],
                           width: 50,
                           height: 50,
                           fit: BoxFit.cover,
@@ -96,7 +89,7 @@ class _CompletedTaskDetailsState extends State<CompletedTaskDetails> {
                         ),
                       )),
             title: Text(
-              snapshot['Seller Name'],
+              snapshot['Client Name'],
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w700,
@@ -178,9 +171,45 @@ class _CompletedTaskDetailsState extends State<CompletedTaskDetails> {
                 ),
                 divider,
                 SizedBox(
-                  height: 20,
+                  height: 15,
                 ),
-                chatWithTasker(snapshot),
+                RaisedButton(
+                  padding: EdgeInsets.symmetric(vertical: 8, horizontal: 100),
+                  child: Row(children: [
+                    Icon(Icons.chat),
+                    SizedBox(width: 10),
+                    Text('Chat with Tasker'),
+                  ]),
+                  textColor: Colors.white,
+                  color: Colors.black.withOpacity(0.7),
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => ChatScreen(
+                            receiverName: snapshot['Client Name'],
+                            receiverEmail: snapshot['Client Email'],
+                            receiverPhotoURL: snapshot['Client PhotoURL'],
+                            isOnline: true,
+                          ),
+                        ));
+                  },
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(5)),
+                    color: Colors.red[50],
+                  ),
+                  padding: EdgeInsets.all(10),
+                  child: Text(
+                    "Reason: ${snapshot['Reason']} ",
+                    style: TextStyle(
+                        color: Colors.red, fontWeight: FontWeight.bold),
+                  ),
+                ),
               ],
             ),
           ),
@@ -189,39 +218,14 @@ class _CompletedTaskDetailsState extends State<CompletedTaskDetails> {
     );
   }
 
-  chatWithTasker(DocumentSnapshot snapshot) {
-    return RaisedButton(
-      padding: EdgeInsets.symmetric(vertical: 8, horizontal: 100),
-      child: Row(children: [
-        Icon(Icons.chat),
-        SizedBox(width: 10),
-        Text('Chat with Tasker'),
-      ]),
-      textColor: Colors.white,
-      color: Colors.black.withOpacity(0.7),
-      onPressed: () {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (_) => ChatScreen(
-                receiverName: snapshot['Seller Name'],
-                receiverEmail: snapshot['Seller Email'],
-                receiverPhotoURL: snapshot['Seller PhotoURL'],
-                isOnline: true,
-              ),
-            ));
-      },
-    );
-  }
-
-  receivedWork(DocumentSnapshot snapshot) {
+  submittedWork(DocumentSnapshot snapshot) {
     return StreamBuilder(
       stream: FirebaseFirestore.instance
           .collection("Users")
           .doc(FirebaseAuth.instance.currentUser.email)
-          .collection("Assigned Tasks")
+          .collection("Orders")
           .doc(snapshot.id)
-          .collection("Received Work")
+          .collection("Submitted Work")
           .orderBy("timestamp", descending: true)
           .snapshots(),
       builder: (BuildContext context, AsyncSnapshot snap) {

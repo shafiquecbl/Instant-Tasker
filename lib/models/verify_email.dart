@@ -49,7 +49,7 @@ class _VerifyEmailState extends State<VerifyEmail> {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            SpinKitDoubleBounce(
+            SpinKitCircle(
               color: kPrimaryColor,
             ),
             SizedBox(height: 20),

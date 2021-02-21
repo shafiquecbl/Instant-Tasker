@@ -36,7 +36,7 @@ class _VerificationsState extends State<Verifications> {
         future: GetData().getUserProfile(),
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting)
-            return SpinKitDoubleBounce(
+            return SpinKitCircle(
               color: kPrimaryColor,
             );
           storePhoneNo = snapshot.data['Phone Number'];

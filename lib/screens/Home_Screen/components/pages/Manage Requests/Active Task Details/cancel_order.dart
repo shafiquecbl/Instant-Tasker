@@ -10,26 +10,27 @@ import 'package:shop_app/widgets/customAppBar.dart';
 import 'package:shop_app/components/default_button.dart';
 import 'package:shop_app/components/form_error.dart';
 import 'package:shop_app/widgets/outline_input_border.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:shop_app/widgets/snack_bar.dart';
-import 'package:shop_app/screens/Home_Screen/home_screen.dart';
 
-class SubmitReview extends StatefulWidget {
+class CancelOrder extends StatefulWidget {
+  final String taskID;
+  final String orderID;
   final String userEmail;
-  SubmitReview({@required this.userEmail});
+  CancelOrder(
+      {@required this.taskID,
+      @required this.orderID,
+      @required this.userEmail});
   @override
-  _SubmitReviewState createState() => _SubmitReviewState();
+  _CancelOrderState createState() => _CancelOrderState();
 }
 
-class _SubmitReviewState extends State<SubmitReview> {
+class _CancelOrderState extends State<CancelOrder> {
   User user = FirebaseAuth.instance.currentUser;
-  double saveRating;
   GetData getData = GetData();
   UpdateData updateData = UpdateData();
 
   final _formKey = GlobalKey<FormState>();
   final List<String> errors = [];
-  String review;
+  String reason;
 
   void addError({String error}) {
     if (!errors.contains(error))
@@ -49,7 +50,7 @@ class _SubmitReviewState extends State<SubmitReview> {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return Scaffold(
-      appBar: customAppBar('Complete Order'),
+      appBar: customAppBar('Cancel Order'),
       body: SingleChildScrollView(
         child: FutureBuilder(
           future: Future.wait(
@@ -77,14 +78,10 @@ class _SubmitReviewState extends State<SubmitReview> {
                 child: Column(
                   children: [
                     getReviewFormField(),
-                    SizedBox(height: getProportionateScreenHeight(20)),
-                    ratingText(),
-                    SizedBox(height: getProportionateScreenHeight(20)),
-                    ratingBar(),
-                    SizedBox(height: getProportionateScreenHeight(30)),
+                    SizedBox(height: getProportionateScreenHeight(10)),
                     FormError(errors: errors),
                     SizedBox(height: getProportionateScreenHeight(30)),
-                    submitReview(snapshot.data[1]),
+                    cancel(snapshot.data[1]),
                     SizedBox(height: getProportionateScreenHeight(30)),
                   ],
                 ),
@@ -93,63 +90,23 @@ class _SubmitReviewState extends State<SubmitReview> {
       ),
     );
   }
-
   ///////////////////////////////////////////////////////////////////////////////
 
-  ratingText() {
-    return Text(
-      "Rating ( Please provide rating )",
-      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-    );
-  }
-
-  ///////////////////////////////////////////////////////////////////////////////
-
-  ratingBar() {
-    return RatingBar(
-      minRating: 1,
-      initialRating: 0,
-      direction: Axis.horizontal,
-      allowHalfRating: true,
-      itemCount: 5,
-      ratingWidget: RatingWidget(
-        full: Icon(
-          Icons.star,
-          color: kPrimaryColor,
-        ),
-        half: Icon(Icons.star_half, color: kPrimaryColor),
-        empty: Icon(Icons.star_border_outlined, color: kPrimaryColor),
-      ),
-      itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
-      onRatingUpdate: (rating) {
-        saveRating = rating;
-      },
-    );
-  }
-
-  ///////////////////////////////////////////////////////////////////////////////
-
-  submitReview(DocumentSnapshot snapshot) {
+  cancel(DocumentSnapshot snapshot) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15),
       child: DefaultButton(
-        text: "Submit Review",
+        text: "Submit and Cancel",
         press: () async {
           if (_formKey.currentState.validate()) {
-            if (saveRating == null) {
-              Snack_Bar.show(context, "Please provide Rating!");
-            } else {
-              updateData
-                  .submitReview(
-                      receiverEmail: snapshot['Email'],
-                      cTask: snapshot['Completed Task as Buyer'],
-                      revBuyer: snapshot['Reviews as Buyer'],
-                      ratBuyer: snapshot['Rating as Buyer'],
-                      rating: saveRating,
-                      review: review)
-                  .then((value) => Navigator.push(context,
-                      MaterialPageRoute(builder: (_) => MainScreen())));
-            }
+            updateData.cancelOrder(context,
+                orderID: widget.orderID,
+                taskID: widget.taskID,
+                receiverEmail: widget.userEmail,
+                completedTask: snapshot['Completed Task'],
+                cancelledTask: snapshot['Cancelled Task'],
+                totalTasks: snapshot['Total Task'],
+                reason: reason);
           }
         },
       ),
@@ -165,25 +122,25 @@ class _SubmitReviewState extends State<SubmitReview> {
         expands: true,
         minLines: null,
         maxLines: null,
-        onSaved: (newValue) => review = newValue,
+        onSaved: (newValue) => reason = newValue,
         onChanged: (value) {
           if (value.isNotEmpty) {
-            removeError(error: "Please add Review");
-            review = value;
+            removeError(error: "Please add Reason");
+            reason = value;
           } else {}
         },
         validator: (value) {
           if (value.isEmpty) {
-            addError(error: "Please add Review");
+            addError(error: "Please add Reason");
             return "";
           }
           return null;
         },
         decoration: InputDecoration(
-          labelText: "Review",
-          hintText: "Share your review about \nservice",
+          labelText: "Reason",
+          hintText: "Why are you cancelling\n order?",
           floatingLabelBehavior: FloatingLabelBehavior.always,
-          suffixIcon: Icon(Icons.star_border_outlined),
+          suffixIcon: Icon(Icons.info_outline),
           border: rectangularBorder,
         ),
       ),

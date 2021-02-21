@@ -64,7 +64,7 @@ class _UserProfileState extends State<UserProfile> {
             .snapshots(),
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting)
-            return SpinKitDoubleBounce(
+            return SpinKitCircle(
               color: kPrimaryColor,
             );
           profilePic = snapshot.data['PhotoURL'];

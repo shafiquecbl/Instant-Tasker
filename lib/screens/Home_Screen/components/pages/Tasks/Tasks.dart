@@ -20,23 +20,6 @@ class _TasksState extends State<Tasks> {
   String cnicCheck;
   List<dynamic> list = [];
 
-// popup menu data//
-  static const menuItems = <String>[
-    'All',
-    'Online',
-    'Physical',
-    'Offered',
-  ];
-
-  final List<PopupMenuItem<String>> _popUpMenuItems = menuItems
-      .map(
-        (String value) => PopupMenuItem<String>(
-          value: value,
-          child: Text(value),
-        ),
-      )
-      .toList();
-
   // ignore: unused_field
   String _btn1SelectedVal;
 
@@ -60,18 +43,6 @@ class _TasksState extends State<Tasks> {
           ),
         ),
         backgroundColor: hexColor,
-        actions: [
-          PopupMenuButton<String>(
-            icon: Icon(
-              Icons.filter_list,
-              color: kPrimaryColor,
-            ),
-            onSelected: (String newValue) {
-              _btn1SelectedVal = newValue;
-            },
-            itemBuilder: (BuildContext context) => _popUpMenuItems,
-          ),
-        ],
       ),
       body: StreamBuilder(
         stream: FirebaseFirestore.instance
@@ -81,7 +52,7 @@ class _TasksState extends State<Tasks> {
             .snapshots(),
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting)
-            return SpinKitDoubleBounce(color: kPrimaryColor);
+            return SpinKitCircle(color: kPrimaryColor);
           indexLength = snapshot.data.docs.length;
           if (indexLength == 0)
             return SizedBox(

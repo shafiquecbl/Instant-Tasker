@@ -13,6 +13,8 @@ import 'package:shop_app/widgets/time_ago.dart';
 import 'package:shop_app/widgets/customAppBar.dart';
 import 'package:shop_app/screens/Home_Screen/components/pages/Manage%20Requests/Active%20Task%20Details/mark_order_asComplete.dart';
 
+import 'cancel_order.dart';
+
 class ActiveTaskDetails extends StatefulWidget {
   final int index;
   final String docID;
@@ -39,11 +41,11 @@ class _ActiveTaskDetailsState extends State<ActiveTaskDetails> {
       body: SingleChildScrollView(
         child: FutureBuilder(
           initialData: [],
-          future: getData.getActiveTask(),
+          future: getData.getActiveTask(widget.docID),
           builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting)
               return SpinKitDoubleBounce(color: kPrimaryColor);
-            return taskDetails(snapshot.data[widget.index]);
+            return taskDetails(snapshot.data);
           },
         ),
       ),
@@ -199,7 +201,7 @@ class _ActiveTaskDetailsState extends State<ActiveTaskDetails> {
                   height: 5,
                 ),
                 snapshot['Status'] == "Waiting for rating"
-                    ? markAsComplete(snapshot['Seller Email'])
+                    ? markAsComplete()
                     : Container(),
               ],
             ),
@@ -240,7 +242,56 @@ class _ActiveTaskDetailsState extends State<ActiveTaskDetails> {
       child: Text('Cancel Order'),
       textColor: Colors.white,
       color: Colors.red,
-      onPressed: () {},
+      onPressed: () {
+        confirmCancel(context);
+      },
+    );
+  }
+
+  confirmCancel(BuildContext context) {
+    // set up the button
+    Widget acceptButton = CupertinoDialogAction(
+      child: Text("Yes"),
+      onPressed: () {
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => CancelOrder(
+                taskID: taskID,
+                orderID: orderID,
+                userEmail: email,
+              ),
+            ));
+      },
+    );
+    Widget cancelButton = CupertinoDialogAction(
+      child: Text("No"),
+      onPressed: () {
+        Navigator.pop(context);
+      },
+    );
+
+    // set up the AlertDialog
+    CupertinoAlertDialog alert = CupertinoAlertDialog(
+      title: Text(
+        "Confirmation!",
+        style: TextStyle(
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+      content: Text("Do you want cancel order?"),
+      actions: [
+        cancelButton,
+        acceptButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
     );
   }
 
@@ -284,7 +335,7 @@ class _ActiveTaskDetailsState extends State<ActiveTaskDetails> {
                 })
             .then((value) => {
                   setState(() {
-                    getData.getActiveTask();
+                    getData.getActiveTask(widget.docID);
                   })
                 });
       },
@@ -320,7 +371,7 @@ class _ActiveTaskDetailsState extends State<ActiveTaskDetails> {
     );
   }
 
-  markAsComplete(userEmail) {
+  markAsComplete() {
     return RaisedButton(
       padding: EdgeInsets.symmetric(vertical: 8, horizontal: 10),
       child: Text('Mark as complete'),

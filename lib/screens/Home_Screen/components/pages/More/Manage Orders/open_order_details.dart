@@ -33,7 +33,7 @@ class _OpenOrderDetailsState extends State<OpenOrderDetails> {
           future: getData.getOrders(widget.docID),
           builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting)
-              return SpinKitDoubleBounce(color: kPrimaryColor);
+              return SpinKitCircle(color: kPrimaryColor);
             return offerDetails(snapshot.data);
           },
         ),
@@ -278,7 +278,7 @@ class _OpenOrderDetailsState extends State<OpenOrderDetails> {
           .snapshots(),
       builder: (BuildContext context, AsyncSnapshot snap) {
         if (snap.data == null)
-          return Center(child: CircularProgressIndicator.adaptive());
+          return Center(child: SpinKitCircle(color: kPrimaryColor));
         if (snap.data.docs.length == 0)
           return Container(
             padding: EdgeInsets.symmetric(vertical: 30),

@@ -37,7 +37,7 @@ class _VerifyCNICState extends State<VerifyCNIC> {
         future: GetData().getUserProfile(),
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting)
-            return SpinKitDoubleBounce(
+            return SpinKitCircle(
               color: kPrimaryColor,
             );
           storePhoneNo = snapshot.data['Name'];

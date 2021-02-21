@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:shop_app/screens/Home_Screen/home_screen.dart';
 import 'package:shop_app/widgets/snack_bar.dart';
@@ -212,5 +213,53 @@ class UpdateData {
       'Review': review,
       'Name': user.displayName,
     }).then((value) => Snack_Bar(message: "Review Submitted!"));
+  }
+
+  Future cancelOrder(context,
+      {@required orderID,
+      @required taskID,
+      @required receiverEmail,
+      @required completedTask,
+      @required cancelledTask,
+      @required totalTasks,
+      @required reason}) async {
+    int canTask = (cancelledTask + 1);
+    int totTask = (totalTasks + 1);
+    double comRate = (completedTask / totTask) * 100;
+
+    await FirebaseFirestore.instance
+        .collection('Users')
+        .doc(email)
+        .collection("Assigned Tasks")
+        .doc(taskID)
+        .update({
+      'Status': "Cancelled",
+      'TOstatus': "Cancelled",
+      'Reason': reason,
+    });
+
+    await FirebaseFirestore.instance
+        .collection('Users')
+        .doc(receiverEmail)
+        .collection('Orders')
+        .doc(orderID)
+        .update({
+      'Status': "Cancelled",
+      'TOstatus': "Cancelled",
+      'Reason': reason,
+    });
+
+    return await FirebaseFirestore.instance
+        .collection('Users')
+        .doc(receiverEmail)
+        .update({
+      'Total Task': totTask,
+      'Cancelled Task': canTask,
+      'Completion Rate': comRate,
+    }).then((value) => {
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (_) => MainScreen())),
+              Snack_Bar(message: "Order Cancelled!")
+            });
   }
 }

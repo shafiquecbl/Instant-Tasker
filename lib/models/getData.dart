@@ -27,24 +27,46 @@ class GetData {
     return snapshot.docs;
   }
 
-  Future getActiveTask() async {
+  // getActive() and getActiveTask() are same
+
+  Future getActive() async {
     QuerySnapshot snapshot = await firestore
         .collection("Users")
         .doc(email)
         .collection("Assigned Tasks")
-        .where('TOstatus', isEqualTo: "Active")
+        .where('TOstatus', isEqualTo: 'Active')
         .get();
     return snapshot.docs;
   }
 
-  Future getCompletedTask() async {
-    QuerySnapshot snapshot = await firestore
+  Future getActiveTask(docID) async {
+    DocumentSnapshot snapshot = await firestore
         .collection("Users")
         .doc(email)
         .collection("Assigned Tasks")
-        .where('TOstatus', isEqualTo: "Completed")
+        .doc(docID)
         .get();
-    return snapshot.docs;
+    return snapshot;
+  }
+
+  Future getCompletedTask(docID) async {
+    DocumentSnapshot snapshot = await firestore
+        .collection("Users")
+        .doc(email)
+        .collection("Assigned Tasks")
+        .doc(docID)
+        .get();
+    return snapshot;
+  }
+
+  Future getCancelledTask(docID) async {
+    DocumentSnapshot snapshot = await firestore
+        .collection("Users")
+        .doc(email)
+        .collection("Assigned Tasks")
+        .doc(docID)
+        .get();
+    return snapshot;
   }
 
   Future getTask(docID) async {

@@ -78,7 +78,7 @@ class _EditProfileFormState extends State<EditProfileForm> {
             .snapshots(),
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
           if (snapshot.data == null)
-            return SpinKitDoubleBounce(
+            return SpinKitCircle(
               color: kPrimaryColor,
             );
           storeName = snapshot.data['Name'];
@@ -111,6 +111,7 @@ class _EditProfileFormState extends State<EditProfileForm> {
                 getLanguagesFormField(),
                 SizedBox(height: getProportionateScreenHeight(30)),
                 getWorkFormField(),
+                SizedBox(height: getProportionateScreenHeight(10)),
                 FormError(errors: errors),
                 SizedBox(height: getProportionateScreenHeight(40)),
                 DefaultButton(

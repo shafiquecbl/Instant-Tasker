@@ -10,32 +10,25 @@ import 'package:shop_app/size_config.dart';
 import 'package:shop_app/widgets/time_ago.dart';
 import 'package:shop_app/widgets/customAppBar.dart';
 
-class CompletedTaskDetails extends StatefulWidget {
+class CancelledTaskDetails extends StatefulWidget {
   final String docID;
-  CompletedTaskDetails(this.docID);
+  CancelledTaskDetails(this.docID);
   @override
-  _CompletedTaskDetailsState createState() => _CompletedTaskDetailsState();
+  _CancelledTaskDetailsState createState() => _CancelledTaskDetailsState();
 }
 
-class _CompletedTaskDetailsState extends State<CompletedTaskDetails> {
+class _CancelledTaskDetailsState extends State<CancelledTaskDetails> {
   User user = FirebaseAuth.instance.currentUser;
   GetData getData = GetData();
   UpdateData updateData = UpdateData();
-
-  //
-  String taskID;
-  String orderID;
-  String email;
-  //
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return Scaffold(
-      appBar: customAppBar('Completed Task Details'),
+      appBar: customAppBar('Cancelled Task Details'),
       body: SingleChildScrollView(
         child: FutureBuilder(
-          initialData: [],
-          future: getData.getCompletedTask(widget.docID),
+          future: getData.getCancelledTask(widget.docID),
           builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting)
               return SpinKitCircle(color: kPrimaryColor);
@@ -181,6 +174,21 @@ class _CompletedTaskDetailsState extends State<CompletedTaskDetails> {
                   height: 20,
                 ),
                 chatWithTasker(snapshot),
+                SizedBox(
+                  height: 20,
+                ),
+                Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(5)),
+                    color: Colors.red[50],
+                  ),
+                  padding: EdgeInsets.all(10),
+                  child: Text(
+                    "Reason: ${snapshot['Reason']} ",
+                    style: TextStyle(
+                        color: Colors.red, fontWeight: FontWeight.bold),
+                  ),
+                ),
               ],
             ),
           ),

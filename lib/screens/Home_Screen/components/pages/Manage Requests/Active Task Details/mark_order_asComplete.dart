@@ -58,10 +58,10 @@ class _CompleteOrderState extends State<CompleteOrder> {
       body: SingleChildScrollView(
         child: FutureBuilder(
           future: Future.wait(
-              [getData.getActiveTask(), getData.getUserData(widget.userEmail)]),
+              [getData.getActive(), getData.getUserData(widget.userEmail)]),
           builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
             if (snapshot.data == null)
-              return SpinKitDoubleBounce(color: kPrimaryColor);
+              return SpinKitCircle(color: kPrimaryColor);
             if (snapshot.hasData) return reviewForm(snapshot);
             return Container();
           },

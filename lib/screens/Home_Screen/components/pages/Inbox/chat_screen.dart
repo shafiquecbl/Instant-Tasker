@@ -100,8 +100,7 @@ class _ChatScreenState extends State<ChatScreen> {
           .orderBy("timestamp", descending: true)
           .snapshots(),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-        if (snapshot.data == null)
-          return SpinKitDoubleBounce(color: kPrimaryColor);
+        if (snapshot.data == null) return SpinKitCircle(color: kPrimaryColor);
         if (snapshot.data.docs.length == 0)
           return ListView.builder(
               padding: EdgeInsets.all(20),

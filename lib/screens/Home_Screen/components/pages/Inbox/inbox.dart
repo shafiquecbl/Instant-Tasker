@@ -4,6 +4,7 @@ import 'package:shop_app/constants.dart';
 import 'package:shop_app/screens/Home_Screen/components/pages/Inbox/chat_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:shop_app/widgets/customAppBar.dart';
 import 'package:shop_app/widgets/time_ago.dart';
 
 class Inbox extends StatefulWidget {
@@ -24,49 +25,7 @@ class _InboxState extends State<Inbox> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        elevation: 2,
-        shadowColor: kPrimaryColor,
-        automaticallyImplyLeading: false,
-        centerTitle: false,
-        title: Padding(
-            padding: const EdgeInsets.only(left: 0), child: customSearchBar),
-        backgroundColor: hexColor,
-        actions: <Widget>[
-          IconButton(
-            icon: customIcon,
-            color: kPrimaryColor,
-            onPressed: () {
-              setState(() {
-                if (this.customIcon.icon == Icons.search) {
-                  this.customIcon = Icon(Icons.cancel_outlined);
-                  this.customSearchBar = TextField(
-                    textInputAction: TextInputAction.go,
-                    decoration: InputDecoration(
-                        border: InputBorder.none,
-                        focusedBorder: InputBorder.none,
-                        enabledBorder: InputBorder.none,
-                        errorBorder: InputBorder.none,
-                        disabledBorder: InputBorder.none,
-                        hintText: 'Search User ',
-                        focusColor: kPrimaryColor),
-                    style: TextStyle(
-                      color: Colors.black.withOpacity(0.7),
-                      fontSize: 16,
-                    ),
-                  );
-                } else {
-                  this.customIcon = Icon(Icons.search);
-                  this.customSearchBar = Text(
-                    "Inbox",
-                    style: TextStyle(color: kPrimaryColor),
-                  );
-                }
-              });
-            },
-          ),
-        ],
-      ),
+      appBar: customAppBar("Inbox"),
       body: StreamBuilder(
         stream: FirebaseFirestore.instance
             .collection('Users')
@@ -75,8 +34,7 @@ class _InboxState extends State<Inbox> {
             .orderBy("Time", descending: true)
             .snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-          if (snapshot.data == null)
-            return SpinKitDoubleBounce(color: kPrimaryColor);
+          if (snapshot.data == null) return SpinKitCircle(color: kPrimaryColor);
           if (snapshot.data.docs.length == 0)
             return Center(
               child: Padding(

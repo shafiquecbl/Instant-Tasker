@@ -51,8 +51,7 @@ class SetData {
     ).then((value) {
       String message = "Task Post Sussessfully";
       Snack_Bar.show(context, message);
-    }).catchError((e) {
-      Snack_Bar.show(context, e.message);
+      Navigator.pop(context);
     });
   }
 

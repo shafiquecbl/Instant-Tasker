@@ -69,7 +69,7 @@ class _OpenOfferDetailsState extends State<OpenOfferDetails> {
           ]),
           builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting)
-              return SpinKitDoubleBounce(color: kPrimaryColor);
+              return SpinKitCircle(color: kPrimaryColor);
             indexLength = snapshot.data[1].length;
             return Column(
               children: [

@@ -1,11 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:shop_app/constants.dart';
 import 'package:shop_app/models/getData.dart';
 import 'package:shop_app/screens/Home_Screen/components/pages/More/Manage%20Orders/open_order_details.dart';
 import 'package:shop_app/size_config.dart';
 import 'package:shop_app/widgets/time_ago.dart';
+import 'package:shop_app/screens/Home_Screen/components/pages/More/Manage Orders/Cancelled Order/cancelled_order_details.dart';
 
 class ManageOrders extends StatefulWidget {
   @override
@@ -15,6 +17,7 @@ class ManageOrders extends StatefulWidget {
 class _ManageOrdersState extends State<ManageOrders> {
   int activeOrdersLength;
   int completedOrdersLength;
+  int cancelledOrdersLength;
   GetData getData = GetData();
   String email = FirebaseAuth.instance.currentUser.email;
   @override
@@ -76,14 +79,31 @@ class _ManageOrdersState extends State<ManageOrders> {
                     return Tab(text: "Completed ($completedOrdersLength)");
                   },
                 ),
-                Tab(text: "Cancelled"),
+                StreamBuilder(
+                  stream: FirebaseFirestore.instance
+                      .collection("Users")
+                      .doc(FirebaseAuth.instance.currentUser.email)
+                      .collection("Orders")
+                      .where(
+                        'TOstatus',
+                        isEqualTo: "Cancelled",
+                      )
+                      .snapshots(),
+                  builder: (BuildContext context, AsyncSnapshot snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Tab(text: "Cancelled (0)");
+                    }
+                    cancelledOrdersLength = snapshot.data.docs.length;
+                    return Tab(text: "Cancelled ($cancelledOrdersLength)");
+                  },
+                ),
               ]),
         ),
         body: TabBarView(
           children: [
             activeOrders(),
             completedOrders(),
-            Center(child: Text("Cancelled")),
+            cancelledOrders(),
           ],
         ),
       ),
@@ -103,7 +123,7 @@ class _ManageOrdersState extends State<ManageOrders> {
           .snapshots(),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting)
-          return Center(child: CircularProgressIndicator());
+          return Center(child: SpinKitCircle(color: kPrimaryColor));
         activeOrdersLength = snapshot.data.docs.length;
         if (activeOrdersLength == 0)
           return SizedBox(
@@ -257,13 +277,13 @@ class _ManageOrdersState extends State<ManageOrders> {
           .snapshots(),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting)
-          return Center(child: CircularProgressIndicator());
+          return Center(child: SpinKitCircle(color: kPrimaryColor));
         completedOrdersLength = snapshot.data.docs.length;
         if (completedOrdersLength == 0)
           return SizedBox(
             child: Center(
               child: Text(
-                "No Completed Tasks Yet",
+                "No Completed Orders Yet",
                 style: TextStyle(
                     fontWeight: FontWeight.bold, color: kPrimaryColor),
               ),
@@ -377,6 +397,160 @@ class _ManageOrdersState extends State<ManageOrders> {
                                     context,
                                     MaterialPageRoute(
                                       builder: (_) => OpenOrderDetails(
+                                        snapshot.data.docs[index].id,
+                                      ),
+                                    ),
+                                  );
+                                },
+                              );
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+        );
+      },
+    );
+  }
+
+  cancelledOrders() {
+    return StreamBuilder(
+      stream: FirebaseFirestore.instance
+          .collection("Users")
+          .doc(FirebaseAuth.instance.currentUser.email)
+          .collection("Orders")
+          .where(
+            'TOstatus',
+            isEqualTo: "Cancelled",
+          )
+          .snapshots(),
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting)
+          return Center(child: SpinKitCircle(color: kPrimaryColor));
+        cancelledOrdersLength = snapshot.data.docs.length;
+        if (cancelledOrdersLength == 0)
+          return SizedBox(
+            child: Center(
+              child: Text(
+                "No Cancelled Orders ",
+                style: TextStyle(
+                    fontWeight: FontWeight.bold, color: kPrimaryColor),
+              ),
+            ),
+          );
+        return RefreshIndicator(
+          onRefresh: () async {
+            setState(() {
+              FirebaseFirestore.instance
+                  .collection("Users")
+                  .doc(FirebaseAuth.instance.currentUser.email)
+                  .collection("Orders")
+                  .where(
+                    'TOstatus',
+                    isEqualTo: "Completed",
+                  )
+                  .snapshots();
+            });
+          },
+          child: ListView.builder(
+            itemCount: cancelledOrdersLength,
+            itemBuilder: (context, index) {
+              return Container(
+                margin: EdgeInsets.all(10),
+                decoration: boxDecoration,
+                child: Wrap(
+                  children: <Widget>[
+                    Container(
+                      margin: EdgeInsets.only(left: 17, top: 5, right: 17),
+                      child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                TimeAgo.timeAgoSinceDate(
+                                    snapshot.data.docs[index]['Time']),
+                                style: TextStyle(color: Colors.grey),
+                              ),
+                            ),
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                snapshot.data.docs[index]['Status'],
+                                style: TextStyle(color: kPrimaryColor),
+                              ),
+                            ),
+                          ]),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 8),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(5)),
+                              color: Colors.grey[200],
+                            ),
+                            padding: EdgeInsets.all(10),
+                            child: Text(
+                              snapshot.data.docs[index]['Description'],
+                              style: TextStyle(
+                                  color: Colors.black.withOpacity(0.6)),
+                            ),
+                          ),
+                          ListTile(
+                            leading: Icon(
+                              Icons.attach_money,
+                              color: greenColor,
+                            ),
+                            title: Text(
+                              "Budget: ${snapshot.data.docs[index]['Budget']}",
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: greenColor,
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 70),
+                            child: Divider(
+                              height: 1,
+                              color: Colors.grey,
+                            ),
+                          ),
+                          ListTile(
+                            leading: Icon(Icons.timer),
+                            title: Text(
+                              "Duration: ${snapshot.data.docs[index]['Duration']}",
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Colors.grey,
+                              ),
+                            ),
+                          ),
+                          FutureBuilder(
+                            initialData: [],
+                            future:
+                                getData.getOrders(snapshot.data.docs[index].id),
+                            builder:
+                                (BuildContext context, AsyncSnapshot snap) {
+                              return RaisedButton(
+                                child: Text('View Details'),
+                                textColor: Colors.white,
+                                color: kPrimaryColor,
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (_) => CancelledOrders(
                                         snapshot.data.docs[index].id,
                                       ),
                                     ),
