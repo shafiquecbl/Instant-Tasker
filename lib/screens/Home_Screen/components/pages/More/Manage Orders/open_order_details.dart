@@ -19,7 +19,6 @@ class OpenOrderDetails extends StatefulWidget {
 }
 
 class _OpenOrderDetailsState extends State<OpenOrderDetails> {
-  int indexLength = 0;
   User user = FirebaseAuth.instance.currentUser;
   GetData getData = GetData();
   @override
@@ -218,7 +217,7 @@ class _OpenOrderDetailsState extends State<OpenOrderDetails> {
                               builder: (_) => SubmitOrder(
                                 snapshot.id,
                                 snapshot['Client Email'],
-                                snapshot['Time'],
+                                snapshot['timestamp'],
                               ),
                             ),
                           );

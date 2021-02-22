@@ -4,7 +4,7 @@ Future deleteUserRequest(docID) async {
   FirebaseFirestore.instance
       .collection("Buyer Requests")
       .doc(docID)
-      .collection("Orders")
+      .collection("Offers")
       .doc()
       .delete();
   FirebaseFirestore.instance.collection("Buyer Requests").doc(docID).delete();

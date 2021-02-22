@@ -24,7 +24,6 @@ class _UserProfileState extends State<UserProfile> {
   User user = FirebaseAuth.instance.currentUser;
   String email = FirebaseAuth.instance.currentUser.email;
   final auth = FirebaseAuth.instance;
-  String profilePic;
 
   @override
   Widget build(BuildContext context) {
@@ -67,7 +66,6 @@ class _UserProfileState extends State<UserProfile> {
             return SpinKitCircle(
               color: kPrimaryColor,
             );
-          profilePic = snapshot.data['PhotoURL'];
           return SafeArea(
             child: RefreshIndicator(
               onRefresh: () async {
