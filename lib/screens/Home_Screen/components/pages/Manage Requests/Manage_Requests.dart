@@ -26,6 +26,7 @@ class _ManageTasksState extends State<ManageTasks> {
   int cancelledTaskLength;
   GetData getData = GetData();
   String email = FirebaseAuth.instance.currentUser.email;
+
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);

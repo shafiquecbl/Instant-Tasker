@@ -10,8 +10,8 @@ class SetData {
   final email = FirebaseAuth.instance.currentUser.email;
   String uid = FirebaseAuth.instance.currentUser.uid.toString();
   String name = FirebaseAuth.instance.currentUser.displayName;
-  static DateTime now = DateTime.now();
-  String dateTime = DateFormat("dd-MM-yyyy h:mma").format(now);
+  String dateTime = DateFormat("dd-MM-yyyy h:mma").format(DateTime.now());
+  FieldValue fieldValue = FieldValue.serverTimestamp();
 
   Future saveNewUser(email, context) async {
     final CollectionReference users =
@@ -128,7 +128,6 @@ class SetData {
       'Duration': duration,
       'Category': category,
       'Client PhotoURL': user.photoURL,
-      'timestamp': FieldValue.serverTimestamp(),
       'Status': "Pending",
       'TOstatus': "Active",
     });
@@ -147,7 +146,6 @@ class SetData {
       'Duration': duration,
       'Category': category,
       'Seller PhotoURL': receiverPhoto,
-      'timestamp': FieldValue.serverTimestamp(),
       'Status': "Pending",
       'TOstatus': "Active",
     });
@@ -163,7 +161,7 @@ class SetData {
         .add({
       'Time': dateTime,
       'Description': description,
-      'timestamp': FieldValue.serverTimestamp(),
+      'timestamp': fieldValue,
     });
 
     return await FirebaseFirestore.instance
@@ -175,7 +173,7 @@ class SetData {
         .add({
       'Time': dateTime,
       'Description': description,
-      'timestamp': FieldValue.serverTimestamp(),
+      'timestamp': fieldValue,
     });
   }
 }

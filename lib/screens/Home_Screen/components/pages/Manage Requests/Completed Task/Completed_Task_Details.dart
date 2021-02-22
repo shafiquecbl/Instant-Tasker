@@ -63,7 +63,7 @@ class _CompletedTaskDetailsState extends State<CompletedTaskDetails> {
                 fontWeight: FontWeight.bold),
           ),
         ),
-        receivedWork(snapshot),
+        submittedWork(snapshot),
       ],
     );
   }
@@ -214,7 +214,7 @@ class _CompletedTaskDetailsState extends State<CompletedTaskDetails> {
     );
   }
 
-  receivedWork(DocumentSnapshot snapshot) {
+  submittedWork(DocumentSnapshot snapshot) {
     return StreamBuilder(
       stream: FirebaseFirestore.instance
           .collection("Users")

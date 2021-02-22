@@ -142,7 +142,7 @@ class _CompleteOrderState extends State<CompleteOrder> {
         press: () async {
           if (_formKey.currentState.validate()) {
             if (saveRating == null) {
-              Snack_Bar.show(context, "Please provide Rating!");
+              addError(error: "Please provide Rating!");
             } else {
               updateData
                   .completeOrder(

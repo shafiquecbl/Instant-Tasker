@@ -4,10 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:shop_app/screens/Home_Screen/home_screen.dart';
 import 'package:shop_app/widgets/snack_bar.dart';
+import 'package:intl/intl.dart';
 
 class UpdateData {
   User user = FirebaseAuth.instance.currentUser;
   final email = FirebaseAuth.instance.currentUser.email;
+  String dateTime = DateFormat("dd-MM-yyyy h:mma").format(DateTime.now());
 
   Future<User> saveUserProfile(context, name, gender, phNo, address) async {
     double doubleValue = 0;
@@ -147,20 +149,16 @@ class UpdateData {
         .doc(email)
         .collection("Assigned Tasks")
         .doc(docID)
-        .update({
-      'Status': "Completed",
-      'TOstatus': "Completed",
-    });
+        .update(
+            {'Status': "Completed", 'TOstatus': "Completed", 'Time': dateTime});
 
     await FirebaseFirestore.instance
         .collection('Users')
         .doc(receiverEmail)
         .collection('Orders')
         .doc(receiverDocID)
-        .update({
-      'Status': "Completed",
-      'TOstatus': "Completed",
-    });
+        .update(
+            {'Status': "Completed", 'TOstatus': "Completed", 'Time': dateTime});
 
     await FirebaseFirestore.instance
         .collection('Users')
@@ -236,6 +234,7 @@ class UpdateData {
       'Status': "Cancelled",
       'TOstatus': "Cancelled",
       'Reason': reason,
+      'Time': dateTime
     });
 
     await FirebaseFirestore.instance
@@ -247,6 +246,7 @@ class UpdateData {
       'Status': "Cancelled",
       'TOstatus': "Cancelled",
       'Reason': reason,
+      'Time': dateTime
     });
 
     return await FirebaseFirestore.instance

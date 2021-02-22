@@ -27,9 +27,13 @@ class _OpenOrderDetailsState extends State<OpenOrderDetails> {
     return Scaffold(
       appBar: customAppBar("Order Details"),
       body: SingleChildScrollView(
-        child: FutureBuilder(
-          initialData: [],
-          future: getData.getOrders(widget.docID),
+        child: StreamBuilder(
+          stream: FirebaseFirestore.instance
+              .collection("Users")
+              .doc(FirebaseAuth.instance.currentUser.email)
+              .collection('Orders')
+              .doc(widget.docID)
+              .snapshots(),
           builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting)
               return SpinKitCircle(color: kPrimaryColor);
@@ -217,7 +221,7 @@ class _OpenOrderDetailsState extends State<OpenOrderDetails> {
                               builder: (_) => SubmitOrder(
                                 snapshot.id,
                                 snapshot['Client Email'],
-                                snapshot['timestamp'],
+                                snapshot['Time'],
                               ),
                             ),
                           );
