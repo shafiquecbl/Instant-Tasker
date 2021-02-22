@@ -190,7 +190,6 @@ class _CancelledOrdersState extends State<CancelledOrders> {
                             receiverName: snapshot['Client Name'],
                             receiverEmail: snapshot['Client Email'],
                             receiverPhotoURL: snapshot['Client PhotoURL'],
-                            isOnline: true,
                           ),
                         ));
                   },

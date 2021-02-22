@@ -229,7 +229,6 @@ class _ActiveTaskDetailsState extends State<ActiveTaskDetails> {
                 receiverName: snapshot['Seller Name'],
                 receiverEmail: snapshot['Seller Email'],
                 receiverPhotoURL: snapshot['Seller PhotoURL'],
-                isOnline: true,
               ),
             ));
       },

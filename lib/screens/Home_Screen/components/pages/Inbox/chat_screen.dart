@@ -6,19 +6,16 @@ import 'package:shop_app/constants.dart';
 import 'package:shop_app/models/getData.dart';
 import 'package:shop_app/models/messages.dart';
 import 'package:shop_app/screens/Home_Screen/components/pages/Inbox/modal_tile.dart';
+import 'package:shop_app/size_config.dart';
 import 'package:shop_app/widgets/outline_input_border.dart';
+import 'package:shop_app/widgets/profile_sheet.dart';
 
 class ChatScreen extends StatefulWidget {
   final String receiverName;
   final String receiverEmail;
   final String receiverPhotoURL;
-  final bool isOnline;
 
-  ChatScreen(
-      {this.receiverName,
-      this.isOnline,
-      this.receiverEmail,
-      this.receiverPhotoURL});
+  ChatScreen({this.receiverName, this.receiverEmail, this.receiverPhotoURL});
 
   @override
   _ChatScreenState createState() => _ChatScreenState();
@@ -34,52 +31,45 @@ class _ChatScreenState extends State<ChatScreen> {
 
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
     return Scaffold(
       backgroundColor: Color(0xFFF6F6F6),
       appBar: AppBar(
-        elevation: 2,
-        shadowColor: kPrimaryColor,
-        backgroundColor: hexColor,
-        centerTitle: true,
-        title: RichText(
-          textAlign: TextAlign.center,
-          text: TextSpan(
-            children: [
-              TextSpan(
-                  text: widget.receiverName,
-                  style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w400,
-                      color: kPrimaryColor)),
-              TextSpan(text: '\n'),
-              widget.isOnline
-                  ? TextSpan(
-                      text: 'Online',
-                      style: TextStyle(
-                          fontSize: 11,
-                          fontWeight: FontWeight.w400,
-                          color: kPrimaryColor),
-                    )
-                  : TextSpan(
-                      text: 'Offline',
-                      style: TextStyle(
-                          fontSize: 11,
-                          fontWeight: FontWeight.w400,
-                          color: kPrimaryColor),
-                    )
-            ],
-          ),
-        ),
-        leading: IconButton(
-            icon: Icon(
-              Icons.arrow_back_ios,
-              color: kPrimaryColor,
+          elevation: 2,
+          shadowColor: kPrimaryColor,
+          backgroundColor: hexColor,
+          centerTitle: true,
+          title: ListTile(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (_) => OpenProfile(email: widget.receiverEmail)),
+              );
+            },
+            leading: CircleAvatar(
+                child: ClipRRect(
+              borderRadius: BorderRadius.circular(70),
+              child: Image.network(
+                widget.receiverPhotoURL,
+                width: 130,
+                height: 130,
+                fit: BoxFit.cover,
+              ),
+            )),
+            title: Text(widget.receiverName,
+                style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w400,
+                    color: kPrimaryColor)),
+            subtitle: Text(
+              'Online',
+              style: TextStyle(
+                  fontSize: 11,
+                  fontWeight: FontWeight.w400,
+                  color: kPrimaryColor),
             ),
-            color: Colors.white,
-            onPressed: () {
-              Navigator.pop(context);
-            }),
-      ),
+          )),
       body: Column(
         children: <Widget>[
           Flexible(

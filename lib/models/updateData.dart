@@ -210,6 +210,9 @@ class UpdateData {
         .set({
       'Review': review,
       'Name': user.displayName,
+      'Email': user.email,
+      'PhotoURL': user.photoURL,
+      'Time': dateTime
     }).then((value) => Snack_Bar(message: "Review Submitted!"));
   }
 

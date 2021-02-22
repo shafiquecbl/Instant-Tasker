@@ -195,7 +195,6 @@ class _OpenOrderDetailsState extends State<OpenOrderDetails> {
                             receiverName: snapshot['Client Name'],
                             receiverEmail: snapshot['Client Email'],
                             receiverPhotoURL: snapshot['Client PhotoURL'],
-                            isOnline: true,
                           ),
                         ));
                   },

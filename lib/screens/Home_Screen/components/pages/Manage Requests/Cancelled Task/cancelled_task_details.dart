@@ -215,7 +215,6 @@ class _CancelledTaskDetailsState extends State<CancelledTaskDetails> {
                 receiverName: snapshot['Seller Name'],
                 receiverEmail: snapshot['Seller Email'],
                 receiverPhotoURL: snapshot['Seller PhotoURL'],
-                isOnline: true,
               ),
             ));
       },

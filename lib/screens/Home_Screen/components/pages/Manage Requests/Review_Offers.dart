@@ -347,7 +347,6 @@ class _ReviewOffersState extends State<ReviewOffers> {
                                                       .data[0][i]['Email'],
                                                   receiverPhotoURL: snapshot
                                                       .data[0][i]['PhotoURL'],
-                                                  isOnline: true,
                                                 ),
                                               ));
                                         },

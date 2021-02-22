@@ -462,7 +462,6 @@ class _OpenOfferDetailsState extends State<OpenOfferDetails> {
                               receiverName: snapshot['Name'],
                               receiverEmail: snapshot['Email'],
                               receiverPhotoURL: snapshot['PhotoURL'],
-                              isOnline: true,
                             ),
                           ));
                     },

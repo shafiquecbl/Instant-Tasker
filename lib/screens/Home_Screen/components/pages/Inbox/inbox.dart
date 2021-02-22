@@ -4,6 +4,7 @@ import 'package:shop_app/constants.dart';
 import 'package:shop_app/screens/Home_Screen/components/pages/Inbox/chat_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:shop_app/size_config.dart';
 import 'package:shop_app/widgets/customAppBar.dart';
 import 'package:shop_app/widgets/time_ago.dart';
 
@@ -15,15 +16,9 @@ class Inbox extends StatefulWidget {
 class _InboxState extends State<Inbox> {
   User user = FirebaseAuth.instance.currentUser;
   final email = FirebaseAuth.instance.currentUser.email;
-  Icon customIcon = Icon(Icons.search);
-  Widget customSearchBar = Text(
-    "Inbox",
-    style: TextStyle(
-      color: kPrimaryColor,
-    ),
-  );
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
     return Scaffold(
       appBar: customAppBar("Inbox"),
       body: StreamBuilder(
@@ -78,7 +73,6 @@ class _InboxState extends State<Inbox> {
             receiverEmail: snapshot['Email'],
             receiverName: snapshot['Name'],
             receiverPhotoURL: snapshot['PhotoURL'],
-            isOnline: true,
           ),
         ),
       ),
