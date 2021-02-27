@@ -6,6 +6,7 @@ import 'package:shop_app/models/getData.dart';
 import 'package:shop_app/models/setData.dart';
 import 'package:shop_app/models/updateData.dart';
 import 'package:shop_app/size_config.dart';
+import 'package:shop_app/widgets/alert_dialog.dart';
 import 'package:shop_app/widgets/outline_input_border.dart';
 import 'package:shop_app/widgets/snack_bar.dart';
 
@@ -58,6 +59,7 @@ class _SubmitOrderFormState extends State<SubmitOrderForm> {
                   text: "Submit Order",
                   press: () async {
                     if (_formKey.currentState.validate()) {
+                      showLoadingDialog(context);
                       submitOrder(snapshot.data[0]);
                     }
                   },
@@ -114,6 +116,7 @@ class _SubmitOrderFormState extends State<SubmitOrderForm> {
                   .sumbitOrder(snapshot.id, widget.docID, description,
                       widget.receiverEmail)
                   .then((value) => {
+                        Navigator.pop(context),
                         Snack_Bar.show(context, "Order Submitted Successfully"),
                         Navigator.pop(context)
                       })

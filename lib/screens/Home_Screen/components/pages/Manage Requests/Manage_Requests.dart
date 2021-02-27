@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:shop_app/constants.dart';
 import 'package:shop_app/models/getData.dart';
 import 'package:shop_app/screens/Home_Screen/components/pages/Manage%20Requests/Cancelled%20Task/cancelled_task_details.dart';
@@ -40,7 +41,11 @@ class _ManageTasksState extends State<ManageTasks> {
             centerTitle: false,
             title: Text(
               'My Tasks',
-              style: TextStyle(color: kPrimaryColor),
+              style: GoogleFonts.teko(
+                color: kPrimaryColor,
+                fontWeight: FontWeight.bold,
+                fontSize: 20,
+              ),
             ),
             backgroundColor: hexColor,
             bottom: TabBar(

@@ -8,6 +8,7 @@ import 'package:shop_app/screens/Home_Screen/components/pages/Inbox/chat_Screen.
 import 'package:shop_app/screens/Home_Screen/components/pages/Manage Requests/Review_Offers.dart';
 import 'package:shop_app/screens/Home_Screen/components/pages/Tasks/widgets/common_widgets.dart';
 import 'package:shop_app/size_config.dart';
+import 'package:shop_app/widgets/customAppBar.dart';
 import 'package:shop_app/widgets/time_ago.dart';
 
 class OpenOfferDetails extends StatefulWidget {
@@ -26,40 +27,7 @@ class _OpenOfferDetailsState extends State<OpenOfferDetails> {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: true,
-        elevation: 2,
-        shadowColor: kPrimaryColor,
-        centerTitle: false,
-        title: Padding(
-          padding: const EdgeInsets.only(left: 0),
-          child: Text(
-            'Task Details',
-            style: TextStyle(
-              color: kPrimaryColor,
-            ),
-          ),
-        ),
-        backgroundColor: hexColor,
-        actions: [
-          FlatButton(
-            onPressed: () {},
-            child: Text("Edit",
-                style: TextStyle(
-                    color: greenColor,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold)),
-          ),
-          FlatButton(
-            onPressed: () {},
-            child: Text("Delete",
-                style: TextStyle(
-                    color: greenColor,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold)),
-          ),
-        ],
-      ),
+      appBar: customAppBar("Task Details"),
       body: SingleChildScrollView(
         child: FutureBuilder(
           initialData: [],

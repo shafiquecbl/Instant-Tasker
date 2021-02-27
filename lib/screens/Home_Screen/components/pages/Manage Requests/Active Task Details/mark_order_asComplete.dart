@@ -7,6 +7,7 @@ import 'package:shop_app/models/getData.dart';
 import 'package:shop_app/models/updateData.dart';
 import 'package:shop_app/screens/Home_Screen/home_screen.dart';
 import 'package:shop_app/size_config.dart';
+import 'package:shop_app/widgets/alert_dialog.dart';
 import 'package:shop_app/widgets/customAppBar.dart';
 import 'package:shop_app/components/default_button.dart';
 import 'package:shop_app/components/form_error.dart';
@@ -144,6 +145,7 @@ class _CompleteOrderState extends State<CompleteOrder> {
             if (saveRating == null) {
               addError(error: "Please provide Rating!");
             } else {
+              showLoadingDialog(context);
               updateData
                   .completeOrder(
                       widget.orderID,
@@ -156,8 +158,11 @@ class _CompleteOrderState extends State<CompleteOrder> {
                       saveRating,
                       snapshot['Total Task'],
                       review)
-                  .then((value) => Navigator.push(
-                      context, MaterialPageRoute(builder: (_) => MainScreen())))
+                  .then((value) => {
+                        Navigator.pop(context),
+                        Navigator.pop(context),
+                        Navigator.pop(context),
+                      })
                   .then((value) =>
                       Snack_Bar(message: "Order Marked as Completed!"));
             }

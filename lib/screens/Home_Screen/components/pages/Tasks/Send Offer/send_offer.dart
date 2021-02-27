@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shop_app/screens/Home_Screen/components/pages/Tasks/Send%20Offer/send_offer_form.dart';
 import 'package:shop_app/size_config.dart';
+import 'package:shop_app/widgets/customAppBar.dart';
 
 class SendOffer extends StatefulWidget {
   final String docID;
@@ -14,25 +15,23 @@ class _SendOfferState extends State<SendOffer> {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Send Offer"),
-      ),
-      body:  SafeArea(
-          child: SizedBox(
-        width: double.infinity,
-        child: Padding(
-          padding:
-              EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(20)),
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                SizedBox(height: SizeConfig.screenHeight * 0.04),
-                SendOfferForm(widget.docID),
-              ],
+      appBar: customAppBar("Send Offer"),
+      body: SafeArea(
+        child: SizedBox(
+          width: double.infinity,
+          child: Padding(
+            padding: EdgeInsets.symmetric(
+                horizontal: getProportionateScreenWidth(20)),
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  SizedBox(height: SizeConfig.screenHeight * 0.04),
+                  SendOfferForm(widget.docID),
+                ],
+              ),
             ),
           ),
         ),
-      ),
       ),
     );
   }

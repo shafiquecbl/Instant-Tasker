@@ -6,6 +6,7 @@ import 'package:shop_app/models/getData.dart';
 import 'package:shop_app/size_config.dart';
 import 'package:shop_app/screens/Home_Screen/components/pages/More/Verification/verify_cnic.dart';
 import 'package:shop_app/components/default_button.dart';
+import 'package:shop_app/widgets/customAppBar.dart';
 
 class Verifications extends StatefulWidget {
   @override
@@ -20,18 +21,7 @@ class _VerificationsState extends State<Verifications> {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return Scaffold(
-      appBar: AppBar(
-        elevation: 2,
-        shadowColor: kPrimaryColor,
-        title: Text(
-          "Verifications",
-          style: TextStyle(
-            color: kPrimaryColor,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-        backgroundColor: hexColor,
-      ),
+      appBar: customAppBar("Verification"),
       body: FutureBuilder(
         future: GetData().getUserProfile(),
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {

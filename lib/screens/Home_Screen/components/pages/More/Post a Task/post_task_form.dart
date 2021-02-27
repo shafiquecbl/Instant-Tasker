@@ -5,6 +5,7 @@ import 'package:shop_app/constants.dart';
 import 'package:shop_app/models/setData.dart';
 import 'package:shop_app/size_config.dart';
 import 'package:shop_app/components/custom_surfix_icon.dart';
+import 'package:shop_app/widgets/alert_dialog.dart';
 import 'package:shop_app/widgets/outline_input_border.dart';
 import 'package:shop_app/widgets/snack_bar.dart';
 
@@ -189,10 +190,13 @@ class _PostTaskFormState extends State<PostTaskForm> {
             text: "Post Task",
             press: () async {
               if (_formKey.currentState.validate()) {
+                showLoadingDialog(context);
                 try {
                   if (location == null) location = "Online";
-                  SetData().postTask(context, description, category, duration,
-                      budget, location);
+                  SetData()
+                      .postTask(context, description, category, duration,
+                          budget, location)
+                      .then((value) => {_formKey.currentState.reset()});
                 } catch (e) {
                   Snack_Bar.show(context, e.message);
                 }

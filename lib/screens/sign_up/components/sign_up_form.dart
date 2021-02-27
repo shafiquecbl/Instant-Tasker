@@ -4,6 +4,7 @@ import 'package:shop_app/components/custom_surfix_icon.dart';
 import 'package:shop_app/components/default_button.dart';
 import 'package:shop_app/components/form_error.dart';
 import 'package:shop_app/models/verify_email.dart';
+import 'package:shop_app/widgets/alert_dialog.dart';
 import 'package:shop_app/widgets/outline_input_border.dart';
 import 'package:shop_app/widgets/snack_bar.dart';
 
@@ -60,6 +61,7 @@ class _SignUpFormState extends State<SignUpForm> {
             press: () async {
               if (_formKey.currentState.validate()) {
                 _formKey.currentState.save();
+                showLoadingDialog(context);
                 signUpUser(email, password, context);
               }
             },
@@ -178,11 +180,12 @@ class _SignUpFormState extends State<SignUpForm> {
     );
   }
 
-  Future<void> signUpUser(email, password, context) async {
+  Future signUpUser(email, password, context) async {
     try {
       await auth
           .createUserWithEmailAndPassword(email: email, password: password)
           .then((currentUser) {
+        Navigator.pop(context);
         Navigator.pushNamed(context, VerifyEmail.routeName);
       }).catchError((e) {
         Snack_Bar.show(context, e.message);
@@ -190,6 +193,5 @@ class _SignUpFormState extends State<SignUpForm> {
     } catch (e) {
       Snack_Bar.show(context, e.message);
     }
-    return "user";
   }
 }

@@ -5,6 +5,7 @@ import 'package:shop_app/constants.dart';
 import 'package:shop_app/screens/Home_Screen/components/pages/More/Verification/verify_cnic.dart';
 import 'package:shop_app/screens/Home_Screen/components/pages/Tasks/Send%20Offer/send_offer.dart';
 import 'package:shop_app/models/getData.dart';
+import 'package:shop_app/widgets/customAppBar.dart';
 import 'package:shop_app/widgets/time_ago.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
@@ -28,22 +29,7 @@ class _TasksState extends State<Tasks> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        elevation: 2,
-        shadowColor: kPrimaryColor,
-        automaticallyImplyLeading: false,
-        centerTitle: false,
-        title: Padding(
-          padding: const EdgeInsets.only(left: 0),
-          child: Text(
-            'Buyer Requests',
-            style: TextStyle(
-              color: kPrimaryColor,
-            ),
-          ),
-        ),
-        backgroundColor: hexColor,
-      ),
+      appBar: customAppBar("Buyer Requests"),
       body: StreamBuilder(
         stream: FirebaseFirestore.instance
             .collection("Buyer Requests")

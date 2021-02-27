@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shop_app/constants.dart';
 import 'package:shop_app/models/updateData.dart';
@@ -34,9 +35,10 @@ class _UserProfileState extends State<UserProfile> {
           shadowColor: kPrimaryColor,
           title: Text(
             "My Profile",
-            style: TextStyle(
+            style: GoogleFonts.teko(
               color: kPrimaryColor,
-              fontWeight: FontWeight.w500,
+              fontWeight: FontWeight.bold,
+              fontSize: 20,
             ),
           ),
           backgroundColor: hexColor,

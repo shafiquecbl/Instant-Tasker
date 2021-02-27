@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:shop_app/constants.dart';
 import 'package:shop_app/models/getData.dart';
 import 'package:shop_app/screens/Home_Screen/components/pages/More/Manage%20Orders/open_order_details.dart';
@@ -34,7 +35,11 @@ class _ManageOrdersState extends State<ManageOrders> {
             padding: const EdgeInsets.only(left: 0),
             child: Text(
               'Manage Orders',
-              style: TextStyle(color: kPrimaryColor),
+              style: GoogleFonts.teko(
+                color: kPrimaryColor,
+                fontWeight: FontWeight.bold,
+                fontSize: 20,
+              ),
             ),
           ),
           backgroundColor: hexColor,

@@ -83,10 +83,8 @@ class _SignFormState extends State<SignForm> {
             press: () async {
               if (_formKey.currentState.validate()) {
                 _formKey.currentState.save();
-                FirebaseFirestore.instance.terminate();
-                FirebaseFirestore.instance
-                    .clearPersistence()
-                    .then((value) => signinUser(email, password, context));
+                showLoadingDialog(context);
+                signinUser(email, password, context);
               }
             },
           ),
@@ -170,6 +168,7 @@ class _SignFormState extends State<SignForm> {
     auth
         .signInWithEmailAndPassword(email: email, password: password)
         .then((value) {
+      Navigator.pop(context);
       if (value.user.emailVerified) {
         Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(builder: (context) => MainScreen()),

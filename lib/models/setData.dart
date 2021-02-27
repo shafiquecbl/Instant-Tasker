@@ -49,9 +49,8 @@ class SetData {
         'PhotoURL': user.photoURL
       },
     ).then((value) {
-      String message = "Task Post Sussessfully";
-      Snack_Bar.show(context, message);
       Navigator.pop(context);
+      Snack_Bar.show(context, "Task Posted Sussessfully");
     });
   }
 
@@ -92,9 +91,9 @@ class SetData {
         'CNIC Status': cnicStatus,
       },
     ).then((value) {
-      String message = "Offer sent Sussessfully";
-      Snack_Bar.show(context, message);
-      Navigator.of(context).pop();
+      Navigator.pop(context);
+      Navigator.pop(context);
+      Snack_Bar.show(context, "Offer sent Sussessfully");
     }).catchError((e) {
       Snack_Bar.show(context, e.message);
     });

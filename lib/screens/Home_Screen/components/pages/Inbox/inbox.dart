@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:shop_app/constants.dart';
+import 'package:shop_app/models/updateData.dart';
 import 'package:shop_app/screens/Home_Screen/components/pages/Inbox/chat_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -69,13 +70,12 @@ class _InboxState extends State<Inbox> {
       onTap: () => Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (_) => ChatScreen(
-            receiverEmail: snapshot['Email'],
-            receiverName: snapshot['Name'],
-            receiverPhotoURL: snapshot['PhotoURL'],
-          ),
-        ),
-      ),
+            builder: (_) => ChatScreen(
+                  receiverEmail: snapshot['Email'],
+                  receiverName: snapshot['Name'],
+                  receiverPhotoURL: snapshot['PhotoURL'],
+                )),
+      ).then((value) => UpdateData().updateMessageStatus(snapshot['Email'])),
       child: Container(
         padding: EdgeInsets.symmetric(
           horizontal: 20,
@@ -142,6 +142,10 @@ class _InboxState extends State<Inbox> {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
+                      snapshot['Status'] == "unread"
+                          ? Icon(Icons.mark_email_unread,
+                              color: UniversalVariables.blueColor)
+                          : Container()
                     ],
                   ),
                   SizedBox(

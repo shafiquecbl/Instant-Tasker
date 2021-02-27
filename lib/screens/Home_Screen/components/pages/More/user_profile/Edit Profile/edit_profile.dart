@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:shop_app/constants.dart';
 import 'package:shop_app/size_config.dart';
 import 'edit_profile_form.dart';
@@ -22,7 +23,11 @@ class _EditProfileState extends State<EditProfile> {
             padding: EdgeInsets.only(left: 5),
             child: Text(
               "Edit Profile",
-              style: TextStyle(color: kPrimaryColor),
+              style: GoogleFonts.teko(
+                color: kPrimaryColor,
+                fontWeight: FontWeight.bold,
+                fontSize: 20,
+              ),
             )),
         actions: [
           IconButton(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:shop_app/constants.dart';
 
 customAppBar(
@@ -12,7 +13,11 @@ customAppBar(
       padding: const EdgeInsets.only(left: 0),
       child: Text(
         '$text',
-        style: TextStyle(color: kPrimaryColor),
+        style: GoogleFonts.teko(
+          color: kPrimaryColor,
+          fontWeight: FontWeight.bold,
+          fontSize: 20,
+        ),
       ),
     ),
     backgroundColor: hexColor,

@@ -9,6 +9,7 @@ import 'package:shop_app/models/getData.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shop_app/screens/Home_Screen/components/pages/Tasks/widgets/common_widgets.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:shop_app/widgets/alert_dialog.dart';
 import 'package:shop_app/widgets/customAppBar.dart';
 import 'package:shop_app/widgets/time_ago.dart';
 
@@ -386,6 +387,8 @@ class _ReviewOffersState extends State<ReviewOffers> {
     Widget acceptButton = CupertinoDialogAction(
       child: Text("Yes"),
       onPressed: () {
+        Navigator.pop(context);
+        showLoadingDialog(context);
         SetData()
             .assignTask(
                 context,
@@ -415,7 +418,7 @@ class _ReviewOffersState extends State<ReviewOffers> {
     // set up the AlertDialog
     CupertinoAlertDialog alert = CupertinoAlertDialog(
       title: Text(
-        "Confirmation!",
+        "Confirmation",
         style: TextStyle(
           fontWeight: FontWeight.bold,
         ),

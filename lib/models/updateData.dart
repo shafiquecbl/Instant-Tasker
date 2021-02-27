@@ -75,7 +75,10 @@ class UpdateData {
           },
         )
         .then(
-          (value) => Snack_Bar.show(context, "Profile Successfully Updated!"),
+          (value) => {
+            Navigator.pop(context),
+            Snack_Bar.show(context, "Profile Successfully Updated!")
+          },
         )
         .catchError((e) {
           Snack_Bar.show(context, e.message);
@@ -179,7 +182,7 @@ class UpdateData {
         .set({
       'Review': review,
       'Name': user.displayName,
-    }).then((value) => Snack_Bar(message: "Order Marked as Completed!"));
+    });
   }
 
   Future submitReview(
@@ -264,5 +267,14 @@ class UpdateData {
                   context, MaterialPageRoute(builder: (_) => MainScreen())),
               Snack_Bar(message: "Order Cancelled!")
             });
+  }
+
+  Future updateMessageStatus(receiverEmail) async {
+    return await FirebaseFirestore.instance
+        .collection('Users')
+        .doc(email)
+        .collection('Contacts')
+        .doc(receiverEmail)
+        .update({'Status': "read"});
   }
 }

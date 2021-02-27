@@ -5,6 +5,7 @@ import 'package:shop_app/constants.dart';
 import 'package:shop_app/models/setData.dart';
 import 'package:shop_app/size_config.dart';
 import 'package:shop_app/models/getData.dart';
+import 'package:shop_app/widgets/alert_dialog.dart';
 import 'package:shop_app/widgets/outline_input_border.dart';
 
 class SendOfferForm extends StatefulWidget {
@@ -114,6 +115,7 @@ class _SendOfferFormState extends State<SendOfferForm> {
                   text: "Send Offer",
                   press: () async {
                     if (_formKey.currentState.validate()) {
+                      showLoadingDialog(context);
                       SetData().sendOffer(
                         context,
                         widget.docID,

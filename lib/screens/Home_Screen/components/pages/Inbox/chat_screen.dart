@@ -60,7 +60,7 @@ class _ChatScreenState extends State<ChatScreen> {
             title: Text(widget.receiverName,
                 style: TextStyle(
                     fontSize: 16,
-                    fontWeight: FontWeight.w400,
+                    fontWeight: FontWeight.bold,
                     color: kPrimaryColor)),
             subtitle: Text(
               'Online',

@@ -6,6 +6,8 @@ import 'package:shop_app/size_config.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 
+import 'package:shop_app/widgets/customAppBar.dart';
+
 class VerifyCNIC extends StatefulWidget {
   static String routeName = "/verifycnic";
   @override
@@ -21,18 +23,7 @@ class _VerifyCNICState extends State<VerifyCNIC> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        elevation: 2,
-        shadowColor: kPrimaryColor,
-        title: Text(
-          "Verify CNIC",
-          style: TextStyle(
-            color: kPrimaryColor,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-        backgroundColor: hexColor,
-      ),
+      appBar: customAppBar("Verify CNIC"),
       body: FutureBuilder(
         future: GetData().getUserProfile(),
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {

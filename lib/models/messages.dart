@@ -52,6 +52,7 @@ class Messages {
       'PhotoURL': receiverPhotoURl,
       'Last Message': message,
       'Time': dateTime,
+      'Status': "read"
     });
 
     return await FirebaseFirestore.instance
@@ -65,6 +66,7 @@ class Messages {
       'PhotoURL': user.photoURL,
       'Last Message': message,
       'Time': dateTime,
+      'Status': "unread"
     });
   }
 }
