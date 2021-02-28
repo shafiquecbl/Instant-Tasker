@@ -11,7 +11,8 @@ class UpdateData {
   final email = FirebaseAuth.instance.currentUser.email;
   String dateTime = DateFormat("dd-MM-yyyy h:mma").format(DateTime.now());
 
-  Future<User> saveUserProfile(context, name, gender, phNo, address) async {
+  Future<User> saveUserProfile(
+      context, name, gender, phNo, address, cnic) async {
     double doubleValue = 0;
     int intValue = 0;
     final CollectionReference users =
@@ -42,7 +43,7 @@ class UpdateData {
             'Work': "",
             'CNIC Status': "Not Verified",
             'Payment Status': "Not Verified",
-            'CNIC': "Not Available",
+            'CNIC': cnic,
             "Payment Method": "Not Available",
           },
         )
@@ -56,7 +57,7 @@ class UpdateData {
   //////////////////////////////////////////////////////////////////////////////////////////
 
   Future<User> updateUserProfile(context, name, gender, phNo, address, about,
-      education, specialities, languages, work) async {
+      education, specialities, languages, work, cnic) async {
     final CollectionReference users =
         FirebaseFirestore.instance.collection('Users');
     users
@@ -72,6 +73,7 @@ class UpdateData {
             'Specialities': specialities,
             'Languages': languages,
             'Work': work,
+            'CNIC': cnic
           },
         )
         .then(

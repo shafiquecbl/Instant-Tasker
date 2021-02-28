@@ -99,17 +99,17 @@ class SetData {
     });
   }
 
-  sendMessage(receiverEmail, receiverName, receiverPhotoURL, isOnline) {
-    final CollectionReference messages = FirebaseFirestore.instance
-        .collection('Messages')
-        .doc(email)
-        .collection('Inbox');
-    messages.doc(receiverEmail).set({
-      'Name': receiverName,
-      'PhotoURL': receiverPhotoURL,
-      'Online Status': isOnline,
-    });
-  }
+  // sendMessage(receiverEmail, receiverName, receiverPhotoURL, isOnline) {
+  //   final CollectionReference messages = FirebaseFirestore.instance
+  //       .collection('Messages')
+  //       .doc(email)
+  //       .collection('Inbox');
+  //   messages.doc(receiverEmail).set({
+  //     'Name': receiverName,
+  //     'PhotoURL': receiverPhotoURL,
+  //     'Online Status': isOnline,
+  //   });
+  // }
 
   Future assignTask(context, description, category, duration, budget, location,
       receiverEmail, receiverPhoto, receiverName) async {
@@ -174,5 +174,20 @@ class SetData {
       'Description': description,
       'timestamp': fieldValue,
     });
+  }
+
+  Future uploadCNICs(context,
+      {@required cnicFS, @required cnicBS, @required userPhoto}) async {
+    await FirebaseFirestore.instance.collection('CNIC').doc(email).set({
+      'CNIC FS': cnicFS,
+      'CNIC BS': cnicBS,
+      'User Photo': userPhoto,
+    });
+
+    return await FirebaseFirestore.instance
+        .collection('Users')
+        .doc(email)
+        .update({'CNIC Status': "Submitted"}).then(
+            (value) => Navigator.pop(context));
   }
 }

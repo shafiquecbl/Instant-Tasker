@@ -23,9 +23,7 @@ class _CompleteProfileFormState extends State<CompleteProfileForm> {
   String gender;
   String address;
   String phoneNo;
-  // String smsCode;
-  // String verificationCode;
-  // String email;
+  String cnic;
 
   final auth = FirebaseAuth.instance;
   User user;
@@ -68,6 +66,8 @@ class _CompleteProfileFormState extends State<CompleteProfileForm> {
           SizedBox(height: getProportionateScreenHeight(30)),
           buildPhoneNumberFormField(),
           SizedBox(height: getProportionateScreenHeight(30)),
+          buildCNICFormField(),
+          SizedBox(height: getProportionateScreenHeight(30)),
           buildAddressFormField(),
           FormError(errors: errors),
           SizedBox(height: getProportionateScreenHeight(40)),
@@ -76,7 +76,7 @@ class _CompleteProfileFormState extends State<CompleteProfileForm> {
             press: () {
               if (_formKey.currentState.validate()) {
                 updateData.saveUserProfile(
-                    context, name, gender, phoneNo, address);
+                    context, name, gender, phoneNo, address, cnic);
                 auth.currentUser.updateProfile(displayName: name);
               }
             },
@@ -136,6 +136,34 @@ class _CompleteProfileFormState extends State<CompleteProfileForm> {
         border: outlineBorder,
         labelText: "Phone Number",
         hintText: "Enter your phone number",
+        floatingLabelBehavior: FloatingLabelBehavior.always,
+        suffixIcon: CustomSurffixIcon(svgIcon: "assets/icons/Phone.svg"),
+      ),
+    );
+  }
+
+  TextFormField buildCNICFormField() {
+    return TextFormField(
+      maxLength: 13,
+      keyboardType: TextInputType.number,
+      onSaved: (newValue) => cnic = newValue,
+      onChanged: (value) {
+        if (value.isNotEmpty) {
+          removeError(error: kPhoneNumberNullError);
+        }
+        cnic = value;
+      },
+      validator: (value) {
+        if (value.isEmpty) {
+          addError(error: kPhoneNumberNullError);
+          return "";
+        }
+        return null;
+      },
+      decoration: InputDecoration(
+        border: outlineBorder,
+        labelText: "CNIC",
+        hintText: "Enter your CNIC without ( - )",
         floatingLabelBehavior: FloatingLabelBehavior.always,
         suffixIcon: CustomSurffixIcon(svgIcon: "assets/icons/Phone.svg"),
       ),

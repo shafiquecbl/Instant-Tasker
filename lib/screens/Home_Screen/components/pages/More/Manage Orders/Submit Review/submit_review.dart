@@ -13,7 +13,6 @@ import 'package:shop_app/components/form_error.dart';
 import 'package:shop_app/widgets/outline_input_border.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:shop_app/widgets/snack_bar.dart';
-import 'package:shop_app/screens/Home_Screen/home_screen.dart';
 
 class SubmitReview extends StatefulWidget {
   final String userEmail;

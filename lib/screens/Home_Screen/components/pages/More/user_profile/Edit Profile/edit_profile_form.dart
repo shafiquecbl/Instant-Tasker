@@ -33,6 +33,7 @@ class _EditProfileFormState extends State<EditProfileForm> {
   String specialities;
   String languages;
   String work;
+  String cnic;
 
   String storeName;
   String storePhoneNo;
@@ -43,6 +44,7 @@ class _EditProfileFormState extends State<EditProfileForm> {
   String storeSpecialities;
   String storeLanguages;
   String storeWork;
+  String storeCnic;
 
   static const menuItems = <String>[
     'Male',
@@ -91,6 +93,7 @@ class _EditProfileFormState extends State<EditProfileForm> {
           storeSpecialities = snapshot.data['Specialities'];
           storeLanguages = snapshot.data['Languages'];
           storeWork = snapshot.data['Work'];
+          storeCnic = snapshot.data['CNIC'];
           return Form(
             key: _formKey,
             child: Column(
@@ -147,6 +150,9 @@ class _EditProfileFormState extends State<EditProfileForm> {
                         if (work == null) {
                           work = storeWork;
                         }
+                        if (cnic == null) {
+                          cnic = storeCnic;
+                        }
                         showLoadingDialog(context);
                         updateData.updateUserProfile(
                             context,
@@ -158,7 +164,8 @@ class _EditProfileFormState extends State<EditProfileForm> {
                             education,
                             specialities,
                             languages,
-                            work);
+                            work,
+                            cnic);
                       }
                     }
                   },
@@ -202,6 +209,7 @@ class _EditProfileFormState extends State<EditProfileForm> {
 
   TextFormField getPhoneNoFormField() {
     return TextFormField(
+      keyboardType: TextInputType.number,
       initialValue: storePhoneNo,
       onSaved: (newValue) => phoneNo = newValue,
       onChanged: (value) {
@@ -220,6 +228,33 @@ class _EditProfileFormState extends State<EditProfileForm> {
       decoration: InputDecoration(
         labelText: "Phone No",
         hintText: "Enter Phone No",
+        floatingLabelBehavior: FloatingLabelBehavior.always,
+        suffixIcon: CustomSurffixIcon(svgIcon: "assets/icons/Phone.svg"),
+        border: rectangularBorder,
+      ),
+    );
+  }
+
+  TextFormField getCNICFormField() {
+    return TextFormField(
+      initialValue: storeCnic,
+      onSaved: (newValue) => cnic = newValue,
+      onChanged: (value) {
+        if (value.isNotEmpty) {
+          removeError(error: kPhoneNumberNullError);
+          cnic = value;
+        } else {}
+      },
+      validator: (value) {
+        if (value.isEmpty) {
+          addError(error: kPhoneNumberNullError);
+          return "";
+        }
+        return null;
+      },
+      decoration: InputDecoration(
+        labelText: "CNIC",
+        hintText: "Enter CNIC without ( - )",
         floatingLabelBehavior: FloatingLabelBehavior.always,
         suffixIcon: CustomSurffixIcon(svgIcon: "assets/icons/Phone.svg"),
         border: rectangularBorder,

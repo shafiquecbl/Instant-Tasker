@@ -3,9 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:shop_app/constants.dart';
 import 'package:shop_app/models/getData.dart';
+import 'package:shop_app/models/verify_email.dart';
+import 'package:shop_app/screens/otp/otp_screen.dart';
 import 'package:shop_app/size_config.dart';
 import 'package:shop_app/screens/Home_Screen/components/pages/More/Verification/verify_cnic.dart';
-import 'package:shop_app/components/default_button.dart';
 import 'package:shop_app/widgets/customAppBar.dart';
 
 class Verifications extends StatefulWidget {
@@ -14,8 +15,12 @@ class Verifications extends StatefulWidget {
 }
 
 class _VerificationsState extends State<Verifications> {
-  String storePhoneNo;
+  String phoneNo;
+  String cnic;
   String email = FirebaseAuth.instance.currentUser.email;
+  String verificationCode;
+  String smsCode;
+  FirebaseAuth _auth = FirebaseAuth.instance;
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +34,8 @@ class _VerificationsState extends State<Verifications> {
             return SpinKitCircle(
               color: kPrimaryColor,
             );
-          storePhoneNo = snapshot.data['Phone Number'];
+          phoneNo = snapshot.data['Phone Number'];
+          cnic = snapshot.data['CNIC Status'];
 
           return SafeArea(
             child: ListView(children: [
@@ -83,14 +89,20 @@ class _VerificationsState extends State<Verifications> {
                     child: ListTile(
                       leading: Icon(Icons.phone, color: kPrimaryColor),
                       title: Text("Phone"),
-                      subtitle: Text(storePhoneNo),
+                      subtitle: Text(phoneNo),
                       trailing: RaisedButton(
-                          child: Text('Verify'),
+                          child: Text(auth.currentUser.phoneNumber == null
+                              ? 'Verify'
+                              : 'Verified'),
                           textColor: kWhiteColor,
                           color: kPrimaryColor.withOpacity(0.9),
-                          onPressed: () {
-                            addMediaModal(context);
-                          }),
+                          onPressed: auth.currentUser.phoneNumber == null
+                              ? () => Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (_) =>
+                                          OtpScreen(phoneNo: phoneNo)))
+                              : null),
                     ),
                   ),
                   Card(
@@ -104,12 +116,19 @@ class _VerificationsState extends State<Verifications> {
                         style: TextStyle(fontSize: 11.5),
                       ),
                       trailing: RaisedButton(
-                          child: Text('Verify'),
+                          child: Text(cnic == 'Submitted'
+                              ? 'Submitted'
+                              : cnic == 'verified'
+                                  ? 'Verified'
+                                  : 'Verify'),
                           textColor: kWhiteColor,
                           color: kPrimaryColor.withOpacity(0.9),
-                          onPressed: () {
-                            Navigator.pushNamed(context, VerifyCNIC.routeName);
-                          }),
+                          onPressed: cnic == "Submitted"
+                              ? null
+                              : cnic == "verified"
+                                  ? null
+                                  : () => Navigator.pushNamed(
+                                      context, VerifyCNIC.routeName)),
                     ),
                   ),
                   Card(
@@ -136,84 +155,5 @@ class _VerificationsState extends State<Verifications> {
         },
       ),
     );
-  }
-
-  // Bottom Sheet Starts
-  addMediaModal(context) {
-    showModalBottomSheet(
-        isScrollControlled: true,
-        context: context,
-        elevation: 0,
-        backgroundColor: UniversalVariables.blackColor,
-        builder: (context) {
-          return SizedBox(
-            width: double.infinity,
-            child: Padding(
-              padding: EdgeInsets.symmetric(
-                  horizontal: getProportionateScreenWidth(20)),
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    SizedBox(height: SizeConfig.screenHeight * 0.05),
-                    Text(
-                      "OTP Verification",
-                      style: otp,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text("We sent code to "),
-                        Text(
-                          storePhoneNo,
-                          style: TextStyle(color: kPrimaryColor),
-                        ),
-                      ],
-                    ),
-                    Form(
-                      child: Column(
-                        children: [
-                          SizedBox(height: SizeConfig.screenHeight * 0.10),
-                          Center(
-                            child: SizedBox(
-                              width: getProportionateScreenWidth(200),
-                              child: TextFormField(
-                                maxLength: 6,
-                                autofocus: true,
-                                style: TextStyle(
-                                    fontSize: 24, color: Colors.white),
-                                keyboardType: TextInputType.number,
-                                textAlign: TextAlign.center,
-                                decoration: otpInputDecoration,
-                                onChanged: (value) {
-                                  // smsCode = value;
-                                },
-                              ),
-                            ),
-                          ),
-                          SizedBox(height: SizeConfig.screenHeight * 0.10),
-                          DefaultButton(
-                            text: "Verify Code",
-                            press: () {},
-                          )
-                        ],
-                      ),
-                    ),
-                    SizedBox(height: SizeConfig.screenHeight * 0.05),
-                    GestureDetector(
-                      onTap: () {
-                        // OTP code resend
-                      },
-                      child: Text(
-                        "Resend OTP Code",
-                        style: TextStyle(decoration: TextDecoration.underline),
-                      ),
-                    ),
-                    SizedBox(height: SizeConfig.screenHeight * 0.12),
-                  ],
-                ),
-              ),
-            ),
-          );
-        });
   }
 }

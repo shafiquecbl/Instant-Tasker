@@ -3,8 +3,16 @@ import 'package:shop_app/size_config.dart';
 
 import 'components/body.dart';
 
-class OtpScreen extends StatelessWidget {
+class OtpScreen extends StatefulWidget {
+  final String phoneNo;
+  OtpScreen({@required this.phoneNo});
   static String routeName = "/otp";
+
+  @override
+  _OtpScreenState createState() => _OtpScreenState();
+}
+
+class _OtpScreenState extends State<OtpScreen> {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -12,7 +20,9 @@ class OtpScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text("OTP Verification"),
       ),
-      body: Body(),
+      body: Body(
+        phoneNo: widget.phoneNo,
+      ),
     );
   }
 }

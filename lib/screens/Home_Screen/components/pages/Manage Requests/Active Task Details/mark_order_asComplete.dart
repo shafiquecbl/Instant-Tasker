@@ -5,7 +5,6 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:shop_app/constants.dart';
 import 'package:shop_app/models/getData.dart';
 import 'package:shop_app/models/updateData.dart';
-import 'package:shop_app/screens/Home_Screen/home_screen.dart';
 import 'package:shop_app/size_config.dart';
 import 'package:shop_app/widgets/alert_dialog.dart';
 import 'package:shop_app/widgets/customAppBar.dart';

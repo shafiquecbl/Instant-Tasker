@@ -12,7 +12,7 @@ class Snack_Bar {
     BuildContext context,
     String message,
   ) {
-    ScaffoldMessenger.of(context).showSnackBar(
+    Scaffold.of(context).showSnackBar(
       SnackBar(
         duration: Duration(seconds: 2),
         backgroundColor: Colors.red,
@@ -25,7 +25,7 @@ class Snack_Bar {
           textColor: Color(0xFFFAF2FB),
           label: 'OK',
           onPressed: () {
-            ScaffoldMessenger.of(context).hideCurrentSnackBar();
+            Scaffold.of(context).hideCurrentSnackBar();
           },
         ),
       ),
