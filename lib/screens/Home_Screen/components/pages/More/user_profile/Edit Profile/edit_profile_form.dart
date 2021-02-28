@@ -104,6 +104,8 @@ class _EditProfileFormState extends State<EditProfileForm> {
                 SizedBox(height: getProportionateScreenHeight(30)),
                 getPhoneNoFormField(),
                 SizedBox(height: getProportionateScreenHeight(30)),
+                getCNICFormField(),
+                SizedBox(height: getProportionateScreenHeight(30)),
                 getAddressFormField(),
                 SizedBox(height: getProportionateScreenHeight(30)),
                 getAboutFormField(),
@@ -237,17 +239,19 @@ class _EditProfileFormState extends State<EditProfileForm> {
 
   TextFormField getCNICFormField() {
     return TextFormField(
+      keyboardType: TextInputType.number,
       initialValue: storeCnic,
+      maxLength: 13,
       onSaved: (newValue) => cnic = newValue,
       onChanged: (value) {
         if (value.isNotEmpty) {
-          removeError(error: kPhoneNumberNullError);
+          removeError(error: "Enter your CNIC");
           cnic = value;
         } else {}
       },
       validator: (value) {
         if (value.isEmpty) {
-          addError(error: kPhoneNumberNullError);
+          addError(error: "Enter your CNIC");
           return "";
         }
         return null;

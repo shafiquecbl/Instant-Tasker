@@ -5,7 +5,7 @@ import 'components/body.dart';
 
 class OtpScreen extends StatefulWidget {
   final String phoneNo;
-  OtpScreen({@required this.phoneNo});
+  OtpScreen({this.phoneNo});
   static String routeName = "/otp";
 
   @override

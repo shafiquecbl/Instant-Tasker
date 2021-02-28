@@ -18,9 +18,7 @@ class _VerificationsState extends State<Verifications> {
   String phoneNo;
   String cnic;
   String email = FirebaseAuth.instance.currentUser.email;
-  String verificationCode;
-  String smsCode;
-  FirebaseAuth _auth = FirebaseAuth.instance;
+  String phoneNoStatus;
 
   @override
   Widget build(BuildContext context) {
@@ -36,6 +34,7 @@ class _VerificationsState extends State<Verifications> {
             );
           phoneNo = snapshot.data['Phone Number'];
           cnic = snapshot.data['CNIC Status'];
+          phoneNoStatus = snapshot.data['Phone Number status'];
 
           return SafeArea(
             child: ListView(children: [
@@ -91,12 +90,12 @@ class _VerificationsState extends State<Verifications> {
                       title: Text("Phone"),
                       subtitle: Text(phoneNo),
                       trailing: RaisedButton(
-                          child: Text(auth.currentUser.phoneNumber == null
+                          child: Text(phoneNoStatus == "Not Verified"
                               ? 'Verify'
                               : 'Verified'),
                           textColor: kWhiteColor,
                           color: kPrimaryColor.withOpacity(0.9),
-                          onPressed: auth.currentUser.phoneNumber == null
+                          onPressed: phoneNoStatus == "Not Verified"
                               ? () => Navigator.push(
                                   context,
                                   MaterialPageRoute(

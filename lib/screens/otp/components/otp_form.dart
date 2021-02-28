@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -57,7 +58,9 @@ class _OtpFormState extends State<OtpForm> {
               width: getProportionateScreenWidth(200),
               child: TextFormField(
                 maxLength: 6,
-                style: TextStyle(fontSize: 24, color: Colors.white),
+                style: TextStyle(
+                  fontSize: 24,
+                ),
                 keyboardType: TextInputType.number,
                 textAlign: TextAlign.center,
                 decoration: otpInputDecoration,
@@ -82,7 +85,13 @@ class _OtpFormState extends State<OtpForm> {
                     verificationId: verificationCode, smsCode: smsCode);
                 await FirebaseAuth.instance.currentUser
                     .linkWithCredential(authCreds)
-                    .whenComplete(() => Navigator.maybePop(context));
+                    .whenComplete(() => {
+                          FirebaseFirestore.instance
+                              .collection('Users')
+                              .doc(_auth.currentUser.email)
+                              .update({'Phone Number status': "Verified"}),
+                          Navigator.maybePop(context)
+                        });
               } catch (e) {
                 addError(error: "Invalid OTP");
               }
