@@ -48,15 +48,18 @@ class _ChatScreenState extends State<ChatScreen> {
               );
             },
             leading: CircleAvatar(
+                radius: 26,
+                backgroundColor: kPrimaryColor.withOpacity(0.8),
                 child: ClipRRect(
-              borderRadius: BorderRadius.circular(70),
-              child: Image.network(
-                widget.receiverPhotoURL,
-                width: 130,
-                height: 130,
-                fit: BoxFit.cover,
-              ),
-            )),
+                  borderRadius: BorderRadius.circular(70),
+                  child: FadeInImage.assetNetwork(
+                    placeholder: 'assets/images/load.gif',
+                    image: widget.receiverPhotoURL,
+                    width: 50,
+                    height: 50,
+                    fit: BoxFit.cover,
+                  ),
+                )),
             title: Text(widget.receiverName,
                 style: TextStyle(
                     fontSize: 16,

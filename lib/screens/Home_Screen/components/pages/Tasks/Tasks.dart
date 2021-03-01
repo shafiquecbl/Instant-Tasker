@@ -82,13 +82,14 @@ class _TasksState extends State<Tasks> {
             width: 390,
             child: ListTile(
               leading: CircleAvatar(
+                  radius: 25,
                   backgroundColor: kPrimaryColor.withOpacity(0.8),
-                  backgroundImage: AssetImage('assets/images/nullUser.png'),
                   child: snapshot['PhotoURL'] != null
                       ? ClipRRect(
                           borderRadius: BorderRadius.circular(50),
-                          child: Image.network(
-                            snapshot['PhotoURL'],
+                          child: FadeInImage.assetNetwork(
+                            placeholder: 'assets/images/load.gif',
+                            image: snapshot['PhotoURL'],
                             width: 50,
                             height: 50,
                             fit: BoxFit.cover,

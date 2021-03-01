@@ -63,8 +63,9 @@ class _OpenProfileState extends State<OpenProfile> {
               child: snapshot['PhotoURL'] != null
                   ? ClipRRect(
                       borderRadius: BorderRadius.circular(70),
-                      child: Image.network(
-                        snapshot['PhotoURL'],
+                      child: FadeInImage.assetNetwork(
+                        placeholder: 'assets/images/load.gif',
+                        image: snapshot['PhotoURL'],
                         width: 130,
                         height: 130,
                         fit: BoxFit.cover,
@@ -474,14 +475,19 @@ class _OpenProfileState extends State<OpenProfile> {
                         itemBuilder: (BuildContext context, int index) {
                           return ListTile(
                             leading: CircleAvatar(
+                                radius: 27,
+                                backgroundColor: kPrimaryColor.withOpacity(0.8),
                                 child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(70),
-                                    child: Image.network(
-                                      snapshot.data.docs[index]['PhotoURL'],
-                                      width: 50,
-                                      height: 50,
-                                      fit: BoxFit.cover,
-                                    ))),
+                                  borderRadius: BorderRadius.circular(70),
+                                  child: FadeInImage.assetNetwork(
+                                    placeholder: 'assets/images/load.gif',
+                                    image: snapshot.data.docs[index]
+                                        ['PhotoURL'],
+                                    width: 50,
+                                    height: 50,
+                                    fit: BoxFit.cover,
+                                  ),
+                                )),
                             title: Text(snapshot.data.docs[index]['Name'],
                                 style: TextStyle(fontWeight: FontWeight.bold)),
                             subtitle: Text(snapshot.data.docs[index]['Review']),

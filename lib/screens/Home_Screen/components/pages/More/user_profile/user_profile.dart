@@ -91,7 +91,7 @@ class _UserProfileState extends State<UserProfile> {
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(70),
                               child: FadeInImage.assetNetwork(
-                                placeholder: 'assets/images/loading.gif',
+                                placeholder: 'assets/images/load.gif',
                                 image: user.photoURL,
                                 width: 130,
                                 height: 130,

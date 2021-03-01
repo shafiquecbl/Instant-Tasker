@@ -87,12 +87,14 @@ class _ReviewOffersState extends State<ReviewOffers> {
             children: <Widget>[
               ListTile(
                 leading: CircleAvatar(
+                    radius: 25,
                     backgroundColor: kPrimaryColor.withOpacity(0.8),
                     child: snap.data['PhotoURL'] != null
                         ? ClipRRect(
                             borderRadius: BorderRadius.circular(50),
-                            child: Image.network(
-                              snap.data['PhotoURL'],
+                            child: FadeInImage.assetNetwork(
+                              placeholder: 'assets/images/load.gif',
+                              image: snap.data['PhotoURL'],
                               width: 50,
                               height: 50,
                               fit: BoxFit.cover,
