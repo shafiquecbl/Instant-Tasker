@@ -57,18 +57,12 @@ class SetData {
 ////////////////////////////////////////////////////////////////////////////////////
 
   Future sendOffer(
-      context,
-      docID,
-      description,
-      duration,
-      budget,
-      double sellerRating,
-      sellerReviews,
-      completetionRate,
-      emailStatus,
-      phoneNoStatus,
-      paymentStatus,
-      cnicStatus) async {
+    context,
+    docID,
+    description,
+    duration,
+    budget,
+  ) async {
     final CollectionReference users = FirebaseFirestore.instance
         .collection('Buyer Requests')
         .doc(docID)
@@ -82,13 +76,6 @@ class SetData {
         'Budget': budget,
         'Duration': duration,
         'PhotoURL': user.photoURL,
-        'Seller Rating': sellerRating,
-        'Seller Reviews': sellerReviews,
-        'Completetion Rate': completetionRate,
-        'Email Status': emailStatus,
-        'Phone No Status': phoneNoStatus,
-        'Payment Status': paymentStatus,
-        'CNIC Status': cnicStatus,
       },
     ).then((value) {
       Navigator.pop(context);
@@ -99,15 +86,46 @@ class SetData {
     });
   }
 
-  // sendMessage(receiverEmail, receiverName, receiverPhotoURL, isOnline) {
-  //   final CollectionReference messages = FirebaseFirestore.instance
-  //       .collection('Messages')
-  //       .doc(email)
-  //       .collection('Inbox');
-  //   messages.doc(receiverEmail).set({
-  //     'Name': receiverName,
-  //     'PhotoURL': receiverPhotoURL,
-  //     'Online Status': isOnline,
+  // Future sendOffer(
+  //     context,
+  //     docID,
+  //     description,
+  //     duration,
+  //     budget,
+  //     double sellerRating,
+  //     sellerReviews,
+  //     completetionRate,
+  //     emailStatus,
+  //     phoneNoStatus,
+  //     paymentStatus,
+  //     cnicStatus) async {
+  //   final CollectionReference users = FirebaseFirestore.instance
+  //       .collection('Buyer Requests')
+  //       .doc(docID)
+  //       .collection('Offers');
+  //   users.doc().set(
+  //     {
+  //       'Name': name,
+  //       'Email': email,
+  //       'Time': dateTime,
+  //       'Description': description,
+  //       'Budget': budget,
+  //       'Duration': duration,
+  //       'PhotoURL': user.photoURL,
+  //       'Seller Rating': sellerRating,
+  //       'Seller Reviews': sellerReviews,
+  //       'Completetion Rate': completetionRate,
+  //       'Email Status': emailStatus,
+  //       'Phone No Status': phoneNoStatus,
+  //       'Payment Status': paymentStatus,
+  //       'CNIC Status': cnicStatus,
+  //     },
+  //   ).then((value) {
+  //     Navigator.pop(context);
+  //     Navigator.pop(context);
+  //     Snack_Bar.show(context, "Offer sent Sussessfully");
+  //   }).catchError((e) {
+  //     Snack_Bar.show(context, e.message);
   //   });
   // }
 

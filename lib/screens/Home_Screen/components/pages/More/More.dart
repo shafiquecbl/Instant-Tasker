@@ -1,5 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:shop_app/screens/Home_Screen/components/pages/Manage%20Tasks/Manage_Tasks.dart';
 import 'package:shop_app/screens/Home_Screen/components/pages/More/Manage%20Orders/manage_orders.dart';
 import 'package:shop_app/screens/Home_Screen/components/pages/More/Verification/verification.dart';
 import 'package:shop_app/screens/Home_Screen/components/pages/More/user_profile/user_profile.dart';
@@ -89,13 +91,14 @@ class _MoreState extends State<More> {
             child: ListView(
               children: [
                 Container(
-                  padding: EdgeInsets.only(left: 25, top: 10, bottom: 10),
+                  padding: EdgeInsets.only(left: 25, top: 10, bottom: 0),
                   child: Text(
                     'General',
-                    style: TextStyle(
-                        color: Colors.black.withOpacity(0.8),
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold),
+                    style: GoogleFonts.teko(
+                      color: Colors.black.withOpacity(0.7),
+                      fontWeight: FontWeight.bold,
+                      fontSize: 22,
+                    ),
                   ),
                 ),
                 ProfileMenu(
@@ -111,6 +114,22 @@ class _MoreState extends State<More> {
                   },
                 ),
                 ProfileMenu(
+                  text: "Notifications",
+                  icon: "assets/icons/verified.svg",
+                  press: () => {},
+                ),
+                Container(
+                  padding: EdgeInsets.only(left: 25, top: 10, bottom: 0),
+                  child: Text(
+                    'Tasks',
+                    style: GoogleFonts.teko(
+                      color: Colors.black.withOpacity(0.7),
+                      fontWeight: FontWeight.bold,
+                      fontSize: 22,
+                    ),
+                  ),
+                ),
+                ProfileMenu(
                   text: "Post a Task",
                   icon: "assets/icons/posttask.svg",
                   press: () => {
@@ -123,6 +142,29 @@ class _MoreState extends State<More> {
                   },
                 ),
                 ProfileMenu(
+                  text: "Manage Tasks",
+                  icon: "assets/icons/orders.svg",
+                  press: () => {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => ManageTasks(),
+                      ),
+                    ),
+                  },
+                ),
+                Container(
+                  padding: EdgeInsets.only(left: 25, top: 10, bottom: 0),
+                  child: Text(
+                    'Orders',
+                    style: GoogleFonts.teko(
+                      color: Colors.black.withOpacity(0.7),
+                      fontWeight: FontWeight.bold,
+                      fontSize: 22,
+                    ),
+                  ),
+                ),
+                ProfileMenu(
                   text: "Manage Orders",
                   icon: "assets/icons/orders.svg",
                   press: () => {
@@ -133,6 +175,17 @@ class _MoreState extends State<More> {
                       ),
                     ),
                   },
+                ),
+                Container(
+                  padding: EdgeInsets.only(left: 25, top: 10, bottom: 0),
+                  child: Text(
+                    'Verifications',
+                    style: GoogleFonts.teko(
+                      color: Colors.black.withOpacity(0.7),
+                      fontWeight: FontWeight.bold,
+                      fontSize: 22,
+                    ),
+                  ),
                 ),
                 ProfileMenu(
                   text: "Verifications",

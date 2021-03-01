@@ -122,13 +122,6 @@ class _SendOfferFormState extends State<SendOfferForm> {
                         description,
                         duration,
                         budget,
-                        snapshot.data['Rating as Seller'],
-                        snapshot.data['Reviews as Seller'],
-                        snapshot.data['Completion Rate'],
-                        snapshot.data['Email status'],
-                        snapshot.data['Phone Number status'],
-                        snapshot.data['Payment Status'],
-                        snapshot.data['CNIC Status'],
                       );
                     }
                   },

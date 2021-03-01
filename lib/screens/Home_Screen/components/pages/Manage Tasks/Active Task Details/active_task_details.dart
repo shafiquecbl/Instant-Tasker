@@ -11,14 +11,12 @@ import 'package:shop_app/size_config.dart';
 import 'package:shop_app/widgets/snack_bar.dart';
 import 'package:shop_app/widgets/time_ago.dart';
 import 'package:shop_app/widgets/customAppBar.dart';
-import 'package:shop_app/screens/Home_Screen/components/pages/Manage%20Requests/Active%20Task%20Details/mark_order_asComplete.dart';
-
+import 'package:shop_app/screens/Home_Screen/components/pages/Manage%20Tasks/Active%20Task%20Details/mark_order_asComplete.dart';
 import 'cancel_order.dart';
 
 class ActiveTaskDetails extends StatefulWidget {
-  final int index;
   final String docID;
-  ActiveTaskDetails(this.index, this.docID);
+  ActiveTaskDetails(this.docID);
   @override
   _ActiveTaskDetailsState createState() => _ActiveTaskDetailsState();
 }

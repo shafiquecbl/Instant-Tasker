@@ -86,30 +86,18 @@ class _UserProfileState extends State<UserProfile> {
                       child: Stack(
                         children: [
                           CircleAvatar(
-                            radius: snapshot.data['PhotoURL'] == null ? 50 : 68,
+                            radius: user.photoURL == null ? 50 : 68,
                             backgroundColor: kPrimaryColor.withOpacity(0.8),
-                            child: user.photoURL != null
-                                ? ClipRRect(
-                                    borderRadius: BorderRadius.circular(70),
-                                    child: Image.network(
-                                      snapshot.data['PhotoURL'],
-                                      width: 130,
-                                      height: 130,
-                                      fit: BoxFit.cover,
-                                    ),
-                                  )
-                                : Container(
-                                    decoration: BoxDecoration(
-                                        image: DecorationImage(
-                                            fit: BoxFit.cover,
-                                            image: AssetImage(
-                                                "assets/images/nullUser.png")),
-                                        color: Colors.grey[200],
-                                        borderRadius:
-                                            BorderRadius.circular(70)),
-                                    width: 132,
-                                    height: 132,
-                                  ),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(70),
+                              child: FadeInImage.assetNetwork(
+                                placeholder: 'assets/images/loading.gif',
+                                image: user.photoURL,
+                                width: 130,
+                                height: 130,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
                           ),
                           Positioned(
                               bottom: 0,

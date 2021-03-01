@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:shop_app/constants.dart';
 import 'package:shop_app/models/getData.dart';
-import 'package:shop_app/models/verify_email.dart';
 import 'package:shop_app/screens/otp/otp_screen.dart';
 import 'package:shop_app/size_config.dart';
 import 'package:shop_app/screens/Home_Screen/components/pages/More/Verification/verify_cnic.dart';

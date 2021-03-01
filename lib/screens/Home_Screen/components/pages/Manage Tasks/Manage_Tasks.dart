@@ -6,14 +6,14 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shop_app/constants.dart';
 import 'package:shop_app/models/getData.dart';
-import 'package:shop_app/screens/Home_Screen/components/pages/Manage%20Requests/Cancelled%20Task/cancelled_task_details.dart';
-import 'package:shop_app/screens/Home_Screen/components/pages/Manage%20Requests/Completed%20Task/Completed_Task_Details.dart';
-import 'package:shop_app/screens/Home_Screen/components/pages/Manage%20Requests/open_offer_details.dart';
+import 'package:shop_app/screens/Home_Screen/components/pages/Manage%20Tasks/Cancelled%20Task/cancelled_task_details.dart';
+import 'package:shop_app/screens/Home_Screen/components/pages/Manage%20Tasks/Completed%20Task/Completed_Task_Details.dart';
+import 'package:shop_app/screens/Home_Screen/components/pages/Manage%20Tasks/open_offer_details.dart';
 import 'package:shop_app/screens/Home_Screen/components/pages/More/Post%20a%20Task/post_task.dart';
 import 'package:shop_app/size_config.dart';
 import 'package:shop_app/widgets/time_ago.dart';
 import 'package:shop_app/models/deleteData.dart';
-import 'package:shop_app/screens/Home_Screen/components/pages/Manage Requests/Active Task Details/active_task_details.dart';
+import 'package:shop_app/screens/Home_Screen/components/pages/Manage Tasks/Active Task Details/active_task_details.dart';
 
 class ManageTasks extends StatefulWidget {
   @override
@@ -25,6 +25,7 @@ class _ManageTasksState extends State<ManageTasks> {
   int activeTaskLength;
   int completedTaskLength;
   int cancelledTaskLength;
+  int init = 0;
   GetData getData = GetData();
   String email = FirebaseAuth.instance.currentUser.email;
 
@@ -40,7 +41,7 @@ class _ManageTasksState extends State<ManageTasks> {
             automaticallyImplyLeading: false,
             centerTitle: false,
             title: Text(
-              'My Tasks',
+              'Manage Tasks',
               style: GoogleFonts.teko(
                 color: kPrimaryColor,
                 fontWeight: FontWeight.bold,
@@ -248,15 +249,18 @@ class _ManageTasksState extends State<ManageTasks> {
                               ),
                             ),
                           ),
-                          FutureBuilder(
-                            initialData: [],
-                            future:
-                                getData.getOffers(snapshot.data.docs[index].id),
+                          StreamBuilder(
+                            stream: FirebaseFirestore.instance
+                                .collection("Buyer Requests")
+                                .doc(snapshot.data.docs[index].id)
+                                .collection('Offers')
+                                .snapshots(),
                             builder:
                                 (BuildContext context, AsyncSnapshot snap) {
                               return RaisedButton(
-                                child:
-                                    Text('View Offers  (${snap.data.length})'),
+                                child: Text(snap.data == null
+                                    ? 'View Offers  (0)'
+                                    : 'View Offers  (${snap.data.docs.length})'),
                                 textColor: Colors.white,
                                 color: kPrimaryColor,
                                 onPressed: () {
@@ -399,7 +403,6 @@ class _ManageTasksState extends State<ManageTasks> {
                                 context,
                                 MaterialPageRoute(
                                   builder: (_) => ActiveTaskDetails(
-                                    index,
                                     snapshot.data.docs[index].id,
                                   ),
                                 ),

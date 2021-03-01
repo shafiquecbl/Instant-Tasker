@@ -1,7 +1,7 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:shop_app/screens/Home_Screen/components/pages/More/More.dart';
-import 'package:shop_app/screens/Home_Screen/components/pages/Manage Requests/Manage_Requests.dart';
+import 'package:shop_app/screens/Home_Screen/components/pages/Manage Tasks/Manage_Tasks.dart';
 import 'package:shop_app/screens/Home_Screen/components/pages/Dashboard/dashboard.dart';
 import 'package:shop_app/screens/Home_Screen/components/pages/Tasks/Tasks.dart';
 import 'package:shop_app/screens/Home_Screen/components/pages/Inbox/inbox.dart';
