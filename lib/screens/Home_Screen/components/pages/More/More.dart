@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shop_app/screens/Home_Screen/components/pages/Manage%20Tasks/Manage_Tasks.dart';
 import 'package:shop_app/screens/Home_Screen/components/pages/More/Manage%20Orders/manage_orders.dart';
+import 'package:shop_app/screens/Home_Screen/components/pages/More/Notifications/notifications.dart';
 import 'package:shop_app/screens/Home_Screen/components/pages/More/Verification/verification.dart';
 import 'package:shop_app/screens/Home_Screen/components/pages/More/user_profile/user_profile.dart';
 import 'package:shop_app/screens/sign_in/sign_in_screen.dart';
@@ -118,7 +119,11 @@ class _MoreState extends State<More> {
                 ProfileMenu(
                   text: "Notifications",
                   icon: "assets/icons/verified.svg",
-                  press: () => {},
+                  press: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => Notifications()),
+                    );
+                  },
                 ),
                 Container(
                   padding: EdgeInsets.only(left: 25, top: 10, bottom: 0),
@@ -200,6 +205,17 @@ class _MoreState extends State<More> {
                       ),
                     ),
                   },
+                ),
+                Container(
+                  padding: EdgeInsets.only(left: 25, top: 10, bottom: 0),
+                  child: Text(
+                    'Signout',
+                    style: GoogleFonts.teko(
+                      color: Colors.black.withOpacity(0.7),
+                      fontWeight: FontWeight.bold,
+                      fontSize: 22,
+                    ),
+                  ),
                 ),
                 ProfileMenu(
                   text: "Sign Out",

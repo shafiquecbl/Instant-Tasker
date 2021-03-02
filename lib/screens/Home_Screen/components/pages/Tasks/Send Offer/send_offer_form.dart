@@ -10,7 +10,8 @@ import 'package:shop_app/widgets/outline_input_border.dart';
 
 class SendOfferForm extends StatefulWidget {
   final String docID;
-  SendOfferForm(this.docID);
+  final String email;
+  SendOfferForm({this.docID, this.email});
   @override
   _SendOfferFormState createState() => _SendOfferFormState();
 }
@@ -116,13 +117,8 @@ class _SendOfferFormState extends State<SendOfferForm> {
                   press: () async {
                     if (_formKey.currentState.validate()) {
                       showLoadingDialog(context);
-                      SetData().sendOffer(
-                        context,
-                        widget.docID,
-                        description,
-                        duration,
-                        budget,
-                      );
+                      SetData().sendOffer(context, widget.docID, description,
+                          duration, budget, widget.email);
                     }
                   },
                 ),
@@ -204,6 +200,7 @@ class _SendOfferFormState extends State<SendOfferForm> {
 
   TextFormField getBudgetFormField() {
     return TextFormField(
+      keyboardType: TextInputType.number,
       onSaved: (newValue) => budget = newValue,
       onChanged: (value) {
         if (value.isNotEmpty) {

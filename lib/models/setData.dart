@@ -57,17 +57,23 @@ class SetData {
 ////////////////////////////////////////////////////////////////////////////////////
 
   Future sendOffer(
-    context,
-    docID,
-    description,
-    duration,
-    budget,
-  ) async {
-    final CollectionReference users = FirebaseFirestore.instance
+      context, docID, description, duration, budget, recEmail) async {
+    await FirebaseFirestore.instance
+        .collection('Users')
+        .doc(recEmail)
+        .collection('Notifications')
+        .add({
+      'Photo': 'offer',
+      'Title': "You received a new offer from ${user.displayName}.",
+      'Time': dateTime,
+      'timestamp': fieldValue
+    });
+    return await FirebaseFirestore.instance
         .collection('Buyer Requests')
         .doc(docID)
-        .collection('Offers');
-    users.doc().set(
+        .collection('Offers')
+        .doc()
+        .set(
       {
         'Name': name,
         'Email': email,
@@ -134,6 +140,16 @@ class SetData {
     await FirebaseFirestore.instance
         .collection('Users')
         .doc(receiverEmail)
+        .collection('Notifications')
+        .add({
+      'Photo': 'order',
+      'Title': "${user.displayName} placed a new order.",
+      'Time': dateTime,
+      'timestamp': fieldValue
+    });
+    await FirebaseFirestore.instance
+        .collection('Users')
+        .doc(receiverEmail)
         .collection('Orders')
         .add({
       'Client Email': email,
@@ -169,6 +185,16 @@ class SetData {
   }
 
   Future sumbitOrder(receiverDocID, docID, description, receiverEmail) async {
+    await FirebaseFirestore.instance
+        .collection('Users')
+        .doc(receiverEmail)
+        .collection('Notifications')
+        .add({
+      'Photo': 'submit',
+      'Title': "${user.displayName} submitted the order.",
+      'Time': dateTime,
+      'timestamp': fieldValue
+    });
     await FirebaseFirestore.instance
         .collection('Users')
         .doc(receiverEmail)

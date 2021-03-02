@@ -222,7 +222,10 @@ class _TasksState extends State<Tasks> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (_) => SendOffer(snapshot.id),
+                                builder: (_) => SendOffer(
+                                  docID: snapshot.id,
+                                  email: snapshot['Email'],
+                                ),
                               ),
                             );
                           } else {

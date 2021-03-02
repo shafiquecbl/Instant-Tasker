@@ -13,6 +13,7 @@ import 'package:shop_app/screens/Home_Screen/components/pages/More/Verification/
 import 'package:shop_app/screens/Home_Screen/components/pages/More/user_profile/Edit Profile/edit_profile.dart';
 import 'package:shop_app/screens/Home_Screen/components/pages/Tasks/widgets/common_widgets.dart';
 import 'package:shop_app/size_config.dart';
+import 'package:shop_app/widgets/alert_dialog.dart';
 
 class UserProfile extends StatefulWidget {
   @override
@@ -31,7 +32,7 @@ class _UserProfileState extends State<UserProfile> {
     SizeConfig().init(context);
     return Scaffold(
       appBar: AppBar(
-          elevation: 5,
+          elevation: 2,
           shadowColor: kPrimaryColor,
           title: Text(
             "My Profile",
@@ -560,6 +561,7 @@ class _UserProfileState extends State<UserProfile> {
   }
 
   uploadProfilePic() async {
+    showLoadingDialog(context);
     final sref =
         FirebaseStorage.instance.ref().child('Profile Pics/$email.jpg');
     sref.putFile(_image);
@@ -569,10 +571,8 @@ class _UserProfileState extends State<UserProfile> {
     auth.currentUser
         .updateProfile(photoURL: dowurl)
         .then((value) => setState(() {
-              FirebaseFirestore.instance
-                  .collection('Users')
-                  .doc(email)
-                  .snapshots();
+              Navigator.pop(context);
+              FirebaseAuth.instance.currentUser.photoURL;
             }));
   }
 }

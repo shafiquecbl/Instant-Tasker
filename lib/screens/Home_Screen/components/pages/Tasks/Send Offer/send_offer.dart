@@ -5,7 +5,8 @@ import 'package:shop_app/widgets/customAppBar.dart';
 
 class SendOffer extends StatefulWidget {
   final String docID;
-  SendOffer(this.docID);
+  final String email;
+  SendOffer({this.docID, this.email});
   @override
   _SendOfferState createState() => _SendOfferState();
 }
@@ -26,7 +27,10 @@ class _SendOfferState extends State<SendOffer> {
               child: Column(
                 children: [
                   SizedBox(height: SizeConfig.screenHeight * 0.04),
-                  SendOfferForm(widget.docID),
+                  SendOfferForm(
+                    docID: widget.docID,
+                    email: widget.email,
+                  ),
                 ],
               ),
             ),

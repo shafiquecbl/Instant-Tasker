@@ -38,8 +38,6 @@ class _ManageTasksState extends State<ManageTasks> {
           appBar: AppBar(
             elevation: 2,
             shadowColor: kPrimaryColor,
-            automaticallyImplyLeading: false,
-            centerTitle: false,
             title: Text(
               'Manage Tasks',
               style: GoogleFonts.teko(

@@ -10,6 +10,7 @@ class UpdateData {
   User user = FirebaseAuth.instance.currentUser;
   final email = FirebaseAuth.instance.currentUser.email;
   String dateTime = DateFormat("dd-MM-yyyy h:mma").format(DateTime.now());
+  FieldValue fieldValue = FieldValue.serverTimestamp();
 
   Future<User> saveUserProfile(
       context, name, gender, phNo, address, cnic) async {
@@ -128,6 +129,17 @@ class UpdateData {
   Future orderRevesion(receiverDocID, docID, receiverEmail) async {
     await FirebaseFirestore.instance
         .collection('Users')
+        .doc(receiverEmail)
+        .collection('Notifications')
+        .add({
+      'Photo': 'revision',
+      'Title': "${user.displayName} asked for revision.",
+      'Time': dateTime,
+      'timestamp': fieldValue
+    });
+
+    await FirebaseFirestore.instance
+        .collection('Users')
         .doc(email)
         .collection("Assigned Tasks")
         .doc(docID)
@@ -148,6 +160,17 @@ class UpdateData {
     double comRate = (comTask / totTask) * 100;
     int reviewsSeller = (revSeller + 1);
     double rating1 = ((rating + ratSeller) / comTask);
+
+    await FirebaseFirestore.instance
+        .collection('Users')
+        .doc(receiverEmail)
+        .collection('Notifications')
+        .add({
+      'Photo': 'complete',
+      'Title': "${user.displayName} marked your order as complete.",
+      'Time': dateTime,
+      'timestamp': fieldValue
+    });
 
     await FirebaseFirestore.instance
         .collection('Users')
@@ -232,6 +255,17 @@ class UpdateData {
     int canTask = (cancelledTask + 1);
     int totTask = (totalTasks + 1);
     double comRate = (completedTask / totTask) * 100;
+
+    await FirebaseFirestore.instance
+        .collection('Users')
+        .doc(receiverEmail)
+        .collection('Notifications')
+        .add({
+      'Photo': 'cancel',
+      'Title': "Your order is cancel by ${user.displayName}",
+      'Time': dateTime,
+      'timestamp': fieldValue
+    });
 
     await FirebaseFirestore.instance
         .collection('Users')

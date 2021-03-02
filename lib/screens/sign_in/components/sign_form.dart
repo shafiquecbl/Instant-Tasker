@@ -178,6 +178,7 @@ class _SignFormState extends State<SignForm> {
         verifyEmailDialog(context, title, content);
       }
     }).catchError((e) {
+      Navigator.pop(context);
       Snack_Bar.show(context, e.message);
     });
   }
