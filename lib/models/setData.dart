@@ -231,7 +231,10 @@ class SetData {
     return await FirebaseFirestore.instance
         .collection('Users')
         .doc(email)
-        .update({'CNIC Status': "Submitted"}).then(
-            (value) => Navigator.pop(context));
+        .update({'CNIC Status': "Submitted"}).then((value) => {
+              Navigator.pop(context),
+              Navigator.pop(context),
+              // Navigator.pop(context)
+            });
   }
 }

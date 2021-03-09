@@ -50,8 +50,7 @@ class _UserProfileState extends State<UserProfile> {
                 color: kPrimaryColor,
               ),
               onPressed: () {
-                Navigator.push(
-                  context,
+                Navigator.of(context, rootNavigator: true).push(
                   MaterialPageRoute(
                     builder: (_) => EditProfile(),
                   ),
@@ -568,11 +567,9 @@ class _UserProfileState extends State<UserProfile> {
     // ignore: unnecessary_cast
     dowurl = await sref.getDownloadURL() as String;
     UpdateData().updateProfilePicture(context, dowurl);
-    auth.currentUser
-        .updateProfile(photoURL: dowurl)
-        .then((value) => setState(() {
-              Navigator.pop(context);
-              FirebaseAuth.instance.currentUser.photoURL;
-            }));
+    auth.currentUser.updateProfile(photoURL: dowurl).then((value) {
+      Navigator.pop(context);
+      super.initState();
+    });
   }
 }

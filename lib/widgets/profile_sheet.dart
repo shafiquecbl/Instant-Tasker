@@ -21,7 +21,7 @@ class _OpenProfileState extends State<OpenProfile> {
         elevation: 0,
         backgroundColor: kWhiteColor,
         actions: [
-          RaisedButton(
+          FlatButton(
               color: hexColor,
               onPressed: () {
                 reviews();

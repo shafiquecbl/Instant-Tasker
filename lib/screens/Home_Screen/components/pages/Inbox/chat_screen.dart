@@ -48,8 +48,8 @@ class _ChatScreenState extends State<ChatScreen> {
               );
             },
             leading: CircleAvatar(
-                radius: 26,
-                backgroundColor: kPrimaryColor.withOpacity(0.8),
+                radius: 25.5,
+                backgroundColor: Colors.black.withOpacity(0.5),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(70),
                   child: FadeInImage.assetNetwork(
@@ -214,7 +214,7 @@ class _ChatScreenState extends State<ChatScreen> {
     showModalBottomSheet(
         context: context,
         elevation: 0,
-        backgroundColor: UniversalVariables.blackColor,
+        backgroundColor: blackColor,
         builder: (context) {
           return Column(
             children: <Widget>[
@@ -301,7 +301,7 @@ class _ChatScreenState extends State<ChatScreen> {
               child: Container(
                 padding: EdgeInsets.all(7),
                 decoration: BoxDecoration(
-                  gradient: UniversalVariables.fabGradient,
+                  gradient: fabGradient,
                   shape: BoxShape.circle,
                 ),
                 child: Icon(Icons.add),
@@ -315,7 +315,7 @@ class _ChatScreenState extends State<ChatScreen> {
             child: TextField(
               controller: textFieldController,
               style: TextStyle(
-                color: UniversalVariables.greyColor,
+                color: greyColor,
               ),
               onChanged: (val) {
                 (val.length > 0 && val.trim() != "")
@@ -325,7 +325,7 @@ class _ChatScreenState extends State<ChatScreen> {
               decoration: InputDecoration(
                 hintText: "Type a message",
                 hintStyle: TextStyle(
-                  color: UniversalVariables.greyColor,
+                  color: greyColor,
                 ),
                 border: outlineBorder,
                 contentPadding:
@@ -378,19 +378,19 @@ class ModalTile extends StatelessWidget {
           margin: EdgeInsets.only(right: 10),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(15),
-            color: UniversalVariables.receiverColor,
+            color: receiverColor,
           ),
           padding: EdgeInsets.all(10),
           child: Icon(
             icon,
-            color: UniversalVariables.greyColor,
+            color: greyColor,
             size: 38,
           ),
         ),
         subtitle: Text(
           subtitle,
           style: TextStyle(
-            color: UniversalVariables.greyColor,
+            color: greyColor,
             fontSize: 14,
           ),
         ),

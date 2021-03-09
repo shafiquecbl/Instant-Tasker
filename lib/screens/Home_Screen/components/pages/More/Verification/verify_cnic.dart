@@ -321,20 +321,27 @@ class _VerifyCNICState extends State<VerifyCNIC> {
 
     // ignore: unnecessary_cast
     fsURL = await cnicFS.getDownloadURL() as String;
+    return upload1();
+  }
 
+  upload1() async {
     final cnicBS =
         FirebaseStorage.instance.ref().child('CNIC/$email/CNICbackSide.jpg');
     cnicBS.putFile(_cnicBackPhoto);
 
     // ignore: unnecessary_cast
     bsURL = await cnicBS.getDownloadURL() as String;
+    return upload2();
+  }
 
+  upload2() async {
     final userP =
         FirebaseStorage.instance.ref().child('CNIC/$email/UserPhoto.jpg');
     userP.putFile(_userPic);
 
     // ignore: unnecessary_cast
     uURL = await userP.getDownloadURL() as String;
+
     SetData()
         .uploadCNICs(context, cnicFS: fsURL, cnicBS: bsURL, userPhoto: uURL);
   }

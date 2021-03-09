@@ -120,8 +120,9 @@ class _MoreState extends State<More> {
                   text: "Notifications",
                   icon: "assets/icons/verified.svg",
                   press: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) => Notifications()),
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => Notifications()),
                     );
                   },
                 ),
@@ -140,8 +141,7 @@ class _MoreState extends State<More> {
                   text: "Post a Task",
                   icon: "assets/icons/posttask.svg",
                   press: () => {
-                    Navigator.push(
-                      context,
+                    Navigator.of(context, rootNavigator: true).push(
                       MaterialPageRoute(
                         builder: (_) => PostTask(),
                       ),
@@ -222,14 +222,19 @@ class _MoreState extends State<More> {
                   icon: "assets/icons/Log out.svg",
                   press: () async {
                     FirebaseAuth.instance.signOut().whenComplete(() {
-                      Navigator.of(context).pushReplacement(
-                        MaterialPageRoute(builder: (context) => SignInScreen()),
-                      );
+                      Navigator.of(context, rootNavigator: true)
+                          .pushAndRemoveUntil(
+                              MaterialPageRoute(
+                                  builder: (context) => SignInScreen()),
+                              (Route<dynamic> route) => false);
                     }).catchError((e) {
                       Snack_Bar.show(context, e.message);
                     });
                   },
                 ),
+                SizedBox(
+                  height: 15,
+                )
               ],
             ),
           )

@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shop_app/constants.dart';
-import 'package:shop_app/screens/Home_Screen/components/pages/More/Verification/verify_cnic.dart';
+import 'package:shop_app/screens/Home_Screen/components/pages/More/Verification/verification.dart';
 import 'package:shop_app/screens/Home_Screen/components/pages/Tasks/Send%20Offer/send_offer.dart';
 import 'package:shop_app/models/getData.dart';
 import 'package:shop_app/widgets/customAppBar.dart';
@@ -219,8 +219,7 @@ class _TasksState extends State<Tasks> {
                         color: greenColor,
                         onPressed: () {
                           if (cnicCheck == "verified") {
-                            Navigator.push(
-                              context,
+                            Navigator.of(context, rootNavigator: true).push(
                               MaterialPageRoute(
                                 builder: (_) => SendOffer(
                                   docID: snapshot.id,
@@ -229,10 +228,9 @@ class _TasksState extends State<Tasks> {
                               ),
                             );
                           } else {
-                            Navigator.push(
-                              context,
+                            Navigator.of(context, rootNavigator: true).push(
                               MaterialPageRoute(
-                                builder: (_) => VerifyCNIC(),
+                                builder: (_) => Verifications(),
                               ),
                             );
                           }

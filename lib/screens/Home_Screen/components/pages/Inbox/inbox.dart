@@ -67,15 +67,16 @@ class _InboxState extends State<Inbox> {
 
   Widget userList(DocumentSnapshot snapshot) {
     return GestureDetector(
-      onTap: () => Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (_) => ChatScreen(
-                  receiverEmail: snapshot['Email'],
-                  receiverName: snapshot['Name'],
-                  receiverPhotoURL: snapshot['PhotoURL'],
-                )),
-      ).then((value) => UpdateData().updateMessageStatus(snapshot['Email'])),
+      onTap: () => Navigator.of(context, rootNavigator: true)
+          .push(
+            MaterialPageRoute(
+                builder: (_) => ChatScreen(
+                      receiverEmail: snapshot['Email'],
+                      receiverName: snapshot['Name'],
+                      receiverPhotoURL: snapshot['PhotoURL'],
+                    )),
+          )
+          .then((value) => UpdateData().updateMessageStatus(snapshot['Email'])),
       child: Container(
         padding: EdgeInsets.symmetric(
           horizontal: 20,
@@ -143,8 +144,7 @@ class _InboxState extends State<Inbox> {
                         ),
                       ),
                       snapshot['Status'] == "unread"
-                          ? Icon(Icons.mark_email_unread,
-                              color: UniversalVariables.blueColor)
+                          ? Icon(Icons.mark_email_unread, color: blueColor)
                           : Container()
                     ],
                   ),
