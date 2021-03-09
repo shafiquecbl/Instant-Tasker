@@ -185,15 +185,14 @@ class _CancelledOrdersState extends State<CancelledOrders> {
                   textColor: Colors.white,
                   color: Colors.black.withOpacity(0.7),
                   onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => ChatScreen(
-                            receiverName: snapshot['Client Name'],
-                            receiverEmail: snapshot['Client Email'],
-                            receiverPhotoURL: snapshot['Client PhotoURL'],
-                          ),
-                        ));
+                    Navigator.of(context, rootNavigator: true)
+                        .push(MaterialPageRoute(
+                      builder: (_) => ChatScreen(
+                        receiverName: snapshot['Client Name'],
+                        receiverEmail: snapshot['Client Email'],
+                        receiverPhotoURL: snapshot['Client PhotoURL'],
+                      ),
+                    ));
                   },
                 ),
                 SizedBox(

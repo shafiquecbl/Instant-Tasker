@@ -22,6 +22,7 @@ class ActiveTaskDetails extends StatefulWidget {
 }
 
 class _ActiveTaskDetailsState extends State<ActiveTaskDetails> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   User user = FirebaseAuth.instance.currentUser;
   GetData getData = GetData();
   UpdateData updateData = UpdateData();
@@ -35,6 +36,7 @@ class _ActiveTaskDetailsState extends State<ActiveTaskDetails> {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return Scaffold(
+      key: _scaffoldKey,
       appBar: customAppBar('Active Task Details'),
       body: SingleChildScrollView(
         child: FutureBuilder(
@@ -42,7 +44,7 @@ class _ActiveTaskDetailsState extends State<ActiveTaskDetails> {
           future: getData.getActiveTask(widget.docID),
           builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting)
-              return SpinKitDoubleBounce(color: kPrimaryColor);
+              return SpinKitCircle(color: kPrimaryColor);
             return taskDetails(snapshot.data);
           },
         ),

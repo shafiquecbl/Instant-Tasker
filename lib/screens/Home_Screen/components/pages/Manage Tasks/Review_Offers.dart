@@ -320,15 +320,14 @@ class _ReviewOffersState extends State<ReviewOffers> {
                             textColor: Colors.white,
                             color: Colors.black.withOpacity(0.7),
                             onPressed: () {
-                              Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (_) => ChatScreen(
-                                      receiverName: snapshot['Name'],
-                                      receiverEmail: snapshot['Email'],
-                                      receiverPhotoURL: snap.data['PhotoURL'],
-                                    ),
-                                  ));
+                              Navigator.of(context, rootNavigator: true)
+                                  .push(MaterialPageRoute(
+                                builder: (_) => ChatScreen(
+                                  receiverName: snapshot['Name'],
+                                  receiverEmail: snapshot['Email'],
+                                  receiverPhotoURL: snap.data['PhotoURL'],
+                                ),
+                              ));
                             },
                           ),
                         ),

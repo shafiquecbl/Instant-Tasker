@@ -225,8 +225,7 @@ class _OpenOfferDetailsState extends State<OpenOfferDetails> {
                   textColor: Colors.white,
                   color: greenColor,
                   onPressed: () {
-                    Navigator.push(
-                      context,
+                    Navigator.of(context, rootNavigator: true).push(
                       MaterialPageRoute(
                         builder: (_) => ReviewOffers(docID: widget.docID),
                       ),
@@ -446,15 +445,14 @@ class _OpenOfferDetailsState extends State<OpenOfferDetails> {
                         textColor: Colors.white,
                         color: Colors.black.withOpacity(0.7),
                         onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (_) => ChatScreen(
-                                  receiverName: snapshot.data['Name'],
-                                  receiverEmail: snap['Email'],
-                                  receiverPhotoURL: snapshot.data['PhotoURL'],
-                                ),
-                              ));
+                          Navigator.of(context, rootNavigator: true)
+                              .push(MaterialPageRoute(
+                            builder: (_) => ChatScreen(
+                              receiverName: snapshot.data['Name'],
+                              receiverEmail: snap['Email'],
+                              receiverPhotoURL: snapshot.data['PhotoURL'],
+                            ),
+                          ));
                         },
                       ),
                     ),

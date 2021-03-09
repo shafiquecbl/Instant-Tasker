@@ -210,15 +210,13 @@ class _CancelledTaskDetailsState extends State<CancelledTaskDetails> {
       textColor: Colors.white,
       color: Colors.black.withOpacity(0.7),
       onPressed: () {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (_) => ChatScreen(
-                receiverName: snapshot['Seller Name'],
-                receiverEmail: snapshot['Seller Email'],
-                receiverPhotoURL: snapshot['Seller PhotoURL'],
-              ),
-            ));
+        Navigator.of(context, rootNavigator: true).push(MaterialPageRoute(
+          builder: (_) => ChatScreen(
+            receiverName: snapshot['Seller Name'],
+            receiverEmail: snapshot['Seller Email'],
+            receiverPhotoURL: snapshot['Seller PhotoURL'],
+          ),
+        ));
       },
     );
   }

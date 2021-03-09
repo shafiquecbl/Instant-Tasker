@@ -397,8 +397,7 @@ class _ManageTasksState extends State<ManageTasks> {
                             textColor: Colors.white,
                             color: kPrimaryColor,
                             onPressed: () {
-                              Navigator.push(
-                                context,
+                              Navigator.of(context, rootNavigator: true).push(
                                 MaterialPageRoute(
                                   builder: (_) => ActiveTaskDetails(
                                     snapshot.data.docs[index].id,

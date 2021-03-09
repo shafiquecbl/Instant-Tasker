@@ -119,7 +119,7 @@ class _TasksState extends State<Tasks> {
             ),
           ),
           Container(
-            width: 390,
+            width: MediaQuery.of(context).size.width - 20,
             child: Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(

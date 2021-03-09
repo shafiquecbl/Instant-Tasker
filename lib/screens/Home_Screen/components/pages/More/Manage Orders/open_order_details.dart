@@ -190,15 +190,14 @@ class _OpenOrderDetailsState extends State<OpenOrderDetails> {
                   textColor: Colors.white,
                   color: Colors.black.withOpacity(0.7),
                   onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => ChatScreen(
-                            receiverName: snapshot['Client Name'],
-                            receiverEmail: snapshot['Client Email'],
-                            receiverPhotoURL: snapshot['Client PhotoURL'],
-                          ),
-                        ));
+                    Navigator.of(context, rootNavigator: true)
+                        .push(MaterialPageRoute(
+                      builder: (_) => ChatScreen(
+                        receiverName: snapshot['Client Name'],
+                        receiverEmail: snapshot['Client Email'],
+                        receiverPhotoURL: snapshot['Client PhotoURL'],
+                      ),
+                    ));
                   },
                 ),
                 SizedBox(
@@ -216,8 +215,7 @@ class _OpenOrderDetailsState extends State<OpenOrderDetails> {
                         textColor: Colors.white,
                         color: greenColor,
                         onPressed: () {
-                          Navigator.push(
-                            context,
+                          Navigator.of(context, rootNavigator: true).push(
                             MaterialPageRoute(
                               builder: (_) => SubmitOrder(
                                 snapshot.id,
@@ -258,12 +256,10 @@ class _OpenOrderDetailsState extends State<OpenOrderDetails> {
           textColor: Colors.white,
           color: kPrimaryColor,
           onPressed: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (_) => SubmitReview(
-                          userEmail: userEmail,
-                        )));
+            Navigator.of(context, rootNavigator: true).push(MaterialPageRoute(
+                builder: (_) => SubmitReview(
+                      userEmail: userEmail,
+                    )));
           },
         );
       },

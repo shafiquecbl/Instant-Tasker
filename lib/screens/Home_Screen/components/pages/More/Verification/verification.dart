@@ -95,9 +95,8 @@ class _VerificationsState extends State<Verifications> {
                           textColor: kWhiteColor,
                           color: kPrimaryColor.withOpacity(0.9),
                           onPressed: phoneNoStatus == "Not Verified"
-                              ? () => Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
+                              ? () => Navigator.of(context, rootNavigator: true)
+                                  .push(MaterialPageRoute(
                                       builder: (_) =>
                                           OtpScreen(phoneNo: phoneNo)))
                               : null),
@@ -125,8 +124,9 @@ class _VerificationsState extends State<Verifications> {
                               ? null
                               : cnic == "verified"
                                   ? null
-                                  : () => Navigator.pushNamed(
-                                      context, VerifyCNIC.routeName)),
+                                  : () =>
+                                      Navigator.of(context, rootNavigator: true)
+                                          .pushNamed(VerifyCNIC.routeName)),
                     ),
                   ),
                   Card(
